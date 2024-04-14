@@ -30,9 +30,7 @@ public class MyLunaController : MonoBehaviour {
     public bool inClimbArea;
 
 
-    public float maxHealth { get; private set; }
-    [Range(0, 5)]
-    public float currentHealth;
+    
 
     void Start() {
         //设置帧率
@@ -41,16 +39,12 @@ public class MyLunaController : MonoBehaviour {
         animator = GetComponentInChildren<Animator>();
         currentSpeed = speedFactor;
 
-        maxHealth = 5;
-        //currentHealth = 4;
-        SetFullHealth();
+        
     }
 
 
     void Update() {
         playerInput = GetPlayerInput();
-
-        UpdateBar();
 
     }
 
@@ -79,14 +73,7 @@ public class MyLunaController : MonoBehaviour {
         return p;
     }
 
-    public void IncreaseHealth(int hp) {
-        currentHealth = Mathf.Clamp(currentHealth + hp, 0, maxHealth);
-
-    }
-
-    private void SetFullHealth() {
-        currentHealth = maxHealth;
-    }
+    
 
     /// <summary>
     /// 更新Luna动画的状态机
@@ -120,10 +107,5 @@ public class MyLunaController : MonoBehaviour {
         animator.SetFloat("ToY", towards.y);
     }
 
-    /// <summary>
-    /// 血条和蓝条UI更新
-    /// </summary>
-    private void UpdateBar() {
-        UIManager.Instance.SetBar(currentHealth / maxHealth, 1);
-    }
+   
 }
