@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,10 +33,10 @@ public class GameManager : MonoBehaviour
 
 
     /// <summary>
-    /// ÑªÌõºÍÀ¶ÌõUI¸üĞÂ
+    /// è¡€æ¡å’Œè“æ¡UIæ›´æ–°
     /// </summary>
     private void UpdateBar() {
-        // À¶Ìõ¹¦ÄÜÔİÊ±Ã»ÓĞÍê³É,´ı¸üĞÂ
+        // è“æ¡åŠŸèƒ½æš‚æ—¶æ²¡æœ‰å®Œæˆ,å¾…æ›´æ–°
         UIManager.Instance.SetBar(currentHealth / maxHealth, 1);
     }
 }
