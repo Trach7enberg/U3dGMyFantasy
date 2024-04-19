@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,7 +21,8 @@ public class MyLunaController : MonoBehaviour {
     private Vector2 towards;
 
     // 人物是否跳跃
-    private bool isJump;
+    public bool isJump;
+    private float jumpDuration = 0.5f;
 
     // 人物加速奔跑
     private bool isRun;
@@ -66,14 +68,41 @@ public class MyLunaController : MonoBehaviour {
 
         // 跳跑爬状态默认是按下切换,而不是持续按下
         // 与运算的作用是 跳跑爬动作同时只能存在一个
-        isJump = (isJump) ? !Input.GetKeyDown(KeyCode.Space) : !isRun & !isClimb & Input.GetKeyDown(KeyCode.Space);
+        isJump = (isJump) ? !Input.GetKeyDown(KeyCode.Space) : !isRun & !isClimb  & Input.GetKeyDown(KeyCode.Space);
         isRun = (isRun) ? !Input.GetKeyDown(KeyCode.LeftShift) : !isJump & !isClimb & Input.GetKeyDown(KeyCode.LeftShift);
         isClimb = (isClimb) ? !Input.GetKeyDown(KeyCode.LeftControl) : !isJump & !isRun & inClimbArea & Input.GetKeyDown(KeyCode.LeftControl);
 
         return p;
     }
 
-    
+    /// <summary>
+    /// 设置当前luna的刚体组件的simulated属性,可以使luna穿透碰撞体
+    /// </summary>
+    /// <param name="b"></param>
+    public void SetSimulated(bool b) {
+        rigibody.simulated = b;
+    }
+
+    /// <summary>
+    /// luna的跳跃功能
+    /// </summary>
+    /// <param name="a">跳跃区域对应的A点</param>
+    /// <param name="b">跳跃区域对应的B点</param>
+    public void Jump(Transform a,Transform b) {
+        SetSimulated(false);
+
+        // 分别判断当前距离与A点、B点哪个点的距离远
+        float disA = Vector3.Distance(transform.position, a.position);
+        float disB = Vector3.Distance(transform.position, b.position);
+
+        // 当前位置如果离A点远,则从当前位置跳跃到A点
+        transform.DOMove((disA) > disB ? a.position : b.position, jumpDuration).OnComplete(() => {
+            SetSimulated(true);
+            isJump = false;
+        });
+
+
+    }
 
     /// <summary>
     /// 更新Luna动画的状态机
@@ -89,6 +118,7 @@ public class MyLunaController : MonoBehaviour {
             // 动作只能触发一种
             if (isJump) {
                 animator.SetBool("Jump", true);
+
             } else if (isClimb) {
                 animator.SetBool("Climb", true);
             } else if (isRun) {
@@ -99,6 +129,8 @@ public class MyLunaController : MonoBehaviour {
                 animator.SetBool("Jump", false);
                 animator.SetBool("Run", false);
                 currentSpeed = speedFactor;
+
+                rigibody.simulated = true;
             }
         }
         animator.SetFloat("MoveValue", originalInput.magnitude);
