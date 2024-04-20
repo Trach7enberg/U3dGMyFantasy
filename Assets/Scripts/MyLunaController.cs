@@ -10,6 +10,9 @@ public class MyLunaController : MonoBehaviour {
     // 动画状态机
     Animator animator;
 
+    //luna对象下的第一个子类,即LunaSprite
+    Transform lunaLocalTransform;
+
     // 当前速度和速度因子
     [SerializeField]
     private float currentSpeed;
@@ -23,6 +26,12 @@ public class MyLunaController : MonoBehaviour {
     // 人物是否跳跃
     public bool isJump;
     private float jumpDuration = 0.5f;
+    // 完成一个跳跃逼真效果的时间
+    private float jumpRealityDuration = 0.25f;
+    // 跳跃逼真效果的幅度
+    private float jumpRealitySize = 1f;
+
+    private float lunaLocalPositionYOriginal;
 
     // 人物加速奔跑
     private bool isRun;
@@ -39,6 +48,8 @@ public class MyLunaController : MonoBehaviour {
         //Application.targetFrameRate = 30;
         rigibody = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
+        lunaLocalTransform = transform.GetChild(0);
+        lunaLocalPositionYOriginal = lunaLocalTransform.localPosition.y;
         currentSpeed = speedFactor;
 
         
@@ -96,12 +107,23 @@ public class MyLunaController : MonoBehaviour {
         float disB = Vector3.Distance(transform.position, b.position);
 
         // 当前位置如果离A点远,则从当前位置跳跃到A点
-        transform.DOMove((disA) > disB ? a.position : b.position, jumpDuration).OnComplete(() => {
+        transform.DOMove((disA) > disB ? a.position : b.position, jumpDuration).SetEase(Ease.Linear).OnComplete(
+            () => {
+            //跳跃结束时luna的刚体模拟要恢复否则会卡住不动
             SetSimulated(true);
             isJump = false;
         });
 
-
+        // 移动luna下的lunaSprite,让跳跃更加真实,动作分成两段,第一段是增加Y距离,第二段是恢复默认Y值
+        // 可以用DOTween Sequence 队列来保存这两个动作,然后自动按顺序播放
+        // SetEase 是设置动画播放的速度,InOutSine 指的是sin函数的正周期,即动作从0开始加速后半段归0,非常符合跳跃的效果
+        lunaLocalTransform.DOLocalMoveY(
+            lunaLocalPositionYOriginal + jumpRealitySize, jumpRealityDuration).SetEase(Ease.InOutSine)
+            .OnComplete(
+                () => { 
+                    lunaLocalTransform.DOLocalMoveY(lunaLocalPositionYOriginal, jumpRealityDuration).SetEase(Ease.InOutSine); 
+                }
+            );
     }
 
     /// <summary>
