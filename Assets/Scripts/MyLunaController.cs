@@ -9,6 +9,7 @@ public class MyLunaController : MonoBehaviour {
     Rigidbody2D rigibody;
     // 动画状态机
     Animator animator;
+    private string[] AnimatorParameters = { "ToX", "ToY" };
 
     //luna对象下的第一个子类,即LunaSprite
     Transform lunaLocalTransform;
@@ -152,13 +153,12 @@ public class MyLunaController : MonoBehaviour {
                 animator.SetBool("Run", false);
                 currentSpeed = speedFactor;
 
-                rigibody.simulated = true;
             }
         }
         animator.SetFloat("MoveValue", originalInput.magnitude);
 
-        animator.SetFloat("ToX", towards.x);
-        animator.SetFloat("ToY", towards.y);
+        animator.SetFloat(AnimatorParameters[0], towards.x);
+        animator.SetFloat(AnimatorParameters[1], towards.y);
     }
 
    
