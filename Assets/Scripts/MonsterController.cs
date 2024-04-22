@@ -29,6 +29,8 @@ public class MonsterController : MonoBehaviour
     private Rigidbody2D rigidbody2d;
     private Animator animator;
     private string[] AnimatorParameters = { "ToX","ToY"};
+    private string tagLuna = "Luna";
+
     private Vector2 lastPosition ;
     private Vector2 nowPosition;
 
@@ -38,7 +40,6 @@ public class MonsterController : MonoBehaviour
         lastPosition = rigidbody2d.position;
         nowPosition = rigidbody2d.position;
 
-        isVertical = false;
         timer = changeTime;
     }
 
@@ -82,11 +83,14 @@ public class MonsterController : MonoBehaviour
     private void UpdateAnimatorState() {
         lastPosition.Normalize();
         nowPosition.Normalize();
-        
-        
-        Debug.Log( nowPosition.x);
 
         animator.SetFloat(AnimatorParameters[0],(isVertical) ? 0: direction);
         animator.SetFloat(AnimatorParameters[1], (isVertical) ? direction : 0);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.transform.tag == tagLuna) {
+            GameManager.Instance.EnterOrExitBattle();
+        }
     }
 }

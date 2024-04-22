@@ -10,6 +10,7 @@ public class MyLunaController : MonoBehaviour {
     // 动画状态机
     Animator animator;
     private string[] AnimatorParameters = { "ToX", "ToY" };
+    private string MainMonster = "MainMapMonster";
 
     //luna对象下的第一个子类,即LunaSprite
     Transform lunaLocalTransform;
@@ -161,5 +162,11 @@ public class MyLunaController : MonoBehaviour {
         animator.SetFloat(AnimatorParameters[1], towards.y);
     }
 
-   
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if(collision.transform.tag == MainMonster) {
+            GameManager.Instance.EnterOrExitBattle();
+        }
+    }
+
 }

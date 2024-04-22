@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public GameObject battleBackGround;
+
     public float maxHealth { get; private set; }
     [Range(0, 5)]
     public float currentHealth;
@@ -38,5 +40,13 @@ public class GameManager : MonoBehaviour
     private void UpdateBar() {
         // 蓝条功能暂时没有完成,待更新
         UIManager.Instance.SetBar(currentHealth / maxHealth, 1);
+    }
+    
+    /// <summary>
+    /// 启用游戏战斗场景
+    /// </summary>
+    /// <param name="enter"></param>
+    public void EnterOrExitBattle(bool enter=true) {
+        battleBackGround.SetActive(enter);
     }
 }

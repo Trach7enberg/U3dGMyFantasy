@@ -6,6 +6,7 @@ TagManager:
   tags:
   - HpPotion
   - Luna
+  - MainMapMonster
   layers:
   - Default
   - TransparentFX
