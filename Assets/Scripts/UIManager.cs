@@ -8,6 +8,9 @@ public class UIManager : MonoBehaviour {
     public Image hpMaskImage;
     public Image mpMaskImage;
 
+
+    public GameObject battleUI;
+
     /// <summary>
     /// 血条和蓝条原始宽度
     /// </summary>
@@ -30,4 +33,7 @@ public class UIManager : MonoBehaviour {
         mpMaskImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, MpFillPercent * originalSize);
     }
 
+    public void ShowBattleUI(bool enter = true) {
+        battleUI.SetActive(enter);
+    }
 }

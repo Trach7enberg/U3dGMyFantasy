@@ -91,6 +91,7 @@ public class MonsterController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.tag == tagLuna) {
             GameManager.Instance.EnterOrExitBattle();
+            UIManager.Instance.ShowBattleUI();
         }
     }
 }

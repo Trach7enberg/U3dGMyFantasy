@@ -1728,7 +1728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &253119306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2633,7 +2633,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleBackGround: {fileID: 799709535}
-  battleUI: {fileID: 253119305}
   currentHealth: 4
 --- !u!4 &500390331
 Transform:
@@ -2822,6 +2821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpMaskImage: {fileID: 1762956107}
   mpMaskImage: {fileID: 921047401}
+  battleUI: {fileID: 253119305}
 --- !u!1 &532237554
 GameObject:
   m_ObjectHideFlags: 0
@@ -4290,13 +4290,14 @@ GameObject:
   m_Component:
   - component: {fileID: 799709536}
   - component: {fileID: 799709537}
+  - component: {fileID: 799709538}
   m_Layer: 0
   m_Name: BattleBackground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &799709536
 Transform:
   m_ObjectHideFlags: 0
@@ -4366,6 +4367,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &799709538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799709535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ceccb05183e32348ad8fa778e1e10d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lunaAnimator: {fileID: 1334875790}
+  lunaTransform: {fileID: 1334875788}
+  monsterTransform: {fileID: 1413433594}
+  monsterRenderer: {fileID: 1413433595}
 --- !u!1 &819253055
 GameObject:
   m_ObjectHideFlags: 0
@@ -7704,7 +7721,7 @@ Transform:
   m_GameObject: {fileID: 1334875787}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.9765904, y: -0.42035598, z: 0}
+  m_LocalPosition: {x: 3.11, y: 0.04, z: 0}
   m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7877,8 +7894,8 @@ Transform:
   m_GameObject: {fileID: 1413433593}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.3633237, y: -0.2974419, z: 0}
-  m_LocalScale: {x: 1, y: 1.2, z: 1}
+  m_LocalPosition: {x: -2.57, y: 0.04, z: 0}
+  m_LocalScale: {x: 1.3359, y: 1.60308, z: 1.3359}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 799709536}
@@ -10360,7 +10377,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2014183748}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 799709538}
+        m_TargetAssemblyTypeName: BattleController, Assembly-CSharp
+        m_MethodName: Attack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2014183748
 MonoBehaviour:
   m_ObjectHideFlags: 0
