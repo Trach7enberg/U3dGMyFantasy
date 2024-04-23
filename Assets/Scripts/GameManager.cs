@@ -49,6 +49,10 @@ public class GameManager : MonoBehaviour
     /// <param name="enter">true为开启</param>
     public void EnterOrExitBattle(bool enter=true) {
         battleBackGround.SetActive(enter);
+        ShowBattleUI(enter);
+    }
+
+    public void ShowBattleUI(bool enter = true) {
         battleUI.SetActive(enter);
     }
 }
