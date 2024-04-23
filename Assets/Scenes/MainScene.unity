@@ -1728,7 +1728,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &253119306
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2633,6 +2633,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battleBackGround: {fileID: 799709535}
+  battleUI: {fileID: 253119305}
   currentHealth: 4
 --- !u!4 &500390331
 Transform:
@@ -2717,7 +2718,7 @@ GameObject:
   - component: {fileID: 526625579}
   - component: {fileID: 526625583}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4295,7 +4296,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &799709536
 Transform:
   m_ObjectHideFlags: 0

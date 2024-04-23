@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     public GameObject battleBackGround;
+    public GameObject battleUI;
 
     public float maxHealth { get; private set; }
     [Range(0, 5)]
@@ -45,8 +46,9 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 启用游戏战斗场景
     /// </summary>
-    /// <param name="enter"></param>
+    /// <param name="enter">true为开启</param>
     public void EnterOrExitBattle(bool enter=true) {
         battleBackGround.SetActive(enter);
+        battleUI.SetActive(enter);
     }
 }
