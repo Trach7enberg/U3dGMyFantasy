@@ -1,14 +1,11 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
-/// Õ½¶·³¡¾°µÄÕ½¶·¿ØÖÆ
+/// æˆ˜æ–—åœºæ™¯çš„æˆ˜æ–—æ§åˆ¶
 /// </summary>
-public class BattleController : MonoBehaviour
-{
+public class BattleController : MonoBehaviour {
     public Animator lunaAnimator;
     public Transform lunaTransform;
     public Transform monsterTransform;
@@ -20,11 +17,16 @@ public class BattleController : MonoBehaviour
 
     private string[] animatorParameters = { "isDefend", "MoveVal", "MoveState", };
 
-    // lumaÆÕ¹¥ÉËº¦
+    // lumaæ™®æ”»ä¼¤å®³
     private float lunaDamage = 20f;
 
-    private float moveDuration = 0.4f;
-    private float monsterFadeDuration = 0.2f;
+    private float lunaMoveDuration = 0.5f;
+    private float monsterFadeDuration = 0.6f;
+    private float monsterFade = 0.3f;
+    private float lunaAttackAnimatorDuration = 0.667f;
+
+    // åŠ¨ç”»åºåˆ—åœ¨çŠ¶æ€æœºé‡Œçš„åå­—
+    private string clipNameAtk = "LunaAttack";
 
     //public Button attack;
     //public Button defend;
@@ -33,16 +35,13 @@ public class BattleController : MonoBehaviour
     //public Button escape;
 
     // Start is called before the first frame update
-    void Awake()
-    {
+    private void Awake() {
         monsterInitPos = monsterTransform.localPosition;
         lunaInitPos = lunaTransform.localPosition;
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
+    private void Update() {
     }
 
     public void Attack() {
@@ -50,31 +49,52 @@ public class BattleController : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹ÖÎï¿ÛÑª(ÔİÎ´Íê³É),½¥±ä»Ö¸´
+    /// æ€ªç‰©æ‰£è¡€(æš‚æœªå®Œæˆ),æ¸å˜æ¢å¤
     /// </summary>
     /// <param name="value"></param>
     public void JudgeMonsterHP(float value) {
         monsterRenderer.color = Color.white;
+        // è®¾ç½®æ€ªç‰©çš„é€æ˜åº¦ä¸º100%
         monsterRenderer.DOFade(1f, monsterFadeDuration);
     }
 
-    IEnumerator PerformAttackLogic() {
+    /// <summary>
+    /// åç¨‹,æ‰§è¡Œlunaæ”»å‡»
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator PerformAttackLogic() {
         UIManager.Instance.ShowBattleUI(false);
         lunaAnimator.SetBool(animatorParameters[2], true);
         lunaAnimator.SetFloat(animatorParameters[1], -1f);
 
-        lunaTransform.DOLocalMove(monsterInitPos + new Vector3(1.5f, 0f, 0), moveDuration)
-            .OnComplete(()=>{
+        // lunaå‰ç§»åŠ¨æ”»å‡»
+        lunaTransform.DOLocalMove(monsterInitPos + new Vector3(1.5f, 0f, 0), lunaMoveDuration)
+            .OnComplete(() => {
                 lunaAnimator.SetBool(animatorParameters[2], false);
                 lunaAnimator.SetFloat(animatorParameters[1], 0f);
-                
-                // Ö±½Ó²¥·Åattack¶¯»­,½áÊøÖ®ºó×Ô¶¯ÓÎ»Ø¼ıÍ·ËùÖ¸µÄ¶¯×÷,0´ú±í×´Ì¬»úµÄ²ã¼¶
-                lunaAnimator.CrossFade("LunaAttack", 0);
-                //¹ÖÎïÊÜ»÷½¥±ä¶¯»­
-                monsterRenderer.color = Color.red;
-                monsterRenderer.DOFade(0.4f, monsterFadeDuration).OnComplete(() => { JudgeMonsterHP(lunaDamage); });
 
+                // ç›´æ¥æ’­æ”¾attackåŠ¨ç”»,ç»“æŸä¹‹åè‡ªåŠ¨æ¸¸å›ç®­å¤´æ‰€æŒ‡çš„åŠ¨ä½œ,0ä»£è¡¨çŠ¶æ€æœºçš„å±‚çº§
+                lunaAnimator.CrossFade(clipNameAtk, 0);
+
+                //æ€ªç‰©å—å‡»æ¸å˜åŠ¨ç”»
+                monsterRenderer.color = Color.red;
+                monsterRenderer.DOFade(monsterFade, monsterFadeDuration).OnComplete(() => { JudgeMonsterHP(lunaDamage); });
             });
+
+        // ç­‰å¾…ç§»åŠ¨+æ”»å‡»å®Œæˆä¹‹å å°†lunaå›ç§»
+        yield return new WaitForSeconds(lunaMoveDuration + lunaAttackAnimatorDuration);
+
+        lunaAnimator.SetBool(animatorParameters[2], true);
+        lunaAnimator.SetFloat(animatorParameters[1], 1f);
+        lunaTransform.DOLocalMove(lunaInitPos, lunaMoveDuration)
+            .OnComplete(() => {
+                lunaAnimator.SetBool(animatorParameters[2], false);
+                lunaAnimator.SetFloat(animatorParameters[1], 0f);
+            });
+        yield return new WaitForSeconds(0.5f);
+    }
+
+    private IEnumerator MonsterAttack() {
         yield return null;
     }
 }

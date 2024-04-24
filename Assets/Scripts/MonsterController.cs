@@ -1,29 +1,29 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Windows;
 
 /// <summary>
-/// ¿ØÖÆÖ÷µØÍ¼ÉÏ¹ÖÎïµÄĞĞÎª,Ä¬ÈÏÊÇÀ´»Ø×ß¶¯
+/// æ§åˆ¶ä¸»åœ°å›¾ä¸Šæ€ªç‰©çš„è¡Œä¸º,é»˜è®¤æ˜¯æ¥å›èµ°åŠ¨
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public class MonsterController : MonoBehaviour
 {
 
-    // tÊÇ´¹Ö±·½Ïò,fÊÇË®Æ½·½Ïò
+    // tæ˜¯å‚ç›´æ–¹å‘,fæ˜¯æ°´å¹³æ–¹å‘
     public bool isVertical;
     
-    // ¹ÖÎïËÙ¶È
+    // æ€ªç‰©é€Ÿåº¦
     public float speed = 2f;
 
-    // ¹ÖÎïµÄÒÆ¶¯·½Ïò,ÕıÏò»¹ÊÇ·´Ïò
+    // æ€ªç‰©çš„ç§»åŠ¨æ–¹å‘,æ­£å‘è¿˜æ˜¯åå‘
     private int direction = 1;
 
-    // ¹ÖÎï¸Ä±ä·½ÏòµÄ¼ä¸ôÊ±¼ä
+    // æ€ªç‰©æ”¹å˜æ–¹å‘çš„é—´éš”æ—¶é—´
     private float changeTime = 3f;
     
-    // ¼ÆÊ±Æ÷,¹ÖÎïÃ¿¸ônÃë¾Í»áÀ´»Ø×ß¶¯
+    // è®¡æ—¶å™¨,æ€ªç‰©æ¯éš”nç§’å°±ä¼šæ¥å›èµ°åŠ¨
     private float timer;
 
     private Rigidbody2D rigidbody2d;
@@ -52,20 +52,20 @@ public class MonsterController : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿ØÖÆ¹ÖÎïÀ´»Ø×ß¶¯
+    /// æ§åˆ¶æ€ªç‰©æ¥å›èµ°åŠ¨
     /// </summary>
     private void Move() {
         lastPosition = rigidbody2d.position;
         Vector2 pos = rigidbody2d.position;
         timer -= Time.fixedDeltaTime;
 
-        // ¼ÆÊ±Æ÷Ò»µ½¾Í¸Ä±ä·½Ïò
+        // è®¡æ—¶å™¨ä¸€åˆ°å°±æ”¹å˜æ–¹å‘
         if(timer < 0) {
             direction = -direction;
             timer = changeTime; 
         }
 
-        // ¸ù¾İË®Æ½»òÕß´¹Ö±·½ÏòÀ´¸ü¸Ä¸ÕÌå×ªÏò
+        // æ ¹æ®æ°´å¹³æˆ–è€…å‚ç›´æ–¹å‘æ¥æ›´æ”¹åˆšä½“è½¬å‘
         if (isVertical) {
             pos.y = pos.y + speed * direction * Time.fixedDeltaTime;
         } else {
@@ -78,7 +78,7 @@ public class MonsterController : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸üĞÂmonster¶¯»­×´Ì¬»ú,Ä¿Ç°monsterÖ»»á¼òµ¥µÄÉÏÏÂÒÆ¶¯
+    /// æ›´æ–°monsteråŠ¨ç”»çŠ¶æ€æœº,ç›®å‰monsteråªä¼šç®€å•çš„ä¸Šä¸‹ç§»åŠ¨
     /// </summary>
     private void UpdateAnimatorState() {
         lastPosition.Normalize();
