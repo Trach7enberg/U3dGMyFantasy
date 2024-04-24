@@ -4383,6 +4383,7 @@ MonoBehaviour:
   lunaTransform: {fileID: 1334875788}
   monsterTransform: {fileID: 1413433594}
   monsterRenderer: {fileID: 1413433595}
+  lunaRenderer: {fileID: 1334875789}
 --- !u!1 &819253055
 GameObject:
   m_ObjectHideFlags: 0

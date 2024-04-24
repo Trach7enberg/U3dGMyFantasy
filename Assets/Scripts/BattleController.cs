@@ -14,19 +14,28 @@ public class BattleController : MonoBehaviour {
     private Vector3 lunaInitPos;
 
     public SpriteRenderer monsterRenderer;
+    public SpriteRenderer lunaRenderer;
 
     private string[] animatorParameters = { "isDefend", "MoveVal", "MoveState", };
 
     // luma普攻伤害
     private float lunaDamage = 20f;
 
+    private float MonsterDamage = 2f;
+
     private float lunaMoveDuration = 0.5f;
+    private float lunaAttackAnimatorDuration = 0.667f;
+    private float lunaFadeDuration = 0.333f;
+    private float lunaFade = 0.3f;
+
+    private float monsterMoveDuration = 0.5f;
     private float monsterFadeDuration = 0.6f;
     private float monsterFade = 0.3f;
-    private float lunaAttackAnimatorDuration = 0.667f;
 
     // 动画序列在状态机里的名字
-    private string clipNameAtk = "LunaAttack";
+    private string clipNameAtk = "Attack";
+
+    private string clipNameHurt = "Hurt";
 
     //public Button attack;
     //public Button defend;
@@ -52,10 +61,15 @@ public class BattleController : MonoBehaviour {
     /// 怪物扣血(暂未完成),渐变恢复
     /// </summary>
     /// <param name="value"></param>
-    public void JudgeMonsterHP(float value) {
+    public void JudgeMonsterHp(float value) {
         monsterRenderer.color = Color.white;
         // 设置怪物的透明度为100%
-        monsterRenderer.DOFade(1f, monsterFadeDuration);
+        monsterRenderer.DOFade(1f, 0);
+    }
+
+    public void JudgeLunaHp(float value) {
+        lunaRenderer.color = Color.white;
+        lunaRenderer.DOFade(1f, 0);
     }
 
     /// <summary>
@@ -68,7 +82,7 @@ public class BattleController : MonoBehaviour {
         lunaAnimator.SetFloat(animatorParameters[1], -1f);
 
         // luna前移动攻击
-        lunaTransform.DOLocalMove(monsterInitPos + new Vector3(1.5f, 0f, 0), lunaMoveDuration)
+        lunaTransform.DOLocalMoveX(monsterTransform.localPosition.x + 1.5f, lunaMoveDuration)
             .OnComplete(() => {
                 lunaAnimator.SetBool(animatorParameters[2], false);
                 lunaAnimator.SetFloat(animatorParameters[1], 0f);
@@ -78,7 +92,7 @@ public class BattleController : MonoBehaviour {
 
                 //怪物受击渐变动画
                 monsterRenderer.color = Color.red;
-                monsterRenderer.DOFade(monsterFade, monsterFadeDuration).OnComplete(() => { JudgeMonsterHP(lunaDamage); });
+                monsterRenderer.DOFade(monsterFade, monsterFadeDuration).OnComplete(() => { JudgeMonsterHp(lunaDamage); });
             });
 
         // 等待移动+攻击完成之后 将luna回移
@@ -92,9 +106,28 @@ public class BattleController : MonoBehaviour {
                 lunaAnimator.SetFloat(animatorParameters[1], 0f);
             });
         yield return new WaitForSeconds(0.5f);
+        StartCoroutine(MonsterAttack());
     }
 
+    /// <summary>
+    /// 协程,怪物冲刺攻击
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator MonsterAttack() {
+        monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 1.5f, monsterMoveDuration);
+        yield return new WaitForSeconds(0.5f);
+        monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 0.5f, monsterMoveDuration / 2f).OnComplete(() => {
+            lunaAnimator.CrossFade(clipNameHurt, 0);
+            lunaRenderer.color = Color.red;
+            lunaRenderer.DOFade(lunaFade, lunaFadeDuration);
+        });
+
+        yield return new WaitForSeconds(monsterMoveDuration / 2f + lunaFadeDuration);
+        JudgeLunaHp(MonsterDamage);
+
+        monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
+            UIManager.Instance.ShowBattleUI(true);
+        });
         yield return null;
     }
 }
