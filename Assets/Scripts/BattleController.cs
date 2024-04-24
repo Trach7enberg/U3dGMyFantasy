@@ -26,7 +26,7 @@ public class BattleController : MonoBehaviour {
     private float lunaMoveDuration = 0.5f;
     private float lunaAttackAnimatorDuration = 0.667f;
     private float lunaFadeDuration = 0.333f;
-    private float lunaFade = 0.3f;
+    private float lunaFadeSize = 0.3f;
 
     private float monsterMoveDuration = 0.5f;
     private float monsterFadeDuration = 0.6f;
@@ -36,6 +36,7 @@ public class BattleController : MonoBehaviour {
     private string clipNameAtk = "Attack";
 
     private string clipNameHurt = "Hurt";
+    private string clipNameDefense = "isDefend";
 
     //public Button attack;
     //public Button defend;
@@ -49,12 +50,18 @@ public class BattleController : MonoBehaviour {
         lunaInitPos = lunaTransform.localPosition;
     }
 
-    // Update is called once per frame
-    private void Update() {
-    }
-
+    /// <summary>
+    /// luna的攻击功能
+    /// </summary>
     public void Attack() {
         StartCoroutine(PerformAttackLogic());
+    }
+
+    /// <summary>
+    /// luna的防御功能
+    /// </summary>
+    public void Defense() {
+        StartCoroutine(PerformDefenseLogic());
     }
 
     /// <summary>
@@ -112,14 +119,17 @@ public class BattleController : MonoBehaviour {
     /// <summary>
     /// 协程,怪物冲刺攻击
     /// </summary>
+    /// <param name="isDefend">luna是否在防御状态</param>
     /// <returns></returns>
     private IEnumerator MonsterAttack() {
+        // 怪物先移动到luna旁边然后等待时间再进行冲刺
         monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 1.5f, monsterMoveDuration);
         yield return new WaitForSeconds(0.5f);
+        // 怪物冲剂
         monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 0.5f, monsterMoveDuration / 2f).OnComplete(() => {
             lunaAnimator.CrossFade(clipNameHurt, 0);
             lunaRenderer.color = Color.red;
-            lunaRenderer.DOFade(lunaFade, lunaFadeDuration);
+            lunaRenderer.DOFade(lunaFadeSize, lunaFadeDuration);
         });
 
         yield return new WaitForSeconds(monsterMoveDuration / 2f + lunaFadeDuration);
@@ -128,6 +138,36 @@ public class BattleController : MonoBehaviour {
         monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
             UIManager.Instance.ShowBattleUI(true);
         });
+        yield return null;
+    }
+
+    /// <summary>
+    /// 协程,执行Luna防御功能
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator PerformDefenseLogic() {
+        UIManager.Instance.ShowBattleUI(false);
+        lunaAnimator.SetBool(clipNameDefense, true);
+
+        monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 1.5f, monsterMoveDuration / 2f);
+        yield return new WaitForSeconds(0.5f);
+
+        // 怪物冲刺
+        monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 0.5f, monsterMoveDuration / 2f);
+
+        // luna防御后退
+        lunaTransform.DOLocalMoveX(lunaTransform.localPosition.x + 1.5f, lunaMoveDuration / 2f).OnComplete(() => {
+            // luna防御后退完成然后归位
+            lunaTransform.DOLocalMoveX(lunaInitPos.x, lunaMoveDuration / 2f);
+        });
+
+        yield return new WaitForSeconds(lunaMoveDuration);
+        //怪物归位
+        monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
+            UIManager.Instance.ShowBattleUI(true);
+            lunaAnimator.SetBool(clipNameDefense, false);
+        });
+
         yield return null;
     }
 }
