@@ -248,6 +248,7 @@ public class BattleController : MonoBehaviour {
         GameManager.Instance.InOrDecreaseLunaMp(GameManager.Instance.lunaHealMpCost);
 
         healEffectCopy = Instantiate(HealEffect, lunaTransform) as GameObject;
+        healEffectCopy.transform.localPosition = Vector3.zero;
         yield return new WaitForSeconds(lunaHealEffectDuration);
         UIManager.Instance.ShowBattleUI(true);
         yield return null;

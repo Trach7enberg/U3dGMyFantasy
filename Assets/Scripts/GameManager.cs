@@ -24,8 +24,11 @@ public class GameManager : MonoBehaviour {
     [Range(0, 5)]
     public float monsterCurrentHp;
 
+    public bool test;
+
     private void Awake() {
         Instance = this;
+        test = false;
 
         lunaMaxHp = 5;
         lunaMaxMp = 5;
@@ -64,6 +67,13 @@ public class GameManager : MonoBehaviour {
     private void UpdateBar() {
         // 蓝条功能暂时没有完成,待更新
         UIManager.Instance.SetBar(lunaCurrentHp / lunaMaxHp, lunaCurrentMp / lunaMaxMp);
+
+        // 测试
+        if (test) {
+            lunaCurrentMp = lunaMaxMp;
+            lunaCurrentHp = lunaMaxMp;
+            monsterCurrentHp = monsterMaxHp;
+        }
     }
 
     /// <summary>
