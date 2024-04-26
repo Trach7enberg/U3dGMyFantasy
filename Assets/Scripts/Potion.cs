@@ -29,7 +29,7 @@ public class Potion : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.tag == tagName) {
-            if (GameManager.Instance.CanInOrDecreaseLuna(true)) {
+            if (GameManager.Instance.CanIncreaseLunaHp()) {
                 GameManager.Instance.InOrDecreaseLunaHp();
                 Instantiate(startEffect, this.transform.position, Quaternion.identity);
                 Destroy(this.gameObject);

@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour {
     public float lunaMaxMp { get; private set; }
     public float monsterMaxHp { get; private set; }
 
-    public float lunaMpCost;
+    public float lunaSkillMpCost;
+    public float lunaHealMpCost;
 
     [Range(0, 5)]
     public float lunaCurrentHp;
@@ -29,7 +30,8 @@ public class GameManager : MonoBehaviour {
         lunaMaxHp = 5;
         lunaMaxMp = 5;
         monsterMaxHp = 5;
-        lunaMpCost = -3f;
+        lunaSkillMpCost = -3f;
+        lunaHealMpCost = -1f;
 
         monsterCurrentHp = monsterMaxHp;
         lunaCurrentHp = lunaMaxHp;
@@ -65,12 +67,11 @@ public class GameManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 判断luna是否能回蓝或者回血
+    /// 判断luna是否能回血
     /// </summary>
-    /// <param name="hpOrMp">true为血,false为蓝</param>
     /// <returns></returns>
-    public bool CanInOrDecreaseLuna(bool hpOrMp) {
-        return hpOrMp ? lunaCurrentHp < lunaMaxHp : lunaCurrentMp < lunaMaxMp;
+    public bool CanIncreaseLunaHp() {
+        return lunaCurrentHp < lunaMaxHp;
     }
 
     /// <summary>

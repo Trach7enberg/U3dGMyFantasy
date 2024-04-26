@@ -80,7 +80,7 @@ public class BattleController : MonoBehaviour {
     /// luna的伤害技能
     /// </summary>
     public void Skill() {
-        if (!GameManager.Instance.CanUseSkill(GameManager.Instance.lunaMpCost)) {
+        if (!GameManager.Instance.CanUseSkill(GameManager.Instance.lunaSkillMpCost)) {
             return;
         }
         StartCoroutine(PerformSkillLogic());
@@ -90,7 +90,7 @@ public class BattleController : MonoBehaviour {
     /// luna的回血技能
     /// </summary>
     public void RecoverHp() {
-        if (!GameManager.Instance.CanInOrDecreaseLuna(true)) {
+        if (!GameManager.Instance.CanUseSkill(GameManager.Instance.lunaHealMpCost)) {
             return;
         }
         StartCoroutine(PerformRecoverHpLogic());
@@ -223,7 +223,7 @@ public class BattleController : MonoBehaviour {
     private IEnumerator PerformSkillLogic() {
         UIManager.Instance.ShowBattleUI(false);
         lunaAnimator.CrossFade(clipNameSkill, 0);
-        GameManager.Instance.InOrDecreaseLunaMp(GameManager.Instance.lunaMpCost);
+        GameManager.Instance.InOrDecreaseLunaMp(GameManager.Instance.lunaSkillMpCost);
 
         // 以monster为父类生成在monster脚下的动画
         skillEffectCopy = Instantiate(SkillEffect, monsterTransform) as GameObject;
@@ -237,10 +237,15 @@ public class BattleController : MonoBehaviour {
         UIManager.Instance.ShowBattleUI(true);
     }
 
+    /// <summary>
+    /// 协程,执行luna的回血技能
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator PerformRecoverHpLogic() {
         UIManager.Instance.ShowBattleUI(false);
         lunaAnimator.CrossFade(clipNameRecoverHp, 0);
         GameManager.Instance.InOrDecreaseLunaHp();
+        GameManager.Instance.InOrDecreaseLunaMp(GameManager.Instance.lunaHealMpCost);
 
         healEffectCopy = Instantiate(HealEffect, lunaTransform) as GameObject;
         yield return new WaitForSeconds(lunaHealEffectDuration);
