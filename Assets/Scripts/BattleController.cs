@@ -19,9 +19,9 @@ public class BattleController : MonoBehaviour {
     private string[] animatorParameters = { "isDefend", "MoveVal", "MoveState", };
 
     // luma普攻伤害
-    private float lunaDamage = 20f;
+    private float lunaDamage = -1f;
 
-    private float MonsterDamage = 2f;
+    private float MonsterDamage = -1f;
 
     private float lunaMoveDuration = 0.5f;
     private float lunaAttackAnimatorDuration = 0.667f;
@@ -38,16 +38,15 @@ public class BattleController : MonoBehaviour {
     private string clipNameHurt = "Hurt";
     private string clipNameDefense = "isDefend";
 
-    //public Button attack;
-    //public Button defend;
-    //public Button skill;
-    //public Button recoveryHp;
-    //public Button escape;
+    // 协程引用
+    private IEnumerator lunaAttack, monsterAttack;
 
-    // Start is called before the first frame update
     private void Awake() {
         monsterInitPos = monsterTransform.localPosition;
         lunaInitPos = lunaTransform.localPosition;
+
+        lunaAttack = PerformAttackLogic();
+        monsterAttack = MonsterAttack();
     }
 
     /// <summary>
@@ -65,18 +64,24 @@ public class BattleController : MonoBehaviour {
     }
 
     /// <summary>
-    /// 怪物扣血(暂未完成),渐变恢复
+    /// 怪物扣血或者加血,渐变恢复
     /// </summary>
     /// <param name="value"></param>
-    public void JudgeMonsterHp(float value) {
+    public void JudgeMonsterHp(float value = 1f) {
         monsterRenderer.color = Color.white;
         // 设置怪物的透明度为100%
         monsterRenderer.DOFade(1f, 0);
+        GameManager.Instance.InOrDecreaseMonsterHp(value);
     }
 
+    /// <summary>
+    /// luna扣血或者加血
+    /// </summary>
+    /// <param name="value"></param>
     public void JudgeLunaHp(float value) {
         lunaRenderer.color = Color.white;
         lunaRenderer.DOFade(1f, 0);
+        GameManager.Instance.InOrDecreaseLunaHp(value);
     }
 
     /// <summary>
@@ -138,7 +143,6 @@ public class BattleController : MonoBehaviour {
         monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
             UIManager.Instance.ShowBattleUI(true);
         });
-        yield return null;
     }
 
     /// <summary>
@@ -167,7 +171,5 @@ public class BattleController : MonoBehaviour {
             UIManager.Instance.ShowBattleUI(true);
             lunaAnimator.SetBool(clipNameDefense, false);
         });
-
-        yield return null;
     }
 }
