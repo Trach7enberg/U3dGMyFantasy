@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -9,6 +10,8 @@ public class BattleController : MonoBehaviour {
     public Animator lunaAnimator;
     public Transform lunaTransform;
     public Transform monsterTransform;
+    public GameObject SkillEffect;
+    private GameObject skillEffectCopy;
 
     private Vector3 monsterInitPos;
     private Vector3 lunaInitPos;
@@ -18,7 +21,7 @@ public class BattleController : MonoBehaviour {
 
     private string[] animatorParameters = { "isDefend", "MoveVal", "MoveState", };
 
-    // luma普攻伤害
+    // luma普攻和技能伤害
     private float lunaDamage = -1f;
 
     private float MonsterDamage = -1f;
@@ -27,6 +30,9 @@ public class BattleController : MonoBehaviour {
     private float lunaAttackAnimatorDuration = 0.667f;
     private float lunaFadeDuration = 0.333f;
     private float lunaFadeSize = 0.3f;
+
+    //private float lunaSkillDuration = 0.5f;
+    private float lunaSkillEffectDuration = 1.18f; //放在怪物身上的技能伤害动画持续时间
 
     private float monsterMoveDuration = 0.5f;
     private float monsterFadeDuration = 0.6f;
@@ -37,6 +43,7 @@ public class BattleController : MonoBehaviour {
 
     private string clipNameHurt = "Hurt";
     private string clipNameDefense = "isDefend";
+    private string clipNameSkill = "Skill";
 
     // 协程引用
     private IEnumerator lunaAttack, monsterAttack;
@@ -63,14 +70,28 @@ public class BattleController : MonoBehaviour {
         StartCoroutine(PerformDefenseLogic());
     }
 
+    public void Skill() {
+        if (!GameManager.Instance.CanUseSkill(GameManager.Instance.lunaMpCost)) {
+            return;
+        }
+        StartCoroutine(PerformSkillLogic());
+    }
+
+    /// <summary>
+    /// 重置精灵渲染器的颜色和alpha值,颜色默认为白色
+    /// </summary>
+    /// <param name="obj">某个物体的精灵渲染器</param>
+    public void SpriteRendererReset(SpriteRenderer obj) {
+        obj.color = Color.white;
+        // 设置怪物的透明度为100%
+        obj.DOFade(1f, 0f);
+    }
+
     /// <summary>
     /// 怪物扣血或者加血,渐变恢复
     /// </summary>
     /// <param name="value"></param>
     public void JudgeMonsterHp(float value = 1f) {
-        monsterRenderer.color = Color.white;
-        // 设置怪物的透明度为100%
-        monsterRenderer.DOFade(1f, 0);
         GameManager.Instance.InOrDecreaseMonsterHp(value);
     }
 
@@ -79,8 +100,6 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <param name="value"></param>
     public void JudgeLunaHp(float value) {
-        lunaRenderer.color = Color.white;
-        lunaRenderer.DOFade(1f, 0);
         GameManager.Instance.InOrDecreaseLunaHp(value);
     }
 
@@ -104,7 +123,11 @@ public class BattleController : MonoBehaviour {
 
                 //怪物受击渐变动画
                 monsterRenderer.color = Color.red;
-                monsterRenderer.DOFade(monsterFade, monsterFadeDuration).OnComplete(() => { JudgeMonsterHp(lunaDamage); });
+                monsterRenderer.DOFade(monsterFade, monsterFadeDuration)
+                    .OnComplete(() => {
+                        SpriteRendererReset(monsterRenderer);
+                        JudgeMonsterHp(lunaDamage);
+                    });
             });
 
         // 等待移动+攻击完成之后 将luna回移
@@ -138,6 +161,7 @@ public class BattleController : MonoBehaviour {
         });
 
         yield return new WaitForSeconds(monsterMoveDuration / 2f + lunaFadeDuration);
+        SpriteRendererReset(lunaRenderer);
         JudgeLunaHp(MonsterDamage);
 
         monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
@@ -171,5 +195,22 @@ public class BattleController : MonoBehaviour {
             UIManager.Instance.ShowBattleUI(true);
             lunaAnimator.SetBool(clipNameDefense, false);
         });
+    }
+
+    private IEnumerator PerformSkillLogic() {
+        UIManager.Instance.ShowBattleUI(false);
+        lunaAnimator.CrossFade(clipNameSkill, 0);
+        GameManager.Instance.InOrDecreaseLunaMp(GameManager.Instance.lunaMpCost);
+
+        // 以monster为父类生成在monster脚下的动画
+        skillEffectCopy = Instantiate(SkillEffect, monsterTransform) as GameObject;
+        monsterRenderer.DOFade(monsterFade, monsterFadeDuration);
+        monsterRenderer.color = Color.blue;
+
+        yield return new WaitForSeconds(lunaSkillEffectDuration);
+
+        JudgeMonsterHp(lunaDamage);
+        SpriteRendererReset(monsterRenderer);
+        UIManager.Instance.ShowBattleUI(true);
     }
 }
