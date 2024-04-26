@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour {
     /// <param name="hpOrMp">true为血,false为蓝</param>
     /// <returns></returns>
     public bool CanInOrDecreaseLuna(bool hpOrMp) {
-        return hpOrMp ? lunaCurrentHp <= lunaMaxHp : lunaCurrentMp <= lunaMaxMp;
+        return hpOrMp ? lunaCurrentHp < lunaMaxHp : lunaCurrentMp < lunaMaxMp;
     }
 
     /// <summary>

@@ -11,7 +11,9 @@ public class BattleController : MonoBehaviour {
     public Transform lunaTransform;
     public Transform monsterTransform;
     public GameObject SkillEffect;
+    public GameObject HealEffect;
     private GameObject skillEffectCopy;
+    private GameObject healEffectCopy;
 
     private Vector3 monsterInitPos;
     private Vector3 lunaInitPos;
@@ -30,9 +32,12 @@ public class BattleController : MonoBehaviour {
     private float lunaAttackAnimatorDuration = 0.667f;
     private float lunaFadeDuration = 0.333f;
     private float lunaFadeSize = 0.3f;
+    //private float lunaRecoverHpDuration = 1f;
 
     //private float lunaSkillDuration = 0.5f;
     private float lunaSkillEffectDuration = 1.18f; //放在怪物身上的技能伤害动画持续时间
+
+    private float lunaHealEffectDuration = 1.2f;
 
     private float monsterMoveDuration = 0.5f;
     private float monsterFadeDuration = 0.6f;
@@ -44,6 +49,7 @@ public class BattleController : MonoBehaviour {
     private string clipNameHurt = "Hurt";
     private string clipNameDefense = "isDefend";
     private string clipNameSkill = "Skill";
+    private string clipNameRecoverHp = "RecoverHP";
 
     // 协程引用
     private IEnumerator lunaAttack, monsterAttack;
@@ -70,11 +76,24 @@ public class BattleController : MonoBehaviour {
         StartCoroutine(PerformDefenseLogic());
     }
 
+    /// <summary>
+    /// luna的伤害技能
+    /// </summary>
     public void Skill() {
         if (!GameManager.Instance.CanUseSkill(GameManager.Instance.lunaMpCost)) {
             return;
         }
         StartCoroutine(PerformSkillLogic());
+    }
+
+    /// <summary>
+    /// luna的回血技能
+    /// </summary>
+    public void RecoverHp() {
+        if (!GameManager.Instance.CanInOrDecreaseLuna(true)) {
+            return;
+        }
+        StartCoroutine(PerformRecoverHpLogic());
     }
 
     /// <summary>
@@ -197,6 +216,10 @@ public class BattleController : MonoBehaviour {
         });
     }
 
+    /// <summary>
+    /// 协程,执行luna的伤害技能
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator PerformSkillLogic() {
         UIManager.Instance.ShowBattleUI(false);
         lunaAnimator.CrossFade(clipNameSkill, 0);
@@ -212,5 +235,16 @@ public class BattleController : MonoBehaviour {
         JudgeMonsterHp(lunaDamage);
         SpriteRendererReset(monsterRenderer);
         UIManager.Instance.ShowBattleUI(true);
+    }
+
+    private IEnumerator PerformRecoverHpLogic() {
+        UIManager.Instance.ShowBattleUI(false);
+        lunaAnimator.CrossFade(clipNameRecoverHp, 0);
+        GameManager.Instance.InOrDecreaseLunaHp();
+
+        healEffectCopy = Instantiate(HealEffect, lunaTransform) as GameObject;
+        yield return new WaitForSeconds(lunaHealEffectDuration);
+        UIManager.Instance.ShowBattleUI(true);
+        yield return null;
     }
 }

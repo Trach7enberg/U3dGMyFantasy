@@ -4329,6 +4329,7 @@ MonoBehaviour:
   lunaTransform: {fileID: 1334875788}
   monsterTransform: {fileID: 1413433594}
   SkillEffect: {fileID: 2610391717230551059, guid: b80bc77bc8abbcb44897a4cee192a7a5, type: 3}
+  HealEffect: {fileID: 9080541053476652632, guid: 4b9a6178aa1940a4f9966c9d05139600, type: 3}
   monsterRenderer: {fileID: 1413433595}
   lunaRenderer: {fileID: 1334875789}
 --- !u!1 &819253055
@@ -9906,7 +9907,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1868937319}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 799709538}
+        m_TargetAssemblyTypeName: BattleController, Assembly-CSharp
+        m_MethodName: RecoverHp
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1868937319
 MonoBehaviour:
   m_ObjectHideFlags: 0
