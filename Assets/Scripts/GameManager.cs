@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -10,6 +11,8 @@ public class GameManager : MonoBehaviour {
     public float lunaMaxHp { get; private set; }
     public float lunaMaxMp { get; private set; }
     public float monsterMaxHp { get; private set; }
+
+    public float lunaMpCost;
 
     [Range(0, 5)]
     public float lunaCurrentHp;
@@ -26,6 +29,7 @@ public class GameManager : MonoBehaviour {
         lunaMaxHp = 5;
         lunaMaxMp = 5;
         monsterMaxHp = 5;
+        lunaMpCost = -3f;
 
         monsterCurrentHp = monsterMaxHp;
         lunaCurrentHp = lunaMaxHp;
@@ -67,6 +71,16 @@ public class GameManager : MonoBehaviour {
     /// <returns></returns>
     public bool CanInOrDecreaseLuna(bool hpOrMp) {
         return hpOrMp ? lunaCurrentHp <= lunaMaxHp : lunaCurrentMp <= lunaMaxMp;
+    }
+
+    /// <summary>
+    /// 判断luna是否能使用消耗蓝量的技能
+    /// </summary>
+    /// <param name="value">耗蓝数(为负数)</param>
+    /// <returns></returns>
+    public bool CanUseSkill(float value) {
+        //耗蓝数为负数,判断时候就要改回正数
+        return lunaCurrentMp >= -value;
     }
 
     /// <summary>
