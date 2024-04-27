@@ -98,7 +98,7 @@ public class GameManager : MonoBehaviour {
     /// 启用游戏战斗场景
     /// </summary>
     /// <param name="enter">true为开启</param>
-    public void EnterOrExitBattle(bool enter = true) {
+    public void ShowBattleGround(bool enter = true) {
         battleBackGround.SetActive(enter);
     }
 }
