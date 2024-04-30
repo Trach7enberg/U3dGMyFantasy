@@ -102,6 +102,18 @@ public class BattleController : MonoBehaviour {
         StartCoroutine(PerformRecoverHpLogic());
     }
 
+    public void Escape() {
+        UIManager.Instance.ShowBattleUI(false);
+        lunaAnimator.SetBool(animatorParameters[2], true);
+        lunaAnimator.SetFloat(animatorParameters[1], 1f);
+        lunaTransform.DOLocalMoveX(lunaTransform.localPosition.x + 2.5f, lunaMoveDuration).OnComplete((() => {
+            lunaAnimator.SetBool(animatorParameters[2], false);
+            lunaAnimator.SetFloat(animatorParameters[1], 0f);
+            GameManager.Instance.ShowBattleGround(false);
+            lunaTransform.localPosition = lunaInitPos;
+        }));
+    }
+
     /// <summary>
     /// 重置精灵渲染器的颜色和alpha值,颜色默认为白色
     /// </summary>
@@ -244,7 +256,7 @@ public class BattleController : MonoBehaviour {
     private IEnumerator PerformSkillLogic() {
         UIManager.Instance.ShowBattleUI(false);
         lunaAnimator.CrossFade(clipNameSkill, 0);
-        JudgeLunaMp();
+        JudgeLunaMp(GameManager.Instance.lunaSkillMpCost);
 
         // 以monster为父类生成在monster脚下的动画
         skillEffectCopy = Instantiate(SkillEffect, monsterTransform) as GameObject;
@@ -267,7 +279,7 @@ public class BattleController : MonoBehaviour {
     private IEnumerator PerformRecoverHpLogic() {
         UIManager.Instance.ShowBattleUI(false);
         lunaAnimator.CrossFade(clipNameRecoverHp, 0);
-        JudgeLunaMp();
+        JudgeLunaMp(GameManager.Instance.lunaHealMpCost);
 
         healEffectCopy = Instantiate(HealEffect, lunaTransform) as GameObject;
         yield return new WaitForSeconds(lunaHealEffectDuration);
