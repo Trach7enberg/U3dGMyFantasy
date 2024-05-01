@@ -1,16 +1,38 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// 对话信息结构体
+/// </summary>
+public struct DialogInfo {
+    public UIManager.NpcNames Name;
+    public string Content;
+}
+
+/// <summary>
+/// UI管理
+/// </summary>
 public class UIManager : MonoBehaviour {
     public static UIManager Instance;
     public Image hpMaskImage;
     public Image mpMaskImage;
+    public Image CurrentCharacterImage;
+    public Sprite[] characterSprites;
+    public Text NameText;
+    public Text ContentText;
 
 
-    public GameObject battleUI;
-
+    public GameObject BattleChoicePanel;
+    public GameObject BattleBackGroundPanel;
+    public GameObject TalkPanel;
+    public enum NpcNames
+    {
+        Luna,Nala
+    }
+    
     /// <summary>
     /// 血条和蓝条原始宽度
     /// </summary>
@@ -33,7 +55,31 @@ public class UIManager : MonoBehaviour {
         mpMaskImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, MpFillPercent * originalSize);
     }
 
-    public void ShowBattleUI(bool enter = true) {
-        battleUI.SetActive(enter);
+    public void ShowBattleUi(bool enter = true) {
+        BattleChoicePanel.SetActive(enter);
     }
+
+    public void ShowTalkPanel(bool isShow = true)
+    {
+        TalkPanel.SetActive(isShow);
+    }
+
+    /// <summary>
+    /// 显示对话内容(包含人物切换、文本内容修改),content为null则关闭对话框
+    /// </summary>
+    /// <param name="eName">枚举类型的npc名字</param>
+    /// <param name="content">对话的信息</param>
+    public void ShowNpcDialog(NpcNames eName=NpcNames.Luna , string content = null)
+    {
+        if ( content == null) {
+            ShowTalkPanel(false);
+        }
+        else {
+            ShowTalkPanel(true);
+            CurrentCharacterImage.sprite = characterSprites[(int)eName];
+            CurrentCharacterImage.SetNativeSize();// 即图片组件里的Set Native Size
+            NameText.text = eName.ToString();
+        }
+    }
+    
 }

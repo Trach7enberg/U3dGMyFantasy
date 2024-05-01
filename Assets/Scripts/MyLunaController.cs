@@ -65,10 +65,14 @@ public class MyLunaController : MonoBehaviour {
     private void FixedUpdate() {
         Vector2 nextPosition = transform.position;
         nextPosition = playerInput * currentSpeed * Time.fixedDeltaTime + nextPosition;
+        
+        if (GameManager.Instance.canControlLuna)
+        {
 
-        UpdateAnimatorState(playerInput);
+            UpdateAnimatorState(playerInput);
 
-        rigibody.MovePosition(nextPosition);
+            rigibody.MovePosition(nextPosition);
+        }
     }
 
     private Vector2 GetPlayerInput() {

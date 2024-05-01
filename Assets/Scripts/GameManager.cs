@@ -7,12 +7,17 @@ public class GameManager : MonoBehaviour {
     public static GameManager Instance;
 
     public GameObject battleBackGround;
+    // 是否能控制luna
+    public bool canControlLuna;
 
     public float lunaMaxHp { get; private set; }
     public float lunaMaxMp { get; private set; }
     public float monsterMaxHp { get; private set; }
 
+    // luna使用Mp技能消耗的蓝数
     public float lunaSkillMpCost;
+
+    // luna使用回血技能消耗的蓝数
     public float lunaHealMpCost;
 
     [Range(0, 5)]
@@ -24,11 +29,17 @@ public class GameManager : MonoBehaviour {
     [Range(0, 5)]
     public float monsterCurrentHp;
 
-    public bool test;
+    public int CurrentDialogInfoIndex;
+
+    // 方便测试
+    public bool Test;
 
     private void Awake() {
         Instance = this;
-        test = false;
+        canControlLuna = true;
+        Test = false;
+
+        CurrentDialogInfoIndex = 0;
 
         lunaMaxHp = 5;
         lunaMaxMp = 5;
@@ -69,7 +80,7 @@ public class GameManager : MonoBehaviour {
         UIManager.Instance.SetBar(lunaCurrentHp / lunaMaxHp, lunaCurrentMp / lunaMaxMp);
 
         // 测试
-        if (test) {
+        if (Test) {
             lunaCurrentMp = lunaMaxMp;
             lunaCurrentHp = lunaMaxMp;
             monsterCurrentHp = monsterMaxHp;

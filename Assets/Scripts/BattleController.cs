@@ -44,7 +44,7 @@ public class BattleController : MonoBehaviour {
     private float monsterMoveDuration = 0.5f;
     private float monsterFadeDuration = 0.6f;
     private float monsterFade = 0.3f;
-    private float monsterDieDuration = 1f;
+    //private float monsterDieDuration = 1f;
 
     // 动画序列在状态机里的名字
     private string clipNameAtk = "Attack";
@@ -55,7 +55,7 @@ public class BattleController : MonoBehaviour {
     private string clipNameRecoverHp = "RecoverHP";
     private string clipNameDie = "Die";
 
-    private bool isDie;
+    public bool isDie;
 
     // 协程引用
     private IEnumerator lunaAttack, monsterAttack;
@@ -103,7 +103,7 @@ public class BattleController : MonoBehaviour {
     }
 
     public void Escape() {
-        UIManager.Instance.ShowBattleUI(false);
+        UIManager.Instance.ShowBattleUi(false);
         lunaAnimator.SetBool(animatorParameters[2], true);
         lunaAnimator.SetFloat(animatorParameters[1], 1f);
         lunaTransform.DOLocalMoveX(lunaTransform.localPosition.x + 2.5f, lunaMoveDuration).OnComplete((() => {
@@ -159,7 +159,7 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformAttackLogic() {
-        UIManager.Instance.ShowBattleUI(false);
+        UIManager.Instance.ShowBattleUi(false);
         lunaAnimator.SetBool(animatorParameters[2], true);
         lunaAnimator.SetFloat(animatorParameters[1], -1f);
 
@@ -217,7 +217,7 @@ public class BattleController : MonoBehaviour {
         JudgeLunaHp(MonsterDamage);
 
         monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
-            UIManager.Instance.ShowBattleUI(true);
+            UIManager.Instance.ShowBattleUi(true);
         });
     }
 
@@ -226,7 +226,7 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformDefenseLogic() {
-        UIManager.Instance.ShowBattleUI(false);
+        UIManager.Instance.ShowBattleUi(false);
         lunaAnimator.SetBool(clipNameDefense, true);
 
         monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 1.5f, monsterMoveDuration / 2f);
@@ -244,7 +244,7 @@ public class BattleController : MonoBehaviour {
         yield return new WaitForSeconds(lunaMoveDuration);
         //怪物归位
         monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
-            UIManager.Instance.ShowBattleUI(true);
+            UIManager.Instance.ShowBattleUi(true);
             lunaAnimator.SetBool(clipNameDefense, false);
         });
     }
@@ -254,7 +254,7 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformSkillLogic() {
-        UIManager.Instance.ShowBattleUI(false);
+        UIManager.Instance.ShowBattleUi(false);
         lunaAnimator.CrossFade(clipNameSkill, 0);
         JudgeLunaMp(GameManager.Instance.lunaSkillMpCost);
 
@@ -277,14 +277,14 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformRecoverHpLogic() {
-        UIManager.Instance.ShowBattleUI(false);
+        UIManager.Instance.ShowBattleUi(false);
         lunaAnimator.CrossFade(clipNameRecoverHp, 0);
         JudgeLunaMp(GameManager.Instance.lunaHealMpCost);
 
         healEffectCopy = Instantiate(HealEffect, lunaTransform) as GameObject;
         yield return new WaitForSeconds(lunaHealEffectDuration);
         JudgeLunaHp();
-        UIManager.Instance.ShowBattleUI(true);
+        UIManager.Instance.ShowBattleUi(true);
         yield return null;
     }
 
@@ -297,13 +297,13 @@ public class BattleController : MonoBehaviour {
         lunaRenderer.color = Color.red;
         lunaRenderer.DOFade(lunaFadeDuration, lunaDieDuration);
         yield return new WaitForSeconds(lunaDieDuration);
-        UIManager.Instance.ShowBattleUI(false);
+        UIManager.Instance.ShowBattleUi(false);
         GameManager.Instance.ShowBattleGround(false);
         isDie = true;
     }
 
     private IEnumerator PerformMonsterDieLogic() {
-        UIManager.Instance.ShowBattleUI(false);
+        UIManager.Instance.ShowBattleUi(false);
         GameManager.Instance.ShowBattleGround(false);
         isDie = true;
         yield return null;
