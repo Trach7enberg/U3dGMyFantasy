@@ -3190,9 +3190,9 @@ GameObject:
   - component: {fileID: 570218854}
   - component: {fileID: 570218855}
   - component: {fileID: 570218856}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Horse
-  m_TagString: Untagged
+  m_TagString: Horse
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7200,6 +7200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1254105358}
+  - component: {fileID: 1254105359}
   m_Layer: 0
   m_Name: Npc
   m_TagString: Untagged
@@ -7225,6 +7226,20 @@ Transform:
   - {fileID: 570218853}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1254105359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254105357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 237bb84a70be93348a7fc399cc47e562, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentContentIndex: 0
+  NalaAnimator: {fileID: 1453880432}
 --- !u!1 &1274240832
 GameObject:
   m_ObjectHideFlags: 0
@@ -7411,9 +7426,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1453880433}
+      - m_Target: {fileID: 1254105359}
         m_TargetAssemblyTypeName: NpcDialog, Assembly-CSharp
-        m_MethodName: ShowDialogText
+        m_MethodName: DisplayDialog
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8411,10 +8426,9 @@ GameObject:
   - component: {fileID: 1453880430}
   - component: {fileID: 1453880431}
   - component: {fileID: 1453880432}
-  - component: {fileID: 1453880433}
-  m_Layer: 0
-  m_Name: NalaSeller
-  m_TagString: Untagged
+  m_Layer: 6
+  m_Name: Nala
+  m_TagString: Nala
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8552,19 +8566,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1453880433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1453880428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 237bb84a70be93348a7fc399cc47e562, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CurrentContentIndex: 0
 --- !u!1 &1459006023
 GameObject:
   m_ObjectHideFlags: 0
@@ -10516,9 +10517,9 @@ GameObject:
   - component: {fileID: 1973600382}
   - component: {fileID: 1973600385}
   - component: {fileID: 1973600386}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dog
-  m_TagString: Untagged
+  m_TagString: Dog
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10966,7 +10967,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.019479169, y: 0.037851855}
   m_AnchorMax: {x: 0.98, y: 0.2147778}
-  m_AnchoredPosition: {x: 0.96691895, y: -1.2358398}
+  m_AnchoredPosition: {x: 0.967041, y: -1.2358398}
   m_SizeDelta: {x: 0.59339905, y: -4.9665985}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2096294772

@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,29 +7,35 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class MyLunaController : MonoBehaviour {
-    Rigidbody2D rigibody;
+    private Rigidbody2D rigibody;
+
     // 动画状态机
-    Animator animator;
+    private Animator animator;
+
     private string[] AnimatorParameters = { "ToX", "ToY" };
 
     //luna对象下的第一个子类,即LunaSprite
-    Transform lunaLocalTransform;
+    private Transform lunaLocalTransform;
 
     // 当前速度和速度因子
     [SerializeField]
     private float currentSpeed;
+
     public float speedFactor = 2f;
 
-    Vector2 playerInput;
+    private Vector2 playerInput;
 
     // 记录人物当前帧的动画朝向
     private Vector2 towards;
 
     // 人物是否跳跃
     public bool isJump;
+
     private float jumpDuration = 0.5f;
+
     // 完成一个跳跃逼真效果的时间
     private float jumpRealityDuration = 0.25f;
+
     // 跳跃逼真效果的幅度
     private float jumpRealitySize = 1f;
 
@@ -39,12 +46,12 @@ public class MyLunaController : MonoBehaviour {
 
     // 人物攀爬
     public bool isClimb;
+
     public bool inClimbArea;
 
+    public bool inTalk;
 
-    
-
-    void Start() {
+    private void Start() {
         //设置帧率
         //Application.targetFrameRate = 30;
         rigibody = GetComponent<Rigidbody2D>();
@@ -52,23 +59,17 @@ public class MyLunaController : MonoBehaviour {
         lunaLocalTransform = transform.GetChild(0);
         lunaLocalPositionYOriginal = lunaLocalTransform.localPosition.y;
         currentSpeed = speedFactor;
-
-        
     }
 
-
-    void Update() {
+    private void Update() {
         playerInput = GetPlayerInput();
-
     }
 
     private void FixedUpdate() {
         Vector2 nextPosition = transform.position;
         nextPosition = playerInput * currentSpeed * Time.fixedDeltaTime + nextPosition;
-        
-        if (GameManager.Instance.canControlLuna)
-        {
 
+        if (GameManager.Instance.canControlLuna) {
             UpdateAnimatorState(playerInput);
 
             rigibody.MovePosition(nextPosition);
@@ -84,10 +85,12 @@ public class MyLunaController : MonoBehaviour {
 
         // 跳跑爬状态默认是按下切换,而不是持续按下
         // 与运算的作用是 跳跑爬动作同时只能存在一个
-        isJump = (isJump) ? !Input.GetKeyDown(KeyCode.Space) : !isRun & !isClimb  & Input.GetKeyDown(KeyCode.Space);
+        isJump = (isJump) ? !Input.GetKeyDown(KeyCode.Space) : !isRun & !isClimb & Input.GetKeyDown(KeyCode.Space);
         isRun = (isRun) ? !Input.GetKeyDown(KeyCode.LeftShift) : !isJump & !isClimb & Input.GetKeyDown(KeyCode.LeftShift);
         isClimb = (isClimb) ? !Input.GetKeyDown(KeyCode.LeftControl) : !isJump & !isRun & inClimbArea & Input.GetKeyDown(KeyCode.LeftControl);
-
+        if (Input.GetKeyDown(KeyCode.F)) {
+            Talk();
+        }
         return p;
     }
 
@@ -104,7 +107,7 @@ public class MyLunaController : MonoBehaviour {
     /// </summary>
     /// <param name="a">跳跃区域对应的A点</param>
     /// <param name="b">跳跃区域对应的B点</param>
-    public void Jump(Transform a,Transform b) {
+    public void Jump(Transform a, Transform b) {
         SetSimulated(false);
 
         // 分别判断当前距离与A点、B点哪个点的距离远
@@ -114,10 +117,10 @@ public class MyLunaController : MonoBehaviour {
         // 当前位置如果离A点远,则从当前位置跳跃到A点
         transform.DOMove((disA) > disB ? a.position : b.position, jumpDuration).SetEase(Ease.Linear).OnComplete(
             () => {
-            //跳跃结束时luna的刚体模拟要恢复否则会卡住不动
-            SetSimulated(true);
-            isJump = false;
-        });
+                //跳跃结束时luna的刚体模拟要恢复否则会卡住不动
+                SetSimulated(true);
+                isJump = false;
+            });
 
         // 移动luna下的lunaSprite,让跳跃更加真实,动作分成两段,第一段是增加Y距离,第二段是恢复默认Y值
         // 可以用DOTween Sequence 队列来保存这两个动作,然后自动按顺序播放
@@ -125,8 +128,8 @@ public class MyLunaController : MonoBehaviour {
         lunaLocalTransform.DOLocalMoveY(
             lunaLocalPositionYOriginal + jumpRealitySize, jumpRealityDuration).SetEase(Ease.InOutSine)
             .OnComplete(
-                () => { 
-                    lunaLocalTransform.DOLocalMoveY(lunaLocalPositionYOriginal, jumpRealityDuration).SetEase(Ease.InOutSine); 
+                () => {
+                    lunaLocalTransform.DOLocalMoveY(lunaLocalPositionYOriginal, jumpRealityDuration).SetEase(Ease.InOutSine);
                 }
             );
     }
@@ -142,10 +145,9 @@ public class MyLunaController : MonoBehaviour {
             // 将输入的xy位置归一化(即-1到1之间的范围),长度变为单位1,方向不变
             towards.Normalize();
 
-            // 动作只能触发一种
+            // 动作只能触发一种(有动画状态的动作)
             if (isJump) {
                 animator.SetBool("Jump", true);
-
             } else if (isClimb) {
                 animator.SetBool("Climb", true);
             } else if (isRun) {
@@ -156,7 +158,6 @@ public class MyLunaController : MonoBehaviour {
                 animator.SetBool("Jump", false);
                 animator.SetBool("Run", false);
                 currentSpeed = speedFactor;
-
             }
         }
         animator.SetFloat("MoveValue", originalInput.magnitude);
@@ -165,7 +166,21 @@ public class MyLunaController : MonoBehaviour {
         animator.SetFloat(AnimatorParameters[1], towards.y);
     }
 
+    public void Talk() {
+        // 以某个刚体为半径的自交球,有东西在这个半径内 就代表检测成功,第一个参数是以谁为中心点,第二个参数是检测半径,第三参数是检测的是哪个层级的游戏物体
+        Collider2D c = Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UIManager.GameLayerMask.NPC.ToString()));
 
-    
+        if (c != null && Enum.IsDefined(typeof(UIManager.NpcNames), c.name)) {
+            switch ((UIManager.NpcNames)Enum.Parse(typeof(UIManager.NpcNames), c.name)) {
+                case UIManager.NpcNames.Nala:
+                    GameManager.Instance.canControlLuna = false;
 
+                    // 播放对应NPC触发对话的动画
+                    c.GetComponentsInParent<Animator>()[0].CrossFade("TalkLaugh", 0);
+                    // 拿到碰撞对象NPC下的父类然后播放对话
+                    c.GetComponentInParent<NpcDialog>().DisplayDialog();
+                    break;
+            }
+        }
+    }
 }

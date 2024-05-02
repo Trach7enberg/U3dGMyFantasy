@@ -24,22 +24,28 @@ public class UIManager : MonoBehaviour {
     public Text NameText;
     public Text ContentText;
 
-
     public GameObject BattleChoicePanel;
     public GameObject BattleBackGroundPanel;
     public GameObject TalkPanel;
-    public enum NpcNames
-    {
-        Luna,Nala
+
+    public enum NpcNames {
+        Luna, Nala
     }
-    
+
+    /// <summary>
+    /// 游戏层级mask
+    /// </summary>
+    public enum GameLayerMask {
+        NPC,
+    }
+
     /// <summary>
     /// 血条和蓝条原始宽度
     /// </summary>
     private float originalSize;
 
     // Awake先于 start()方法执行
-    void Awake() {
+    private void Awake() {
         Instance = this;
         originalSize = hpMaskImage.rectTransform.rect.width;
     }
@@ -59,8 +65,7 @@ public class UIManager : MonoBehaviour {
         BattleChoicePanel.SetActive(enter);
     }
 
-    public void ShowTalkPanel(bool isShow = true)
-    {
+    public void ShowTalkPanel(bool isShow = true) {
         TalkPanel.SetActive(isShow);
     }
 
@@ -69,17 +74,14 @@ public class UIManager : MonoBehaviour {
     /// </summary>
     /// <param name="eName">枚举类型的npc名字</param>
     /// <param name="content">对话的信息</param>
-    public void ShowNpcDialog(NpcNames eName=NpcNames.Luna , string content = null)
-    {
-        if ( content == null) {
+    public void ShowNpcDialog(NpcNames eName = NpcNames.Luna, string content = null) {
+        if (content == null) {
             ShowTalkPanel(false);
-        }
-        else {
+        } else {
             ShowTalkPanel(true);
             CurrentCharacterImage.sprite = characterSprites[(int)eName];
             CurrentCharacterImage.SetNativeSize();// 即图片组件里的Set Native Size
             NameText.text = eName.ToString();
         }
     }
-    
 }
