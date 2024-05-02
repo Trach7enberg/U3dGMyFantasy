@@ -2750,6 +2750,7 @@ MonoBehaviour:
   lunaCurrentMp: 0
   monsterCurrentHp: 0
   CurrentDialogInfoIndex: 0
+  HasPetTheDog: 0
   Test: 0
 --- !u!4 &500390331
 Transform:
@@ -3013,7 +3014,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -277, y: 360}
+  m_AnchoredPosition: {x: -373, y: 360}
   m_SizeDelta: {x: 554, y: 720}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &539866928
@@ -7239,6 +7240,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentContentIndex: 0
+  DoneContent: 0
   NalaAnimator: {fileID: 1453880432}
 --- !u!1 &1274240832
 GameObject:

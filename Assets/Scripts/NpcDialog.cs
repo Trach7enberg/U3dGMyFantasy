@@ -4,11 +4,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// 对话信息
+/// 任务对话信息控制
 /// </summary>
 public class NpcDialog : MonoBehaviour {
-    private string Candle = "5";
-    private string Monsters = "5";
+    private int TargetCandles = 5;
+    private int TargetKill = 5;
+    private int Candle;
+    private int Monsters;
     private string WeaponName = "蓝纹火锤";
     private List<DialogInfo[]> list;
     public int CurrentContentIndex;
@@ -17,6 +19,8 @@ public class NpcDialog : MonoBehaviour {
 
     private void Start() {
         CurrentContentIndex = 0;
+        this.Candle = GameManager.Instance.CandleNum;
+        this.Monsters = GameManager.Instance.KilledMonsterNum;
         list = new List<DialogInfo[]>() {
             new DialogInfo[] {
                 new DialogInfo(){Name = UIManager.NpcNames.Luna,Content = "(,,·V·)\"hello，我是Luna，你可以用上下左右控制我移动，空格键与NPC进行对话，战斗中需要简单点击按钮执行相应行为"},
@@ -34,7 +38,7 @@ public class NpcDialog : MonoBehaviour {
                 new DialogInfo(){Name=UIManager.NpcNames.Luna,Content="我是猫女郎啊"},
                 new DialogInfo(){Name=UIManager.NpcNames.Nala,Content="安心啦，不会咬你的,去吧去吧~"},
             },
-            //2
+            //2, 安抚狗没有完成
             new DialogInfo[] {
                 new DialogInfo(){Name = UIManager.NpcNames.Luna,Content = "他还在叫呢"},
             },
@@ -103,13 +107,36 @@ public class NpcDialog : MonoBehaviour {
             return;
         }
 
-        if (CurrentContentIndex < list[GameManager.Instance.CurrentDialogInfoIndex].Length) {
-            DialogInfo info = list[GameManager.Instance.CurrentDialogInfoIndex][CurrentContentIndex++];
-            UIManager.Instance.ShowNpcDialog(info.Name, info.Content);
-        } else {
+        //if (CurrentContentIndex < list[GameManager.Instance.CurrentDialogInfoIndex].Length) {
+        //    info = list[GameManager.Instance.CurrentDialogInfoIndex][CurrentContentIndex++];
+        //    UIManager.Instance.ShowNpcDialog(info.Name, info.Content);
+        //} else {
+        //    DoneContent = true;
+        //    CurrentContentIndex = 0;
+        //    UIManager.Instance.ShowNpcDialog();
+        //    GameManager.Instance.canControlLuna = true;
+        //}
+
+        // 当前list里的某个内容数组播放完成时,检测任务完成状况
+        if (CurrentContentIndex >= list[GameManager.Instance.CurrentDialogInfoIndex].Length) {
+            if (GameManager.Instance.CurrentDialogInfoIndex == 2 &&
+                !GameManager.Instance.HasPetTheDog) {
+                // 还没有完成摸狗子任务时
+            } else if (GameManager.Instance.CurrentDialogInfoIndex == 4 &&
+                       GameManager.Instance.CandleNum < TargetCandles) {
+            } else if (GameManager.Instance.CurrentDialogInfoIndex == 6 &&
+                       GameManager.Instance.KilledMonsterNum < TargetKill) {
+            } else if (GameManager.Instance.CurrentDialogInfoIndex == 7) {
+            } else {
+                GameManager.Instance.CurrentDialogInfoIndex++;
+            }
+
             CurrentContentIndex = 0;
             UIManager.Instance.ShowNpcDialog();
             GameManager.Instance.canControlLuna = true;
+        } else {
+            DialogInfo info = list[GameManager.Instance.CurrentDialogInfoIndex][CurrentContentIndex++];
+            UIManager.Instance.ShowNpcDialog(info.Name, info.Content);
         }
     }
 }

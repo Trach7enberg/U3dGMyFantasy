@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager Instance;
 
     public GameObject battleBackGround;
+
     // 是否能控制luna
     public bool canControlLuna;
 
@@ -29,7 +30,14 @@ public class GameManager : MonoBehaviour {
     [Range(0, 5)]
     public float monsterCurrentHp;
 
+    // 对话数组的一维索引下标控制
     public int CurrentDialogInfoIndex;
+
+    // 是否抚摸狗子了
+    public bool HasPetTheDog;
+
+    public int CandleNum;
+    public int KilledMonsterNum;
 
     // 方便测试
     public bool Test;
@@ -37,6 +45,9 @@ public class GameManager : MonoBehaviour {
     private void Awake() {
         Instance = this;
         canControlLuna = true;
+        HasPetTheDog = false;
+        CandleNum = 5;
+        KilledMonsterNum = 5;
         Test = false;
 
         CurrentDialogInfoIndex = 0;

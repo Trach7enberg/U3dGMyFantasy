@@ -82,6 +82,7 @@ public class UIManager : MonoBehaviour {
             CurrentCharacterImage.sprite = characterSprites[(int)eName];
             CurrentCharacterImage.SetNativeSize();// 即图片组件里的Set Native Size
             NameText.text = eName.ToString();
+            ContentText.text = content;
         }
     }
 }
