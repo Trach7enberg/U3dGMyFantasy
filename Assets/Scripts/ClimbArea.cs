@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 
 /*
  * 攀爬区域控制,进入climb为1,出去则为0
  */
+
 public class ClimbArea : MonoBehaviour {
     private string tagName = "Luna";
     private Collider2D areaCollider;
+
     private void Start() {
         areaCollider = this.gameObject.GetComponent<Collider2D>();
     }
-
 
     private void OnCollisionStay2D(Collision2D collision) {
         if (collision.gameObject.tag == tagName) {
@@ -21,9 +19,7 @@ public class ClimbArea : MonoBehaviour {
 
             if (luna.isClimb) {
                 areaCollider.isTrigger = true;
-
             }
-
         }
     }
 
@@ -33,7 +29,6 @@ public class ClimbArea : MonoBehaviour {
             luna.inClimbArea = false;
             luna.isClimb = false;
             areaCollider.isTrigger = false;
-
         }
     }
 }

@@ -17,7 +17,7 @@ namespace TMPro.Examples
         private RectTransform m_TextPopup_RectTransform;
         private TextMeshProUGUI m_TextPopup_TMPComponent;
         private const string k_LinkText = "You have selected link <#ffff00>";
-        private const string k_WordText = "Word Index: <#ffff00>";
+        private const string k_WordText = "Word CurrentIndex: <#ffff00>";
 
 
         private TextMeshProUGUI m_TextMeshPro;

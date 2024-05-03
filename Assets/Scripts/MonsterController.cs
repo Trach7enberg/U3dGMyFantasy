@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography;
-using UnityEngine;
-using UnityEngine.Windows;
+﻿using UnityEngine;
 
 /// <summary>
 /// 控制主地图上怪物的行为,默认是来回走动
@@ -89,7 +85,7 @@ public class MonsterController : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D collision) {
         if (collision.transform.tag == tagLuna) {
             GameManager.Instance.ShowBattleGround();
-            UIManager.Instance.ShowBattleUi();
+            UiManager.Instance.ShowBattleUi();
         }
     }
 }

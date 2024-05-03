@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
-
-/// <summary>
-/// 对话信息结构体
-/// </summary>
-public struct DialogInfo {
-    public UIManager.NpcNames Name;
-    public string Content;
-}
 
 /// <summary>
 /// UI管理
 /// </summary>
-public class UIManager : MonoBehaviour {
-    public static UIManager Instance;
+public partial class UiManager : MonoBehaviour {
+
+    public static UiManager Instance;
     public Image hpMaskImage;
     public Image mpMaskImage;
     public Image CurrentCharacterImage;
@@ -31,14 +22,14 @@ public class UIManager : MonoBehaviour {
     public GameObject MainSceneMonsters;
 
     public enum NpcNames {
-        Luna, Nala
+        Luna, Nala, Dog
     }
 
     /// <summary>
     /// 游戏层级mask
     /// </summary>
     public enum GameLayerMask {
-        NPC,
+        Npc,
     }
 
     /// <summary>
@@ -67,7 +58,11 @@ public class UIManager : MonoBehaviour {
         BattleChoicePanel.SetActive(enter);
     }
 
-    public void ShowTalkPanel(bool isShow = true) {
+    /// <summary>
+    /// 关闭任务对话框
+    /// </summary>
+    /// <param name="isShow">t为开启,f为关闭</param>
+    private void ShowTalkPanel(bool isShow = true) {
         TalkPanel.SetActive(isShow);
     }
 
@@ -85,6 +80,18 @@ public class UIManager : MonoBehaviour {
             CurrentCharacterImage.SetNativeSize();// 即图片组件里的Set Native Size
             NameText.text = eName.ToString();
             ContentText.text = content;
+        }
+    }
+
+    public void ShowNpcDialog(DialogInfo dialogInfo) {
+        if (dialogInfo == null || dialogInfo.Content == null) {
+            ShowTalkPanel(false);
+        } else {
+            ShowTalkPanel(true);
+            CurrentCharacterImage.sprite = characterSprites[(int)dialogInfo.Name];
+            CurrentCharacterImage.SetNativeSize();// 即图片组件里的Set Native Size
+            NameText.text = dialogInfo.Name.ToString();
+            ContentText.text = dialogInfo.Content;
         }
     }
 

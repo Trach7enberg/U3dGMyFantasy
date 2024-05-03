@@ -1,37 +1,39 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEditor.Build;
+using OpenCover.Framework.Model;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
+    public string[] MissionNames;
+
     public static GameManager Instance;
 
-    public GameObject battleBackGround;
+    public GameObject BattleBackGround;
 
     // 是否能控制luna
-    public bool canControlLuna;
+    public bool CanControlLuna;
 
-    public float lunaMaxHp { get; private set; }
-    public float lunaMaxMp { get; private set; }
-    public float monsterMaxHp { get; private set; }
+    public float LunaMaxHp { get; private set; }
+    public float LunaMaxMp { get; private set; }
+    public float MonsterMaxHp { get; private set; }
 
     // luna使用Mp技能消耗的蓝数
-    public float lunaSkillMpCost;
+    public float LunaSkillMpCost;
 
     // luna使用回血技能消耗的蓝数
-    public float lunaHealMpCost;
+    public float LunaHealMpCost;
 
     [Range(0, 5)]
-    public float lunaCurrentHp;
+    public float LunaCurrentHp;
 
     [Range(0, 5)]
-    public float lunaCurrentMp;
+    public float LunaCurrentMp;
 
     [Range(0, 5)]
-    public float monsterCurrentHp;
+    public float MonsterCurrentHp;
 
     // 对话数组的一维索引下标控制
-    public int CurrentDialogInfoIndex;
+    public int MissionsIndex;
 
     // 是否抚摸狗子了
     public bool HasPetTheDog;
@@ -44,23 +46,33 @@ public class GameManager : MonoBehaviour {
 
     private void Awake() {
         Instance = this;
-        canControlLuna = true;
+        CanControlLuna = true;
         HasPetTheDog = false;
         CandleNum = 5;
         KilledMonsterNum = 5;
         Test = false;
 
-        CurrentDialogInfoIndex = 0;
+        MissionsIndex = 1;
 
-        lunaMaxHp = 5;
-        lunaMaxMp = 5;
-        monsterMaxHp = 5;
-        lunaSkillMpCost = -3f;
-        lunaHealMpCost = -1f;
+        LunaMaxHp = 5;
+        LunaMaxMp = 5;
+        MonsterMaxHp = 5;
+        LunaSkillMpCost = -3f;
+        LunaHealMpCost = -1f;
 
-        monsterCurrentHp = monsterMaxHp;
-        lunaCurrentHp = lunaMaxHp;
-        lunaCurrentMp = lunaMaxMp;
+        MonsterCurrentHp = MonsterMaxHp;
+        LunaCurrentHp = LunaMaxHp;
+        LunaCurrentMp = LunaMaxMp;
+
+        // 任务名设置
+        MissionNames = new string[]
+        {
+                "Welcome",
+                "PetTheDog",
+                "B",
+                "C",
+                "D",
+        };
     }
 
     private void Update() {
@@ -72,15 +84,15 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <param name="hp">血量值</param>
     public void InOrDecreaseLunaHp(float hp = 1) {
-        lunaCurrentHp = Mathf.Clamp(lunaCurrentHp + hp, 0, lunaMaxHp);
+        LunaCurrentHp = Mathf.Clamp(LunaCurrentHp + hp, 0, LunaMaxHp);
     }
 
     public void InOrDecreaseLunaMp(float mp = 1) {
-        lunaCurrentMp = Mathf.Clamp(lunaCurrentMp + mp, 0, lunaMaxMp);
+        LunaCurrentMp = Mathf.Clamp(LunaCurrentMp + mp, 0, LunaMaxMp);
     }
 
     public void InOrDecreaseMonsterHp(float hp = 1) {
-        monsterCurrentHp = Mathf.Clamp(monsterCurrentHp + hp, 0, monsterMaxHp);
+        MonsterCurrentHp = Mathf.Clamp(MonsterCurrentHp + hp, 0, MonsterMaxHp);
     }
 
     /// <summary>
@@ -88,13 +100,13 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     private void UpdateBar() {
         // 蓝条功能暂时没有完成,待更新
-        UIManager.Instance.SetBar(lunaCurrentHp / lunaMaxHp, lunaCurrentMp / lunaMaxMp);
+        UiManager.Instance.SetBar(LunaCurrentHp / LunaMaxHp, LunaCurrentMp / LunaMaxMp);
 
         // 测试
         if (Test) {
-            lunaCurrentMp = lunaMaxMp;
-            lunaCurrentHp = lunaMaxMp;
-            monsterCurrentHp = monsterMaxHp;
+            LunaCurrentMp = LunaMaxMp;
+            LunaCurrentHp = LunaMaxMp;
+            MonsterCurrentHp = MonsterMaxHp;
         }
     }
 
@@ -103,7 +115,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     public bool CanIncreaseLunaHp() {
-        return lunaCurrentHp < lunaMaxHp;
+        return LunaCurrentHp < LunaMaxHp;
     }
 
     /// <summary>
@@ -113,7 +125,7 @@ public class GameManager : MonoBehaviour {
     /// <returns></returns>
     public bool CanUseSkill(float value) {
         //耗蓝数为负数,判断时候就要改回正数
-        return lunaCurrentMp >= -value;
+        return LunaCurrentMp >= -value;
     }
 
     /// <summary>
@@ -121,6 +133,6 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <param name="enter">true为开启</param>
     public void ShowBattleGround(bool enter = true) {
-        battleBackGround.SetActive(enter);
+        BattleBackGround.SetActive(enter);
     }
 }

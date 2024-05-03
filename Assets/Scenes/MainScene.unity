@@ -2742,14 +2742,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b981fff2261214db079e3edfb23e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  battleBackGround: {fileID: 799709535}
-  canControlLuna: 0
-  lunaSkillMpCost: 0
-  lunaHealMpCost: 0
-  lunaCurrentHp: 0
-  lunaCurrentMp: 0
-  monsterCurrentHp: 0
-  CurrentDialogInfoIndex: 0
+  MissionNames: []
+  BattleBackGround: {fileID: 799709535}
+  CanControlLuna: 0
+  LunaSkillMpCost: 0
+  LunaHealMpCost: 0
+  LunaCurrentHp: 0
+  LunaCurrentMp: 0
+  MonsterCurrentHp: 0
+  MissionDialogIndex: 0
   HasPetTheDog: 0
   CandleNum: 0
   KilledMonsterNum: 0
@@ -7242,7 +7243,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 237bb84a70be93348a7fc399cc47e562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentContentIndex: 0
+  CurrentIndex: 0
+  CloseOrNot: 0
   NalaAnimator: {fileID: 1453880432}
 --- !u!1 &1274240832
 GameObject:

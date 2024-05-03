@@ -1,8 +1,5 @@
 ﻿using System;
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
@@ -69,7 +66,7 @@ public class MyLunaController : MonoBehaviour {
         Vector2 nextPosition = transform.position;
         nextPosition = playerInput * currentSpeed * Time.fixedDeltaTime + nextPosition;
 
-        if (GameManager.Instance.canControlLuna) {
+        if (GameManager.Instance.CanControlLuna) {
             UpdateAnimatorState(playerInput);
 
             rigibody.MovePosition(nextPosition);
@@ -89,7 +86,7 @@ public class MyLunaController : MonoBehaviour {
         isRun = (isRun) ? !Input.GetKeyDown(KeyCode.LeftShift) : !isJump & !isClimb & Input.GetKeyDown(KeyCode.LeftShift);
         isClimb = (isClimb) ? !Input.GetKeyDown(KeyCode.LeftControl) : !isJump & !isRun & inClimbArea & Input.GetKeyDown(KeyCode.LeftControl);
         if (Input.GetKeyDown(KeyCode.F)) {
-            Talk();
+            DoSomething();
         }
         return p;
     }
@@ -126,7 +123,7 @@ public class MyLunaController : MonoBehaviour {
         // 可以用DOTween Sequence 队列来保存这两个动作,然后自动按顺序播放
         // SetEase 是设置动画播放的速度,InOutSine 指的是sin函数的正周期,即动作从0开始加速后半段归0,非常符合跳跃的效果
         lunaLocalTransform.DOLocalMoveY(
-            lunaLocalPositionYOriginal + jumpRealitySize, jumpRealityDuration).SetEase(Ease.InOutSine)
+                lunaLocalPositionYOriginal + jumpRealitySize, jumpRealityDuration).SetEase(Ease.InOutSine)
             .OnComplete(
                 () => {
                     lunaLocalTransform.DOLocalMoveY(lunaLocalPositionYOriginal, jumpRealityDuration).SetEase(Ease.InOutSine);
@@ -166,18 +163,22 @@ public class MyLunaController : MonoBehaviour {
         animator.SetFloat(AnimatorParameters[1], towards.y);
     }
 
-    public void Talk() {
+    public void DoSomething() {
         // 以某个刚体为半径的自交球,有东西在这个半径内 就代表检测成功,第一个参数是以谁为中心点,第二个参数是检测半径,第三参数是检测的是哪个层级的游戏物体
-        Collider2D c = Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UIManager.GameLayerMask.NPC.ToString()));
+        Collider2D c = Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UiManager.GameLayerMask.Npc.ToString()));
 
-        if (c != null && Enum.IsDefined(typeof(UIManager.NpcNames), c.name)) {
-            switch ((UIManager.NpcNames)Enum.Parse(typeof(UIManager.NpcNames), c.name)) {
-                case UIManager.NpcNames.Nala:
+        if (c != null && Enum.IsDefined(typeof(UiManager.NpcNames), c.name)) {
+            switch ((UiManager.NpcNames)Enum.Parse(typeof(UiManager.NpcNames), c.name)) {
+                case UiManager.NpcNames.Nala:
 
                     // 播放对应NPC触发对话的动画
                     c.GetComponentsInParent<Animator>()[0].CrossFade("TalkLaugh", 0);
                     // 拿到碰撞对象NPC下的父类然后播放对话
                     c.GetComponentInParent<NpcDialog>().DisplayDialog();
+                    break;
+
+                case UiManager.NpcNames.Dog:
+                    Debug.Log("dog");
                     break;
             }
         }
