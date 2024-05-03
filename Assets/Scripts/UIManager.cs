@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour {
     public GameObject BattleBackGroundPanel;
     public GameObject TalkPanel;
 
+    public GameObject MainSceneMonsters;
+
     public enum NpcNames {
         Luna, Nala
     }
@@ -84,5 +86,13 @@ public class UIManager : MonoBehaviour {
             NameText.text = eName.ToString();
             ContentText.text = content;
         }
+    }
+
+    /// <summary>
+    /// 主场景怪物是否启用
+    /// </summary>
+    /// <param name="isShow"></param>
+    public void ShowMonsters(bool isShow) {
+        MainSceneMonsters.SetActive(isShow);
     }
 }

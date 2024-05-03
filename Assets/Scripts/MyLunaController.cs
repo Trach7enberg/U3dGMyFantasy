@@ -173,7 +173,6 @@ public class MyLunaController : MonoBehaviour {
         if (c != null && Enum.IsDefined(typeof(UIManager.NpcNames), c.name)) {
             switch ((UIManager.NpcNames)Enum.Parse(typeof(UIManager.NpcNames), c.name)) {
                 case UIManager.NpcNames.Nala:
-                    GameManager.Instance.canControlLuna = false;
 
                     // 播放对应NPC触发对话的动画
                     c.GetComponentsInParent<Animator>()[0].CrossFade("TalkLaugh", 0);

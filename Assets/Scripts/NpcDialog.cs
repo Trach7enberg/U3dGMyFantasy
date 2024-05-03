@@ -81,7 +81,7 @@ public class NpcDialog : MonoBehaviour {
                 new DialogInfo(){Name=UIManager.NpcNames.Luna,Content="哎，行吧，谁让你大呢~"},
                 new DialogInfo(){Name=UIManager.NpcNames.Nala,Content="嘻嘻，那辛苦你啦"},
             },
-            //6
+            //6,尚未完成清理怪物任务
             new DialogInfo[] {
                 new DialogInfo(){Name=UIManager.NpcNames.Nala,Content="宝，你还没清理干净呢，这样我不方便嘛~"},
             },
@@ -107,16 +107,6 @@ public class NpcDialog : MonoBehaviour {
             return;
         }
 
-        //if (CurrentContentIndex < list[GameManager.Instance.CurrentDialogInfoIndex].Length) {
-        //    info = list[GameManager.Instance.CurrentDialogInfoIndex][CurrentContentIndex++];
-        //    UIManager.Instance.ShowNpcDialog(info.Name, info.Content);
-        //} else {
-        //    DoneContent = true;
-        //    CurrentContentIndex = 0;
-        //    UIManager.Instance.ShowNpcDialog();
-        //    GameManager.Instance.canControlLuna = true;
-        //}
-
         // 当前list里的某个内容数组播放完成时,检测任务完成状况
         if (CurrentContentIndex >= list[GameManager.Instance.CurrentDialogInfoIndex].Length) {
             if (GameManager.Instance.CurrentDialogInfoIndex == 2 &&
@@ -126,15 +116,19 @@ public class NpcDialog : MonoBehaviour {
                        GameManager.Instance.CandleNum < TargetCandles) {
             } else if (GameManager.Instance.CurrentDialogInfoIndex == 6 &&
                        GameManager.Instance.KilledMonsterNum < TargetKill) {
-            } else if (GameManager.Instance.CurrentDialogInfoIndex == 7) {
             } else {
                 GameManager.Instance.CurrentDialogInfoIndex++;
+            }
+
+            if (GameManager.Instance.CurrentDialogInfoIndex == 6) {
+                UIManager.Instance.ShowMonsters(true);
             }
 
             CurrentContentIndex = 0;
             UIManager.Instance.ShowNpcDialog();
             GameManager.Instance.canControlLuna = true;
         } else {
+            GameManager.Instance.canControlLuna = false;
             DialogInfo info = list[GameManager.Instance.CurrentDialogInfoIndex][CurrentContentIndex++];
             UIManager.Instance.ShowNpcDialog(info.Name, info.Content);
         }

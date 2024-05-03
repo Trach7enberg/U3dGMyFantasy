@@ -2751,6 +2751,8 @@ MonoBehaviour:
   monsterCurrentHp: 0
   CurrentDialogInfoIndex: 0
   HasPetTheDog: 0
+  CandleNum: 0
+  KilledMonsterNum: 0
   Test: 0
 --- !u!4 &500390331
 Transform:
@@ -2949,6 +2951,7 @@ MonoBehaviour:
   BattleChoicePanel: {fileID: 253119305}
   BattleBackGroundPanel: {fileID: 799709535}
   TalkPanel: {fileID: 1279119181}
+  MainSceneMonsters: {fileID: 1771113169}
 --- !u!1 &532237554
 GameObject:
   m_ObjectHideFlags: 0
@@ -7240,7 +7243,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentContentIndex: 0
-  DoneContent: 0
   NalaAnimator: {fileID: 1453880432}
 --- !u!1 &1274240832
 GameObject:
@@ -9862,7 +9864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1771113170
 Transform:
   m_ObjectHideFlags: 0

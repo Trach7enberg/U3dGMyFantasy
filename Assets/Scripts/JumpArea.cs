@@ -1,20 +1,17 @@
-using DG.Tweening;
+ï»¿using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÌøÔ¾ÇøÓò¼ì²â
+/// è·³è·ƒåŒºåŸŸæ£€æµ‹
 /// </summary>
-public class JumpArea : MonoBehaviour
-{
+public class JumpArea : MonoBehaviour {
     public Transform jumpPointA;
     public Transform jumpPointB;
 
     private string tagName = "Luna";
-
-   
 
     private void OnCollisionStay2D(Collision2D collision) {
         MyLunaController luna = collision.transform.GetComponent<MyLunaController>();
@@ -22,7 +19,6 @@ public class JumpArea : MonoBehaviour
             if (luna.isJump) {
                 luna.Jump(jumpPointA, jumpPointB);
             }
-
         }
     }
 }
