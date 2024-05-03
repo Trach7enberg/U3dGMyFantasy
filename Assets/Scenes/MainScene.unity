@@ -2750,7 +2750,7 @@ MonoBehaviour:
   LunaCurrentHp: 0
   LunaCurrentMp: 0
   MonsterCurrentHp: 0
-  MissionDialogIndex: 0
+  MissionsIndex: 0
   HasPetTheDog: 0
   CandleNum: 0
   KilledMonsterNum: 0
@@ -3335,6 +3335,50 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &579572053
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 579572055}
+  - component: {fileID: 579572054}
+  m_Layer: 0
+  m_Name: MissionsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &579572054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579572053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15b597f332fb3524ea8dfba614b6444c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &579572055
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 579572053}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1007.80707, y: 771.79553, z: -35.06527}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &581118259
 GameObject:
   m_ObjectHideFlags: 0
@@ -7243,8 +7287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 237bb84a70be93348a7fc399cc47e562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentIndex: 0
-  CloseOrNot: 0
+  Index: 0
   NalaAnimator: {fileID: 1453880432}
 --- !u!1 &1274240832
 GameObject:
@@ -11316,3 +11359,4 @@ SceneRoots:
   - {fileID: 1957009365}
   - {fileID: 526625582}
   - {fileID: 500390331}
+  - {fileID: 579572055}

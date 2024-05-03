@@ -163,6 +163,9 @@ public class MyLunaController : MonoBehaviour {
         animator.SetFloat(AnimatorParameters[1], towards.y);
     }
 
+    /// <summary>
+    /// 与NPC互动对话、领取任务、完成任务
+    /// </summary>
     public void DoSomething() {
         // 以某个刚体为半径的自交球,有东西在这个半径内 就代表检测成功,第一个参数是以谁为中心点,第二个参数是检测半径,第三参数是检测的是哪个层级的游戏物体
         Collider2D c = Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UiManager.GameLayerMask.Npc.ToString()));
@@ -177,8 +180,12 @@ public class MyLunaController : MonoBehaviour {
                     c.GetComponentInParent<NpcDialog>().DisplayDialog();
                     break;
 
-                case UiManager.NpcNames.Dog:
-                    Debug.Log("dog");
+                case UiManager.NpcNames.Dog when MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed:
+                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name == MissionsManager.MissionsName.PetTheDog.ToString()) {
+                        MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
+                        GameManager.Instance.MissionsIndex++;
+                        MissionsManager.Instance.DialogIndex = 0;
+                    }
                     break;
             }
         }

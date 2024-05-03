@@ -7,13 +7,9 @@ using UnityEngine;
 public class NpcDialog : MonoBehaviour
 {
 
-    public int Index;
     public Animator NalaAnimator;
-    private bool IsFirstTimeEndDialog;
 
-    void Start() {
-        IsFirstTimeEndDialog = true;
-    }
+ 
     /// <summary>
     /// 显示对话
     /// </summary>
@@ -28,14 +24,15 @@ public class NpcDialog : MonoBehaviour
                     info = null;
                     m.IsEnd = false;
                     GameManager.Instance.CanControlLuna = true;
-                } else if (Index < m.DialogInfos.Length) {
-                    info = m.DialogInfos[Index++];
+                } else if (MissionsManager.Instance.DialogIndex < m.DialogInfos.Length) {
+                    info = m.DialogInfos[MissionsManager.Instance.DialogIndex++];
                     GameManager.Instance.CanControlLuna = false;
                 } else {
-                    if (IsFirstTimeEndDialog) {
+                    if (m.IsFirstTimeInEndDialog) {
                         info = null;
-                        IsFirstTimeEndDialog = false;
+                        m.IsFirstTimeInEndDialog = false;
                         GameManager.Instance.CanControlLuna = true;
+                        m.IsClaimed = true;
                         m.IsEnd = false;
                     } else {
                         info = m.DoneDialogInfo;
@@ -43,7 +40,6 @@ public class NpcDialog : MonoBehaviour
                         m.IsEnd = true;
                     }
                 }
-                
                 UiManager.Instance.ShowNpcDialog(info);
             }
         }

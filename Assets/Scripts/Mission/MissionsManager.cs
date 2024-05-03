@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MissionsManager : MonoBehaviour
 {
+    public enum MissionsName
+    {
+        Welcome, PetTheDog, FindCandles, KillMonsters, FinishAll
+    }
     private int TargetCandles = 5;
     private int TargetKill = 5;
     private int Candle;
@@ -11,9 +15,10 @@ public class MissionsManager : MonoBehaviour
     private string WeaponName = "蓝纹火锤";
     public static MissionsManager Instance;
     public List<Mission> Missions;
+    public int DialogIndex; // 当前任务的普通对话数组的索引
 
     void Start() {
-
+        DialogIndex = 0;
         Instance = this;
         this.Candle = GameManager.Instance.CandleNum;
         this.Monsters = GameManager.Instance.KilledMonsterNum;

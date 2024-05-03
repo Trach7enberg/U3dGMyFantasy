@@ -44,6 +44,9 @@ public class GameManager : MonoBehaviour {
     // 方便测试
     public bool Test;
 
+    /// <summary>
+    /// 其它类需要用到此类的方法和属性,所以是Awake不能是Start
+    /// </summary>
     private void Awake() {
         Instance = this;
         CanControlLuna = true;
