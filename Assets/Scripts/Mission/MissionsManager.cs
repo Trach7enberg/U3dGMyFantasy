@@ -8,28 +8,26 @@ public class MissionsManager : MonoBehaviour {
         Welcome, PetTheDog, FindCandles, KillMonsters, FinishAll
     }
 
-    private int TargetCandles = 5;
-    private int TargetKill = 5;
     private int Candle;
     private int Monsters;
     private string WeaponName = "蓝纹火锤";
     public static MissionsManager Instance;
     public List<Mission> Missions;
-    public int DialogIndex; // 当前任务的普通对话数组的索引
+    public int DialogIndex; // 当前List中的相应任务的普通对话数组的索引
 
     private void Start() {
         DialogIndex = 0;
         Instance = this;
-        this.Candle = GameManager.Instance.CandleNum;
-        this.Monsters = GameManager.Instance.KilledMonsterNum;
+        this.Candle = GameManager.Instance.TargetCandleNum;
+        this.Monsters = GameManager.Instance.TargetKilledNum;
         Missions = new List<Mission>() {
-            // 任务1 欢迎
+            // 索引0,任务1 欢迎
             new Mission(MissionsName.Welcome,new DialogInfo[]
             {
                 new(){Name = GameManager.NpcNames.Luna,Content = "(,,·V·)\"hello，我是Luna，你可以用上下左右控制我移动，空格键与NPC进行对话，战斗中需要简单点击按钮执行相应行为"},
             },null),
 
-            // 任务2 摸狗
+            // 索引1,任务2, 摸狗
             new Mission(MissionsName.PetTheDog,new DialogInfo[]
             {
                 new (){Name=GameManager.NpcNames.Luna,Content="好久不见了,小猫咪（*ΦωΦ*）,Luna~"},
@@ -44,7 +42,7 @@ public class MissionsManager : MonoBehaviour {
                 new (){Name=GameManager.NpcNames.Nala,Content="安心啦，不会咬你的,去吧去吧~"},
             },new DialogInfo(){Name = GameManager.NpcNames.Luna,Content = "他还在叫呢"}),
 
-            // 任务3 找蜡烛
+            // 索引2,任务3, 找蜡烛
             new Mission(MissionsName.FindCandles,new DialogInfo[]
             {
                 new (){Name=GameManager.NpcNames.Nala,Content="感谢你呐，Luna，你还是那么可靠!"},
@@ -60,7 +58,7 @@ public class MissionsManager : MonoBehaviour {
                 new (){Name=GameManager.NpcNames.Nala,Content="是的，我感觉很适合你，加油呐~"},
             },new DialogInfo(){Name = GameManager.NpcNames.Nala,Content = "你还没帮我收集到所有的蜡烛，宝~"}),
 
-            // 任务4 获得武器,可以触发显示怪物,然后清理怪物
+            // 索引3,任务4, 获得武器,可以触发显示怪物,然后清理怪物
             new Mission(MissionsName.KillMonsters,new DialogInfo[]
             {
                 new (){Name=GameManager.NpcNames.Nala,Content="可靠啊！竟然一个不差的全收集回来"},
@@ -73,7 +71,7 @@ public class MissionsManager : MonoBehaviour {
                 new (){Name=GameManager.NpcNames.Luna,Content="~~获得"+WeaponName+"~~(遇到怪物可触发战斗)"},
                 new (){Name=GameManager.NpcNames.Luna,Content="哇，谢谢你！Thanks（·ω·)"},
                 new (){Name=GameManager.NpcNames.Nala,Content="嘿嘿（*^v^*），咱们的关系不用客气"},
-                new (){Name=GameManager.NpcNames.Nala,Content="正好，最近山里出现了一堆怪物，你也算为民除害，帮忙清理了"+ Monsters +"只怪物"},
+                new (){Name=GameManager.NpcNames.Nala,Content="正好，最近山里出现了一堆怪物，你也算为民除害，请帮忙清理("+ Monsters +")只怪物"},
                 new (){Name=GameManager.NpcNames.Luna,Content="啊？"},
                 new (){Name=GameManager.NpcNames.Luna,Content="这才是你的真实目的吧？！"},
                 new (){Name=GameManager.NpcNames.Nala,Content="托拜托啦，否则真的很不方便我卖东西"},

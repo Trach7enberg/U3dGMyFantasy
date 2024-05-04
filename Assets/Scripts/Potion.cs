@@ -29,7 +29,8 @@ public class Potion : MonoBehaviour {
         if (collision.tag == tagName) {
             if (GameManager.Instance.CanIncreaseLunaHp()) {
                 GameManager.Instance.InOrDecreaseLunaHp();
-                Instantiate(startEffect, this.transform.position, Quaternion.identity);
+                GameObject ins = Instantiate(startEffect, this.transform.position, Quaternion.identity) as GameObject;
+                ins.GetComponent<EffectControl>().SetDestroyTime(1f);
                 Destroy(this.gameObject);
             }
         }

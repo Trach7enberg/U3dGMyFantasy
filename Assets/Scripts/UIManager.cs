@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Security.Cryptography;
+using System.Threading;
+using DG.Tweening;
+using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
@@ -54,6 +58,51 @@ public partial class UiManager : MonoBehaviour {
     }
 
     /// <summary>
+    /// 进入或者退出游戏战斗场景
+    /// </summary>
+    /// <param name="enter">true为开启</param>
+    public void ShowBattleGround(bool enter = true) {
+        // 关闭战斗场景时
+        if (!enter) {
+            GameManager.Instance.CanControlLuna = true;
+            
+            StartCoroutine(PerformMonsterLogic());
+        } else {
+            GameManager.Instance.MonsterCurrentHp = GameManager.Instance.MonsterMaxHp;
+            GameManager.Instance.CanControlLuna = false;
+        }
+        BattleBackGroundPanel.SetActive(enter);
+    }
+
+    /// <summary>
+    /// 进入游戏战斗场景,并且隐藏与Luna发生战斗的怪物
+    /// </summary>
+    /// <param name="monster">与Luna发生战斗的怪物</param>
+    /// <param name="battleLuna">战斗场景中的luna</param>
+    /// <param name="m">monster的初始位置</param>
+    /// <param name="bL">battleLuna的初始位置</param>
+    /// <param name="enter">true为开启</param>
+    public void ShowBattleGround(GameObject monster) {
+        monster.SetActive(false);
+        ShowBattleGround(true);
+    }
+
+    /// <summary>
+    /// 关闭战斗场景,复位战斗场景中人物的位置
+    /// </summary>
+    /// <param name="m">monster现在的位置</param>
+    /// <param name="bLuna">bLuna现在的位置</param>
+    /// <param name="mPosition">monster初始的位置</param>
+    /// <param name="bLunaPosition">bLuna初始的位置</param>
+    public void ShowBattleGround(Transform m, Transform bLuna, Vector3 mPosition, Vector3 bLunaPosition)
+    {
+        m.localPosition = mPosition;
+        bLuna.localPosition = bLunaPosition;
+        ShowBattleGround(false);
+        
+    }
+
+    /// <summary>
     /// 关闭任务对话框
     /// </summary>
     /// <param name="isShow">t为开启,f为关闭</param>
@@ -91,10 +140,23 @@ public partial class UiManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 主场景怪物是否启用
+    /// 主场景中的N个怪物是否全部启用
     /// </summary>
     /// <param name="isShow"></param>
     public void ShowMonsters(bool isShow) {
         MainSceneMonsters.SetActive(isShow);
+    }
+
+    /// <summary>
+    /// 返回主场景处理与Luna战斗的怪物是否现身
+    /// 退出战斗场景时候怪物如果没有被杀死,则在主场景中现身,需要等待n秒后怪物才能恢复,不然会和Luna撞到一起
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator PerformMonsterLogic() {
+        if (GameManager.Instance.MonsterCurrentHp != 0) {
+            yield return new WaitForSeconds(GameManager.Instance.ShowMonsterTime);
+            GameManager.Instance.GetCurrentMonster().SetActive(true);
+        } 
+        yield return 0;
     }
 }

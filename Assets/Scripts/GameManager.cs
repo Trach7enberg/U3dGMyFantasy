@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     /// 游戏里的Npc的标签名字
     /// </summary>
     public enum NpcNames {
-        Luna, Nala, Dog
+        Luna, Nala, Dog, Candle, MainMapMonster
     }
 
     /// <summary>
@@ -28,7 +28,11 @@ public class GameManager : MonoBehaviour {
 
     public static GameManager Instance;
 
-    public GameObject BattleBackGround;
+    // star效果,注意:不要destroy ,可以给多个实体共用
+    public GameObject UniversalStarEffect;
+
+    // 主场景中和Luna正在发生战斗的怪物
+    private GameObject CurrentMonster;
 
     // 是否能控制luna
     public bool CanControlLuna;
@@ -55,11 +59,25 @@ public class GameManager : MonoBehaviour {
     // 是否抚摸狗子了
     public bool HasPetTheDog;
 
+    // 蜡烛任务,当前已找到的蜡烛数
     public int CandleNum;
-    public int KilledMonsterNum;
+
+    // 杀怪任务,当前已啥的数量
+    public int KilledNum;
+
+    // 蜡烛任务完成所需要的目标数量
+    public int TargetCandleNum;
+
+    // 杀怪任务完成所需要的目标数量
+    public int TargetKilledNum;
 
     // 方便测试
     public bool Test;
+
+    // 销毁游戏物体的延迟时间
+    public float DestroyTime;
+
+    public float ShowMonsterTime;
 
     /// <summary>
     /// 其它类需要用到此类的方法和属性,所以是Awake不能是Start
@@ -67,10 +85,13 @@ public class GameManager : MonoBehaviour {
     private void Awake() {
         Instance = this;
         CanControlLuna = true;
-        HasPetTheDog = false;
-        CandleNum = 5;
-        KilledMonsterNum = 5;
+        TargetCandleNum = 5;
+        TargetKilledNum = 5;
+        CandleNum = 0;
+        KilledNum = 0;
         Test = false;
+        DestroyTime = 1f;
+        ShowMonsterTime = 1f;
 
         MissionsIndex = 1;
 
@@ -137,11 +158,12 @@ public class GameManager : MonoBehaviour {
         return LunaCurrentMp >= -value;
     }
 
-    /// <summary>
-    /// 启用游戏战斗场景
-    /// </summary>
-    /// <param name="enter">true为开启</param>
-    public void ShowBattleGround(bool enter = true) {
-        BattleBackGround.SetActive(enter);
+    public void SetCurrentMonster(GameObject monster) {
+        CurrentMonster =monster;
     }
+
+    public GameObject GetCurrentMonster() {
+        return CurrentMonster;
+    }
+
 }

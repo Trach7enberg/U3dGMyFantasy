@@ -10,6 +10,7 @@ TagManager:
   - Dog
   - Nala
   - Horse
+  - Candle
   layers:
   - Default
   - TransparentFX

@@ -5,7 +5,8 @@ using UnityEngine;
 /// <summary>
 /// 战斗场景的战斗控制
 /// </summary>
-public class BattleController : MonoBehaviour {
+public class BattleController : MonoBehaviour
+{
     public Animator lunaAnimator;
     public Transform lunaTransform;
     public Transform monsterTransform;
@@ -24,6 +25,8 @@ public class BattleController : MonoBehaviour {
 
     // luma普攻和技能伤害
     private float lunaDamage = -1f;
+
+    private float lunaSkillDamage = -3f;
 
     private float MonsterDamage = -1f;
 
@@ -54,15 +57,12 @@ public class BattleController : MonoBehaviour {
     private string clipNameRecoverHp = "RecoverHP";
     private string clipNameDie = "Die";
 
-    public bool isDie;
-
     // 协程引用
     private IEnumerator lunaAttack, monsterAttack;
 
     private void Awake() {
         monsterInitPos = monsterTransform.localPosition;
         lunaInitPos = lunaTransform.localPosition;
-        isDie = false;
         lunaAttack = PerformAttackLogic();
         monsterAttack = PerformMonsterAttackLogic();
     }
@@ -108,7 +108,7 @@ public class BattleController : MonoBehaviour {
         lunaTransform.DOLocalMoveX(lunaTransform.localPosition.x + 2.5f, lunaMoveDuration).OnComplete((() => {
             lunaAnimator.SetBool(animatorParameters[2], false);
             lunaAnimator.SetFloat(animatorParameters[1], 0f);
-            GameManager.Instance.ShowBattleGround(false);
+            UiManager.Instance.ShowBattleGround(false);
             lunaTransform.localPosition = lunaInitPos;
         }));
     }
@@ -129,8 +129,9 @@ public class BattleController : MonoBehaviour {
     /// <param name="value"></param>
     public void JudgeMonsterHp(float value = 1f) {
         GameManager.Instance.InOrDecreaseMonsterHp(value);
-        if (GameManager.Instance.MonsterCurrentHp <= 0) {
-            StartCoroutine(PerformMonsterDieLogic());
+        if (GameManager.Instance.MonsterCurrentHp <= 0)
+        {
+            PerformMonsterDieLogic();
         }
     }
 
@@ -148,7 +149,7 @@ public class BattleController : MonoBehaviour {
     /// <summary>
     /// 裁决luna的蓝值判断加减
     /// </summary>
-    /// <param name="value">默认值为1,回一滴蓝</param>
+    /// <param name="value">默认值为1,回一滴蓝,为负数则扣篮</param>
     public void JudgeLunaMp(float value = 1f) {
         GameManager.Instance.InOrDecreaseLunaMp(value);
     }
@@ -179,6 +180,9 @@ public class BattleController : MonoBehaviour {
                         //JudgeMonsterHp(lunaDamage);
                     });
             });
+
+        // 每次普通攻击,luna都会回蓝
+        JudgeLunaMp();
 
         // 等待移动+攻击完成之后 将luna回移
         yield return new WaitForSeconds(lunaMoveDuration + lunaAttackAnimatorDuration);
@@ -259,16 +263,25 @@ public class BattleController : MonoBehaviour {
 
         // 以monster为父类生成在monster脚下的动画
         skillEffectCopy = Instantiate(SkillEffect, monsterTransform) as GameObject;
+        skillEffectCopy.GetComponent<EffectControl>().SetDestroyTime(1f);
+
         monsterRenderer.DOFade(monsterFade, monsterFadeDuration);
         monsterRenderer.color = Color.red;
 
         yield return new WaitForSeconds(lunaSkillEffectDuration);
 
-        monsterRenderer.color = Color.white;
-        monsterRenderer.DOFade(1f, 0)
-            .OnComplete(() => { JudgeMonsterHp(lunaDamage); });
+        //monsterRenderer.color = Color.white;
+        //monsterRenderer.DOFade(1f, 0)
+        //    .OnComplete(() => {  });
+        SpriteRendererReset(monsterRenderer);
+        JudgeMonsterHp(lunaSkillDamage);
 
-        StartCoroutine(PerformMonsterAttackLogic());
+        //TODO  因为开启协程 会导致怪物死亡用技能时再次战斗会有bug
+        if (UiManager.Instance.BattleBackGroundPanel.activeSelf != false) {
+            StartCoroutine(PerformMonsterAttackLogic());
+        }
+        
+        
     }
 
     /// <summary>
@@ -281,6 +294,8 @@ public class BattleController : MonoBehaviour {
         JudgeLunaMp(GameManager.Instance.LunaHealMpCost);
 
         healEffectCopy = Instantiate(HealEffect, lunaTransform) as GameObject;
+        healEffectCopy.GetComponent<EffectControl>().SetDestroyTime(1f);
+
         yield return new WaitForSeconds(lunaHealEffectDuration);
         JudgeLunaHp();
         UiManager.Instance.ShowBattleUi(true);
@@ -297,14 +312,16 @@ public class BattleController : MonoBehaviour {
         lunaRenderer.DOFade(lunaFadeDuration, lunaDieDuration);
         yield return new WaitForSeconds(lunaDieDuration);
         UiManager.Instance.ShowBattleUi(false);
-        GameManager.Instance.ShowBattleGround(false);
-        isDie = true;
+        UiManager.Instance.ShowBattleGround(monsterTransform, lunaTransform, monsterInitPos, lunaInitPos);
+        
+        
     }
 
-    private IEnumerator PerformMonsterDieLogic() {
+    public void PerformMonsterDieLogic() {
+        // 怪物击杀加一
+        GameManager.Instance.KilledNum++;
         UiManager.Instance.ShowBattleUi(false);
-        GameManager.Instance.ShowBattleGround(false);
-        isDie = true;
-        yield return null;
+        
+        UiManager.Instance.ShowBattleGround(monsterTransform,lunaTransform,monsterInitPos,lunaInitPos);
     }
 }

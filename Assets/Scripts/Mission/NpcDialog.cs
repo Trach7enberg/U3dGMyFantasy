@@ -7,6 +7,7 @@ using UnityEngine;
 public class NpcDialog : MonoBehaviour {
     public Animator NalaAnimator;
     public Animator DogAnimator;
+    public GameObject StarEffect;
 
     /// <summary>
     /// 显示对话
@@ -40,45 +41,5 @@ public class NpcDialog : MonoBehaviour {
                 UiManager.Instance.ShowNpcDialog(info);
             }
         }
-        //Debug.Log("listCurrentLen: "+ GameManager.Instance.MissionsIndex+ ",listLen: "+ (Dialoglist.Count - 1));
-        // 当前一维索引大于主数组下标则返回
-        //if (!(GameManager.Instance.MissionsIndex < Dialoglist.Count)) {
-        //    return;
-        //}
-
-        // 当前list里的某个内容数组播放完成时,检测任务完成状况
-        //if (CurrentIndex >= Dialoglist[GameManager.Instance.MissionsIndex].Length) {
-        //    switch (GameManager.Instance.MissionsIndex) {
-        //        case 2 when
-        //            !GameManager.Instance.HasPetTheDog:
-        //            // 还没有完成摸狗子任务时
-        //            break;
-
-        //        case 4 when
-        //            GameManager.Instance.CandleNum < TargetCandles:
-        //            break;
-
-        //        case 6 when
-        //            GameManager.Instance.KilledMonsterNum < TargetKill:
-        //            break;
-
-        //        default:
-        //            GameManager.Instance.MissionsIndex++;
-        //            CurrentIndex = 0;
-        //            break;
-        //    }
-
-        //    // 主场景怪物显示
-        //    if (GameManager.Instance.MissionsIndex == 6) {
-        //        UIManager.Instance.ShowMonsters(true);
-        //    }
-
-        //    UIManager.Instance.ShowNpcDialog();
-        //    GameManager.Instance.canControlLuna = true;
-        //} else {
-        //    GameManager.Instance.canControlLuna = false;
-        //    DialogInfo info = Dialoglist[GameManager.Instance.MissionsIndex][CurrentIndex++];
-        //    UIManager.Instance.ShowNpcDialog(info.Name, info.Content);
-        //}
     }
 }

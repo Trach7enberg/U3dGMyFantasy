@@ -164,39 +164,106 @@ public class MyLunaController : MonoBehaviour {
     }
 
     /// <summary>
-    /// 与NPC互动对话、领取任务、完成任务
+    /// 按下F与NPC、物体的互动对话、领取任务、完成任务
+    /// 或者Luna被什么东西碰撞到,然后执行一些动作
     /// </summary>
-    public void DoSomething() {
+    /// <param name="cder">碰撞体</param>
+    /// <param name="gObject">发起主动碰撞的那个游戏物体</param>
+    public void DoSomething(Collider2D cder = null, GameObject gObject = null) {
         // 以某个刚体为半径的自交球,有东西在这个半径内 就代表检测成功,第一个参数是以谁为中心点,第二个参数是检测半径,第三参数是检测的是哪个层级的游戏物体
-        Collider2D c = Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UiManager.GameLayerMask.Npc.ToString()));
-
+        Collider2D c = (cder != null) ? cder : Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UiManager.GameLayerMask.Npc.ToString()));
+        GameObject starEffect = GameManager.Instance.UniversalStarEffect;
         if (c != null && Enum.IsDefined(typeof(GameManager.NpcNames), c.name)) {
+            GameObject starEffectCopy = null;
             switch ((GameManager.NpcNames)Enum.Parse(typeof(GameManager.NpcNames), c.name)) {
                 // 与Nala互动
                 case GameManager.NpcNames.Nala:
                     Animator nalaAnimator = c.GetComponentInParent<NpcDialog>().NalaAnimator;
                     // 播放对应NPC触发对话的动画
                     nalaAnimator.CrossFade(GameManager.AnimatorMotionName.TalkLaugh.ToString(), 0);
+
+                    // 到达某个任务时,显示怪物
+                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name ==
+                        MissionsManager.MissionsName.KillMonsters) {
+                        UiManager.Instance.ShowMonsters(true);
+                    }
+
+                    // 检测是否完成击杀任务
+                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
+                        == MissionsManager.MissionsName.KillMonsters
+                        && GameManager.Instance.KilledNum == GameManager.Instance.TargetKilledNum)
+                    {
+                        MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
+                        GameManager.Instance.MissionsIndex++;
+                        MissionsManager.Instance.DialogIndex = 0;
+                    }
+
                     // 拿到碰撞对象NPC下的父类然后播放对话
                     c.GetComponentInParent<NpcDialog>().DisplayDialog();
                     break;
 
-                // 与狗子互动
+                // 与狗子互动,相关的任务
                 case GameManager.NpcNames.Dog:
                     Animator dogAnimator = c.GetComponentInParent<NpcDialog>().DogAnimator;
+
                     // 已领取任务并且当前任务的名字是摸狗子时
                     if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed
                         && MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
                         == MissionsManager.MissionsName.PetTheDog) {
+                        // 摸狗动画
                         StartCoroutine(PetTheDogAnimation(dogAnimator, true));
+                        // star效果
+                        starEffectCopy =
+                            Instantiate(starEffect, dogAnimator.transform) as GameObject;
+                        starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(GameManager.Instance.DestroyTime);
+
+                        StartCoroutine(PetTheDogAnimation(dogAnimator, false));
 
                         MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
                         GameManager.Instance.MissionsIndex++;
                         MissionsManager.Instance.DialogIndex = 0;
                     } else {
+                        // star效果
+                        starEffectCopy =
+                            Instantiate(starEffect, dogAnimator.transform) as GameObject;
+                        starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(GameManager.Instance.DestroyTime);
+
                         StartCoroutine(PetTheDogAnimation(dogAnimator, false));
                     }
                     // 完成任务后狗子可以随便摸,,TODO
+                    break;
+
+                // 与蜡烛互动,相关任务
+                case GameManager.NpcNames.Candle:
+                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed
+                        && MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
+                        == MissionsManager.MissionsName.FindCandles) {
+                        Destroy(c.gameObject);
+                        GameManager.Instance.CandleNum++;
+
+                        // 判断任务是否完成
+                        if (GameManager.Instance.CandleNum == GameManager.Instance.TargetCandleNum) {
+                            MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
+                            GameManager.Instance.MissionsIndex++;
+                            MissionsManager.Instance.DialogIndex = 0;
+                        }
+                    }
+
+                    starEffectCopy =
+                        Instantiate(starEffect, c.transform.position, Quaternion.identity) as GameObject;
+                    starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(GameManager.Instance.DestroyTime);
+                    break;
+
+                // 谁碰到Luna
+                case GameManager.NpcNames.Luna:
+                    if (gObject != null) {
+                        // 主场景怪物碰到Luna
+                        if (Enum.Parse<GameManager.NpcNames>(gObject.tag) == GameManager.NpcNames.MainMapMonster) {
+                            GameManager.Instance.SetCurrentMonster(gObject);
+                            UiManager.Instance.ShowBattleGround(gObject);
+                            UiManager.Instance.ShowBattleUi(true);
+                        }
+                    }
                     break;
             }
         }
@@ -206,16 +273,18 @@ public class MyLunaController : MonoBehaviour {
     /// 摸狗子动画
     /// </summary>
     /// <param name="canPet">能摸和不能摸都播放相应动画</param>
+    /// <param name="dogAnimator">狗子的动画控制器</param>
     /// <returns></returns>
-    private IEnumerator PetTheDogAnimation(Animator DogAnimator, bool canPet) {
+    private IEnumerator PetTheDogAnimation(Animator dogAnimator, bool canPet) {
         if (canPet) {
-            // 摸狗的时候可以直接瞬移luna的位置 TODO
+            // 摸狗的时候luna不能动作,播放完毕才能移动 TODO
             animator.CrossFade(GameManager.AnimatorMotionName.TouchTheDog.ToString(), 0);
-            DogAnimator.CrossFade(GameManager.AnimatorMotionName.DogBeHappy.ToString(), 0);
+            dogAnimator.CrossFade(GameManager.AnimatorMotionName.DogBeHappy.ToString(), 0);
         } else {
             animator.CrossFade(GameManager.AnimatorMotionName.LookTheDog.ToString(), 0);
-            DogAnimator.CrossFade(GameManager.AnimatorMotionName.DogBark.ToString(), 0);
+            dogAnimator.CrossFade(GameManager.AnimatorMotionName.DogBark.ToString(), 0);
         }
         yield return 0;
     }
+
 }

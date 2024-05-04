@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
 /// <summary>
 /// 控制主地图上怪物的行为,默认是来回走动
@@ -80,10 +81,12 @@ public class MonsterController : MonoBehaviour {
         animator.SetFloat(GameManager.AnimatorParameters.MainMonsterToY.ToString(), (isVertical) ? direction : 0);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.transform.tag == GameManager.NpcNames.Luna.ToString()) {
-            GameManager.Instance.ShowBattleGround();
-            UiManager.Instance.ShowBattleUi();
+   
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision != null && collision.gameObject.tag == GameManager.NpcNames.Luna.ToString()) {
+            collision.gameObject.GetComponent<MyLunaController>().DoSomething(collision.collider, this.gameObject);
         }
     }
 }

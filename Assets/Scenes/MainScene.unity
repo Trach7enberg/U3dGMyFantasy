@@ -1171,6 +1171,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Candle (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 794387081116682697, guid: c08bc43d82aedde4396048a0378a7e4a, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2451640902228977546, guid: c08bc43d82aedde4396048a0378a7e4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.54
@@ -2742,8 +2746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b981fff2261214db079e3edfb23e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MissionNames: []
-  BattleBackGround: {fileID: 799709535}
+  UniversalStarEffect: {fileID: 4364194464705967885, guid: 5bedcf5cb54a7b04c9a3fc9ea1efc816, type: 3}
   CanControlLuna: 0
   LunaSkillMpCost: 0
   LunaHealMpCost: 0
@@ -2753,8 +2756,12 @@ MonoBehaviour:
   MissionsIndex: 0
   HasPetTheDog: 0
   CandleNum: 0
-  KilledMonsterNum: 0
+  KilledNum: 0
+  TargetCandleNum: 0
+  TargetKilledNum: 0
   Test: 0
+  DestroyTime: 0
+  ShowMonsterTime: 0
 --- !u!4 &500390331
 Transform:
   m_ObjectHideFlags: 0
@@ -4840,6 +4847,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Candle (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 794387081116682697, guid: c08bc43d82aedde4396048a0378a7e4a, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2451640902228977546, guid: c08bc43d82aedde4396048a0378a7e4a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.95
@@ -5282,7 +5293,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.82, y: -7.54, z: -10}
+  m_LocalPosition: {x: -6.91, y: 0.77, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7289,6 +7300,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NalaAnimator: {fileID: 1453880432}
+  DogAnimator: {fileID: 1973600386}
+  StarEffect: {fileID: 4364194464705967885, guid: 5bedcf5cb54a7b04c9a3fc9ea1efc816, type: 3}
 --- !u!1 &1274240832
 GameObject:
   m_ObjectHideFlags: 0
@@ -7711,11 +7724,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 194949486481822800, guid: a67f5ff320c8f134eb01649d2b890d39, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.57
+      value: 1.23
       objectReference: {fileID: 0}
     - target: {fileID: 194949486481822800, guid: a67f5ff320c8f134eb01649d2b890d39, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 14.65
+      value: 15.41
       objectReference: {fileID: 0}
     - target: {fileID: 194949486481822800, guid: a67f5ff320c8f134eb01649d2b890d39, type: 3}
       propertyPath: m_LocalPosition.z
@@ -9461,9 +9474,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 250830958}
     m_Modifications:
+    - target: {fileID: -5281868764657347772, guid: c08bc43d82aedde4396048a0378a7e4a, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 794387081116682697, guid: c08bc43d82aedde4396048a0378a7e4a, type: 3}
       propertyPath: m_Name
       value: Candle
+      objectReference: {fileID: 0}
+    - target: {fileID: 794387081116682697, guid: c08bc43d82aedde4396048a0378a7e4a, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2451640902228977546, guid: c08bc43d82aedde4396048a0378a7e4a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9909,7 +9930,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1771113170
 Transform:
   m_ObjectHideFlags: 0
@@ -11246,11 +11267,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5318372905259463049, guid: c5c0978ba8575e64e8e4c80e62cdf810, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.82
+      value: -6.91
       objectReference: {fileID: 0}
     - target: {fileID: 5318372905259463049, guid: c5c0978ba8575e64e8e4c80e62cdf810, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.54
+      value: 0.77
       objectReference: {fileID: 0}
     - target: {fileID: 5318372905259463049, guid: c5c0978ba8575e64e8e4c80e62cdf810, type: 3}
       propertyPath: m_LocalPosition.z
