@@ -182,7 +182,7 @@ public class MyLunaController : MonoBehaviour {
                     // 播放对应NPC触发对话的动画
                     nalaAnimator.CrossFade(GameManager.AnimatorMotionName.TalkLaugh.ToString(), 0);
 
-                    // 到达某个任务时,显示怪物
+                    // 轮到杀怪任务时,显示怪物
                     if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name ==
                         MissionsManager.MissionsName.KillMonsters) {
                         UiManager.Instance.ShowMonsters(true);
@@ -191,8 +191,7 @@ public class MyLunaController : MonoBehaviour {
                     // 检测是否完成击杀任务
                     if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
                         == MissionsManager.MissionsName.KillMonsters
-                        && GameManager.Instance.KilledNum == GameManager.Instance.TargetKilledNum)
-                    {
+                        && GameManager.Instance.KilledNum == GameManager.Instance.TargetKilledNum) {
                         MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
                         GameManager.Instance.MissionsIndex++;
                         MissionsManager.Instance.DialogIndex = 0;
@@ -286,5 +285,4 @@ public class MyLunaController : MonoBehaviour {
         }
         yield return 0;
     }
-
 }

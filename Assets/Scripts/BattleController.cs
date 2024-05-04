@@ -5,8 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 战斗场景的战斗控制
 /// </summary>
-public class BattleController : MonoBehaviour
-{
+public class BattleController : MonoBehaviour {
     public Animator lunaAnimator;
     public Transform lunaTransform;
     public Transform monsterTransform;
@@ -129,8 +128,7 @@ public class BattleController : MonoBehaviour
     /// <param name="value"></param>
     public void JudgeMonsterHp(float value = 1f) {
         GameManager.Instance.InOrDecreaseMonsterHp(value);
-        if (GameManager.Instance.MonsterCurrentHp <= 0)
-        {
+        if (GameManager.Instance.MonsterCurrentHp <= 0) {
             PerformMonsterDieLogic();
         }
     }
@@ -280,8 +278,6 @@ public class BattleController : MonoBehaviour
         if (UiManager.Instance.BattleBackGroundPanel.activeSelf != false) {
             StartCoroutine(PerformMonsterAttackLogic());
         }
-        
-        
     }
 
     /// <summary>
@@ -312,16 +308,18 @@ public class BattleController : MonoBehaviour
         lunaRenderer.DOFade(lunaFadeDuration, lunaDieDuration);
         yield return new WaitForSeconds(lunaDieDuration);
         UiManager.Instance.ShowBattleUi(false);
-        UiManager.Instance.ShowBattleGround(monsterTransform, lunaTransform, monsterInitPos, lunaInitPos);
-        
-        
+        UiManager.Instance.ShowBattleGround(false);
+        SpriteRendererReset(lunaRenderer);
     }
 
+    /// <summary>
+    /// 执行怪物死亡
+    /// </summary>
     public void PerformMonsterDieLogic() {
         // 怪物击杀加一
         GameManager.Instance.KilledNum++;
         UiManager.Instance.ShowBattleUi(false);
-        
-        UiManager.Instance.ShowBattleGround(monsterTransform,lunaTransform,monsterInitPos,lunaInitPos);
+        UiManager.Instance.ShowBattleGround(false);
+        SpriteRendererReset(monsterRenderer);
     }
 }

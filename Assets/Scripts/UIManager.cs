@@ -65,7 +65,7 @@ public partial class UiManager : MonoBehaviour {
         // 关闭战斗场景时
         if (!enter) {
             GameManager.Instance.CanControlLuna = true;
-            
+
             StartCoroutine(PerformMonsterLogic());
         } else {
             GameManager.Instance.MonsterCurrentHp = GameManager.Instance.MonsterMaxHp;
@@ -85,21 +85,6 @@ public partial class UiManager : MonoBehaviour {
     public void ShowBattleGround(GameObject monster) {
         monster.SetActive(false);
         ShowBattleGround(true);
-    }
-
-    /// <summary>
-    /// 关闭战斗场景,复位战斗场景中人物的位置
-    /// </summary>
-    /// <param name="m">monster现在的位置</param>
-    /// <param name="bLuna">bLuna现在的位置</param>
-    /// <param name="mPosition">monster初始的位置</param>
-    /// <param name="bLunaPosition">bLuna初始的位置</param>
-    public void ShowBattleGround(Transform m, Transform bLuna, Vector3 mPosition, Vector3 bLunaPosition)
-    {
-        m.localPosition = mPosition;
-        bLuna.localPosition = bLunaPosition;
-        ShowBattleGround(false);
-        
     }
 
     /// <summary>
@@ -156,7 +141,7 @@ public partial class UiManager : MonoBehaviour {
         if (GameManager.Instance.MonsterCurrentHp != 0) {
             yield return new WaitForSeconds(GameManager.Instance.ShowMonsterTime);
             GameManager.Instance.GetCurrentMonster().SetActive(true);
-        } 
+        }
         yield return 0;
     }
 }
