@@ -1,23 +1,21 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// ÈÎÎñÀà
+/// ä»»åŠ¡ç±»
 /// </summary>
-public class Mission 
-{
-    public string Name;
-    public bool IsEnd; // ÊµÏÖÔÙ´Îµã»÷¹Ø±Õ¶Ô»°¹¦ÄÜµÄ±ê¼Ç
-    public bool IsClaimed; // ÒÑÁìÈ¡ÈÎÎñ
-    public bool IsDone; // ÈÎÎñÍê³É
-    public bool IsFirstTimeInEndDialog; // ·ÀÖ¹µÚÒ»´ÎÁìÈ¡ÈÎÎñ¶Ô»°Ê±½øÈëµ½ÈÎÎñÍê³ÉµÄ¶Ô»°,¼´µÚÒ»´Î²¥·ÅÍêÈÎÎñ¼ò½éÔÙµã»÷¾ÍÍË³ö
-    public DialogInfo[] DialogInfos;    // ÆÕÍ¨¶Ô»°
-    public DialogInfo DoneDialogInfo; // Íê³ÉÈÎÎñ²¥·ÅµÄ¶Ô»°
+public class Mission {
+    public MissionsManager.MissionsName Name;
+    public bool IsEnd; // å®ç°å†æ¬¡ç‚¹å‡»å…³é—­å¯¹è¯åŠŸèƒ½çš„æ ‡è®°
+    public bool IsClaimed; // å·²é¢†å–ä»»åŠ¡
+    public bool IsDone; // ä»»åŠ¡å®Œæˆ
+    public bool IsFirstTimeInEndDialog; // é˜²æ­¢ç¬¬ä¸€æ¬¡é¢†å–ä»»åŠ¡å¯¹è¯æ—¶è¿›å…¥åˆ°ä»»åŠ¡å®Œæˆçš„å¯¹è¯,å³ç¬¬ä¸€æ¬¡æ’­æ”¾å®Œä»»åŠ¡ç®€ä»‹å†ç‚¹å‡»å°±é€€å‡º
+    public DialogInfo[] DialogInfos;    // æ™®é€šå¯¹è¯
+    public DialogInfo DoneDialogInfo; // å®Œæˆä»»åŠ¡æ’­æ”¾çš„å¯¹è¯
 
-    public Mission(string name, bool isEnd, bool isDone, DialogInfo[] dialogInfos)
-    {
+    public Mission(MissionsManager.MissionsName name, bool isEnd, bool isDone, DialogInfo[] dialogInfos) {
         Name = name;
         IsEnd = isEnd;
         IsDone = isDone;
@@ -26,7 +24,7 @@ public class Mission
         DialogInfos = dialogInfos;
     }
 
-    public Mission(string name, DialogInfo[] dialogInfos, bool isEnd = false, bool isDone = false, bool isClaimed = false,bool isFirst =true, DialogInfo doneDialogInfo=null) {
+    public Mission(MissionsManager.MissionsName name, DialogInfo[] dialogInfos, bool isEnd = false, bool isDone = false, bool isClaimed = false, bool isFirst = true, DialogInfo doneDialogInfo = null) {
         Name = name;
         IsEnd = isEnd;
         IsDone = isDone;
@@ -36,7 +34,7 @@ public class Mission
         IsFirstTimeInEndDialog = isFirst;
     }
 
-    public Mission(string name, DialogInfo[] dialogInfos, DialogInfo doneDialogInfo = null, bool isFirst = true, bool isClaimed = false) {
+    public Mission(MissionsManager.MissionsName name, DialogInfo[] dialogInfos, DialogInfo doneDialogInfo = null, bool isFirst = true, bool isClaimed = false) {
         Name = name;
         IsEnd = false;
         IsDone = false;

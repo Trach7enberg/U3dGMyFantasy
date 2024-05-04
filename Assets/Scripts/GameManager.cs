@@ -4,7 +4,27 @@ using OpenCover.Framework.Model;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    public string[] MissionNames;
+
+    /// <summary>
+    /// 游戏里的Npc的标签名字
+    /// </summary>
+    public enum NpcNames {
+        Luna, Nala, Dog
+    }
+
+    /// <summary>
+    /// 动画控制机里的动画触发参数名字
+    /// </summary>
+    public enum AnimatorParameters {
+        ToX, ToY, Jump, Climb, Run, MoveValue, MainMonsterToX, MainMonsterToY
+    }
+
+    /// <summary>
+    /// 动画控制机里的动画名字
+    /// </summary>
+    public enum AnimatorMotionName {
+        TouchTheDog, LookTheDog, TalkLaugh, DogBeHappy, DogBark,
+    }
 
     public static GameManager Instance;
 
@@ -23,14 +43,11 @@ public class GameManager : MonoBehaviour {
     // luna使用回血技能消耗的蓝数
     public float LunaHealMpCost;
 
-    [Range(0, 5)]
-    public float LunaCurrentHp;
+    [Range(0, 5)] public float LunaCurrentHp;
 
-    [Range(0, 5)]
-    public float LunaCurrentMp;
+    [Range(0, 5)] public float LunaCurrentMp;
 
-    [Range(0, 5)]
-    public float MonsterCurrentHp;
+    [Range(0, 5)] public float MonsterCurrentHp;
 
     // 对话数组的一维索引下标控制
     public int MissionsIndex;
@@ -66,16 +83,6 @@ public class GameManager : MonoBehaviour {
         MonsterCurrentHp = MonsterMaxHp;
         LunaCurrentHp = LunaMaxHp;
         LunaCurrentMp = LunaMaxMp;
-
-        // 任务名设置
-        MissionNames = new string[]
-        {
-                "Welcome",
-                "PetTheDog",
-                "B",
-                "C",
-                "D",
-        };
     }
 
     private void Update() {
@@ -102,7 +109,6 @@ public class GameManager : MonoBehaviour {
     /// 血条和蓝条UI更新
     /// </summary>
     private void UpdateBar() {
-        // 蓝条功能暂时没有完成,待更新
         UiManager.Instance.SetBar(LunaCurrentHp / LunaMaxHp, LunaCurrentMp / LunaMaxMp);
 
         // 测试

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
@@ -8,8 +9,6 @@ public class MyLunaController : MonoBehaviour {
 
     // 动画状态机
     private Animator animator;
-
-    private string[] AnimatorParameters = { "ToX", "ToY" };
 
     //luna对象下的第一个子类,即LunaSprite
     private Transform lunaLocalTransform;
@@ -46,7 +45,8 @@ public class MyLunaController : MonoBehaviour {
 
     public bool inClimbArea;
 
-    public bool inTalk;
+    private float TouchTheDogDuration = 0.5f;
+    private float LookAtTheDogDuration = 1f;
 
     private void Start() {
         //设置帧率
@@ -144,23 +144,23 @@ public class MyLunaController : MonoBehaviour {
 
             // 动作只能触发一种(有动画状态的动作)
             if (isJump) {
-                animator.SetBool("Jump", true);
+                animator.SetBool(GameManager.AnimatorParameters.Jump.ToString(), true);
             } else if (isClimb) {
-                animator.SetBool("Climb", true);
+                animator.SetBool(GameManager.AnimatorParameters.Climb.ToString(), true);
             } else if (isRun) {
-                animator.SetBool("Run", true);
+                animator.SetBool(GameManager.AnimatorParameters.Run.ToString(), true);
                 currentSpeed = speedFactor + 1f;
             } else {
-                animator.SetBool("Climb", false);
-                animator.SetBool("Jump", false);
-                animator.SetBool("Run", false);
+                animator.SetBool(GameManager.AnimatorParameters.Climb.ToString(), false);
+                animator.SetBool(GameManager.AnimatorParameters.Jump.ToString(), false);
+                animator.SetBool(GameManager.AnimatorParameters.Run.ToString(), false);
                 currentSpeed = speedFactor;
             }
         }
-        animator.SetFloat("MoveValue", originalInput.magnitude);
+        animator.SetFloat(GameManager.AnimatorParameters.MoveValue.ToString(), originalInput.magnitude);
 
-        animator.SetFloat(AnimatorParameters[0], towards.x);
-        animator.SetFloat(AnimatorParameters[1], towards.y);
+        animator.SetFloat(GameManager.AnimatorParameters.ToX.ToString(), towards.x);
+        animator.SetFloat(GameManager.AnimatorParameters.ToY.ToString(), towards.y);
     }
 
     /// <summary>
@@ -170,24 +170,52 @@ public class MyLunaController : MonoBehaviour {
         // 以某个刚体为半径的自交球,有东西在这个半径内 就代表检测成功,第一个参数是以谁为中心点,第二个参数是检测半径,第三参数是检测的是哪个层级的游戏物体
         Collider2D c = Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UiManager.GameLayerMask.Npc.ToString()));
 
-        if (c != null && Enum.IsDefined(typeof(UiManager.NpcNames), c.name)) {
-            switch ((UiManager.NpcNames)Enum.Parse(typeof(UiManager.NpcNames), c.name)) {
-                case UiManager.NpcNames.Nala:
-
+        if (c != null && Enum.IsDefined(typeof(GameManager.NpcNames), c.name)) {
+            switch ((GameManager.NpcNames)Enum.Parse(typeof(GameManager.NpcNames), c.name)) {
+                // 与Nala互动
+                case GameManager.NpcNames.Nala:
+                    Animator nalaAnimator = c.GetComponentInParent<NpcDialog>().NalaAnimator;
                     // 播放对应NPC触发对话的动画
-                    c.GetComponentsInParent<Animator>()[0].CrossFade("TalkLaugh", 0);
+                    nalaAnimator.CrossFade(GameManager.AnimatorMotionName.TalkLaugh.ToString(), 0);
                     // 拿到碰撞对象NPC下的父类然后播放对话
                     c.GetComponentInParent<NpcDialog>().DisplayDialog();
                     break;
 
-                case UiManager.NpcNames.Dog when MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed:
-                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name == MissionsManager.MissionsName.PetTheDog.ToString()) {
+                // 与狗子互动
+                case GameManager.NpcNames.Dog:
+                    Animator dogAnimator = c.GetComponentInParent<NpcDialog>().DogAnimator;
+                    // 已领取任务并且当前任务的名字是摸狗子时
+                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed
+                        && MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
+                        == MissionsManager.MissionsName.PetTheDog) {
+                        StartCoroutine(PetTheDogAnimation(dogAnimator, true));
+
                         MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
                         GameManager.Instance.MissionsIndex++;
                         MissionsManager.Instance.DialogIndex = 0;
+                    } else {
+                        StartCoroutine(PetTheDogAnimation(dogAnimator, false));
                     }
+                    // 完成任务后狗子可以随便摸,,TODO
                     break;
             }
         }
+    }
+
+    /// <summary>
+    /// 摸狗子动画
+    /// </summary>
+    /// <param name="canPet">能摸和不能摸都播放相应动画</param>
+    /// <returns></returns>
+    private IEnumerator PetTheDogAnimation(Animator DogAnimator, bool canPet) {
+        if (canPet) {
+            // 摸狗的时候可以直接瞬移luna的位置 TODO
+            animator.CrossFade(GameManager.AnimatorMotionName.TouchTheDog.ToString(), 0);
+            DogAnimator.CrossFade(GameManager.AnimatorMotionName.DogBeHappy.ToString(), 0);
+        } else {
+            animator.CrossFade(GameManager.AnimatorMotionName.LookTheDog.ToString(), 0);
+            DogAnimator.CrossFade(GameManager.AnimatorMotionName.DogBark.ToString(), 0);
+        }
+        yield return 0;
     }
 }

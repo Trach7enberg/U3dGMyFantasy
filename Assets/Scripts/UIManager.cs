@@ -6,7 +6,6 @@ using UnityEngine.UI;
 /// UI管理
 /// </summary>
 public partial class UiManager : MonoBehaviour {
-
     public static UiManager Instance;
     public Image hpMaskImage;
     public Image mpMaskImage;
@@ -20,10 +19,6 @@ public partial class UiManager : MonoBehaviour {
     public GameObject TalkPanel;
 
     public GameObject MainSceneMonsters;
-
-    public enum NpcNames {
-        Luna, Nala, Dog
-    }
 
     /// <summary>
     /// 游戏层级mask
@@ -71,7 +66,7 @@ public partial class UiManager : MonoBehaviour {
     /// </summary>
     /// <param name="eName">枚举类型的npc名字</param>
     /// <param name="content">对话的信息</param>
-    public void ShowNpcDialog(NpcNames eName = NpcNames.Luna, string content = null) {
+    public void ShowNpcDialog(GameManager.NpcNames eName = GameManager.NpcNames.Luna, string content = null) {
         if (content == null) {
             ShowTalkPanel(false);
         } else {

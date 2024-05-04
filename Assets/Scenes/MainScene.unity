@@ -3364,6 +3364,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b597f332fb3524ea8dfba614b6444c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DialogIndex: 0
 --- !u!4 &579572055
 Transform:
   m_ObjectHideFlags: 0
@@ -7287,7 +7288,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 237bb84a70be93348a7fc399cc47e562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Index: 0
   NalaAnimator: {fileID: 1453880432}
 --- !u!1 &1274240832
 GameObject:
@@ -11284,6 +11284,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9174004652717587450, guid: c5c0978ba8575e64e8e4c80e62cdf810, type: 3}
+      propertyPath: DogAnimator
+      value: 
+      objectReference: {fileID: 1973600386}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

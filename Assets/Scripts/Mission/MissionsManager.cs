@@ -1,104 +1,99 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionsManager : MonoBehaviour
-{
-    public enum MissionsName
-    {
+public class MissionsManager : MonoBehaviour {
+
+    public enum MissionsName {
         Welcome, PetTheDog, FindCandles, KillMonsters, FinishAll
     }
+
     private int TargetCandles = 5;
     private int TargetKill = 5;
     private int Candle;
     private int Monsters;
-    private string WeaponName = "À¶ÎÆ»ğ´¸";
+    private string WeaponName = "è“çº¹ç«é”¤";
     public static MissionsManager Instance;
     public List<Mission> Missions;
-    public int DialogIndex; // µ±Ç°ÈÎÎñµÄÆÕÍ¨¶Ô»°Êı×éµÄË÷Òı
+    public int DialogIndex; // å½“å‰ä»»åŠ¡çš„æ™®é€šå¯¹è¯æ•°ç»„çš„ç´¢å¼•
 
-    void Start() {
+    private void Start() {
         DialogIndex = 0;
         Instance = this;
         this.Candle = GameManager.Instance.CandleNum;
         this.Monsters = GameManager.Instance.KilledMonsterNum;
         Missions = new List<Mission>() {
-            // ÈÎÎñ1 »¶Ó­
-            new Mission("Welcome",new DialogInfo[]
+            // ä»»åŠ¡1 æ¬¢è¿
+            new Mission(MissionsName.Welcome,new DialogInfo[]
             {
-                new(){Name = UiManager.NpcNames.Luna,Content = "(,,¡¤V¡¤)\"hello£¬ÎÒÊÇLuna£¬Äã¿ÉÒÔÓÃÉÏÏÂ×óÓÒ¿ØÖÆÎÒÒÆ¶¯£¬¿Õ¸ñ¼üÓëNPC½øĞĞ¶Ô»°£¬Õ½¶·ÖĞĞèÒª¼òµ¥µã»÷°´Å¥Ö´ĞĞÏàÓ¦ĞĞÎª"},
+                new(){Name = GameManager.NpcNames.Luna,Content = "(,,Â·VÂ·)\"helloï¼Œæˆ‘æ˜¯Lunaï¼Œä½ å¯ä»¥ç”¨ä¸Šä¸‹å·¦å³æ§åˆ¶æˆ‘ç§»åŠ¨ï¼Œç©ºæ ¼é”®ä¸NPCè¿›è¡Œå¯¹è¯ï¼Œæˆ˜æ–—ä¸­éœ€è¦ç®€å•ç‚¹å‡»æŒ‰é’®æ‰§è¡Œç›¸åº”è¡Œä¸º"},
             },null),
 
-            // ÈÎÎñ2 Ãş¹·
-            new Mission("PetTheDog",new DialogInfo[]
+            // ä»»åŠ¡2 æ‘¸ç‹—
+            new Mission(MissionsName.PetTheDog,new DialogInfo[]
             {
-                new (){Name=UiManager.NpcNames.Luna,Content="ºÃ¾Ã²»¼ûÁË,Ğ¡Ã¨ßä£¨*¦µ¦Ø¦µ*£©,Luna~"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ºÃ¾Ã²»¼û£¬Nala£¬Äã»¹ÊÇÄÇÃ´ÓĞ»îÁ¦£¬¹ş¹ş"},
-                new (){Name=UiManager.NpcNames.Luna,Content="»¹ºÃ°É~"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÎÒµÄ¹·Ò»Ö±ÔÚ½Ğ£¬µ«ÊÇÎÒÕâ»áÃ¦²»¹ıÀ´£¬ÄãÄÜ°ïÎÒ°²¸§Ò»ÏÂËüÂğ"},
-                new (){Name=UiManager.NpcNames.Luna,Content="°¡£¿"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÃşÃşËû¾ÍĞĞ£¬ÃşÃşËµßÏÎ÷ßÏÎ÷£¬ÕæÊÇ¸öºÃº¢×ÓÄÅ"},
-                new (){Name=UiManager.NpcNames.Luna,Content="±ğ¿´Ëû½ĞµÄÕâÃ´Ğ×£¬ÆäÊµËû¾ÍÊÇÏëÒıÆğ±ğÈËµÄ×¢Òâ"},
-                new (){Name=UiManager.NpcNames.Nala,Content="¿ÉÊÇ¡£¡£¡£¡£"},
-                new (){Name=UiManager.NpcNames.Luna,Content="ÎÒÊÇÃ¨Å®ÀÉ°¡"},
-                new (){Name=UiManager.NpcNames.Nala,Content="°²ĞÄÀ²£¬²»»áÒ§ÄãµÄ,È¥°ÉÈ¥°É~"},
+                new (){Name=GameManager.NpcNames.Luna,Content="å¥½ä¹…ä¸è§äº†,å°çŒ«å’ªï¼ˆ*Î¦Ï‰Î¦*ï¼‰,Luna~"},
+                new (){Name=GameManager.NpcNames.Nala,Content="å¥½ä¹…ä¸è§ï¼ŒNalaï¼Œä½ è¿˜æ˜¯é‚£ä¹ˆæœ‰æ´»åŠ›ï¼Œå“ˆå“ˆ"},
+                new (){Name=GameManager.NpcNames.Luna,Content="è¿˜å¥½å§~"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æˆ‘çš„ç‹—ä¸€ç›´åœ¨å«ï¼Œä½†æ˜¯æˆ‘è¿™ä¼šå¿™ä¸è¿‡æ¥ï¼Œä½ èƒ½å¸®æˆ‘å®‰æŠšä¸€ä¸‹å®ƒå—"},
+                new (){Name=GameManager.NpcNames.Luna,Content="å•Šï¼Ÿ"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æ‘¸æ‘¸ä»–å°±è¡Œï¼Œæ‘¸æ‘¸è¯´å‘¦è¥¿å‘¦è¥¿ï¼ŒçœŸæ˜¯ä¸ªå¥½å­©å­å‘"},
+                new (){Name=GameManager.NpcNames.Luna,Content="åˆ«çœ‹ä»–å«çš„è¿™ä¹ˆå‡¶ï¼Œå…¶å®ä»–å°±æ˜¯æƒ³å¼•èµ·åˆ«äººçš„æ³¨æ„"},
+                new (){Name=GameManager.NpcNames.Nala,Content="å¯æ˜¯ã€‚ã€‚ã€‚ã€‚"},
+                new (){Name=GameManager.NpcNames.Luna,Content="æˆ‘æ˜¯çŒ«å¥³éƒå•Š"},
+                new (){Name=GameManager.NpcNames.Nala,Content="å®‰å¿ƒå•¦ï¼Œä¸ä¼šå’¬ä½ çš„,å»å§å»å§~"},
+            },new DialogInfo(){Name = GameManager.NpcNames.Luna,Content = "ä»–è¿˜åœ¨å«å‘¢"}),
 
-            },new DialogInfo(){Name = UiManager.NpcNames.Luna,Content = "Ëû»¹ÔÚ½ĞÄØ"}),
-            
-            // ÈÎÎñ3 ÕÒÀ¯Öò
-            new Mission("FindCandles",new DialogInfo[]
+            // ä»»åŠ¡3 æ‰¾èœ¡çƒ›
+            new Mission(MissionsName.FindCandles,new DialogInfo[]
             {
-                new (){Name=UiManager.NpcNames.Nala,Content="¸ĞĞ»ÄãÄÅ£¬Luna£¬Äã»¹ÊÇÄÇÃ´¿É¿¿!"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÎÒÏëÇëÄã°ï¸öÃ¦ºÃÂğ"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ËµÆğÀ´ÕâÊÂ¹ÖÎÒ¡£¡£¡£"},
-                new (){Name=UiManager.NpcNames.Nala,Content="½ñÌìÎÒË¯¹ıÍ·ÁË£¬³öÃÅ±È½Ï´ÒÃ¦"},
-                new (){Name=UiManager.NpcNames.Nala,Content="È»ºó×°À¯ÖòµÄ´ü×Ó¿Ú×ÓÃ»·âºÃ£¡"},
-                new (){Name=UiManager.NpcNames.Nala,Content="½á¹û¾Í¡£¡£¡£À¯Öò»ù±¾¶ªÍêÁË"},
-                new (){Name=UiManager.NpcNames.Luna,Content="Äã»¹ÊÇÀÏÑù×Ó£¬¹ş¹ş"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ËùÒÔ£¬ËùÒÔà¶£¬Äã°ï°ïÃ¦£¬°ïÎÒ°ÑÀ¯ÖòÕÒ»ØÀ´"},
-                new (){Name=UiManager.NpcNames.Nala,Content="Èç¹ûÄãÄÜ°ïÎÒÕÒ»ØÈ«²¿µÄ"+Candle+"¸ùÀ¯Öò£¬ÎÒ¾ÍËÍÄãÒ»°ÑÉñÆ÷"},
-                new (){Name=UiManager.NpcNames.Luna,Content="ÉñÆ÷£¿"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÊÇµÄ£¬ÎÒ¸Ğ¾õºÜÊÊºÏÄã£¬¼ÓÓÍÄÅ~"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æ„Ÿè°¢ä½ å‘ï¼ŒLunaï¼Œä½ è¿˜æ˜¯é‚£ä¹ˆå¯é !"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æˆ‘æƒ³è¯·ä½ å¸®ä¸ªå¿™å¥½å—"},
+                new (){Name=GameManager.NpcNames.Nala,Content="è¯´èµ·æ¥è¿™äº‹æ€ªæˆ‘ã€‚ã€‚ã€‚"},
+                new (){Name=GameManager.NpcNames.Nala,Content="ä»Šå¤©æˆ‘ç¡è¿‡å¤´äº†ï¼Œå‡ºé—¨æ¯”è¾ƒåŒ†å¿™"},
+                new (){Name=GameManager.NpcNames.Nala,Content="ç„¶åè£…èœ¡çƒ›çš„è¢‹å­å£å­æ²¡å°å¥½ï¼"},
+                new (){Name=GameManager.NpcNames.Nala,Content="ç»“æœå°±ã€‚ã€‚ã€‚èœ¡çƒ›åŸºæœ¬ä¸¢å®Œäº†"},
+                new (){Name=GameManager.NpcNames.Luna,Content="ä½ è¿˜æ˜¯è€æ ·å­ï¼Œå“ˆå“ˆ"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æ‰€ä»¥ï¼Œæ‰€ä»¥å–½ï¼Œä½ å¸®å¸®å¿™ï¼Œå¸®æˆ‘æŠŠèœ¡çƒ›æ‰¾å›æ¥"},
+                new (){Name=GameManager.NpcNames.Nala,Content="å¦‚æœä½ èƒ½å¸®æˆ‘æ‰¾å›å…¨éƒ¨çš„"+Candle+"æ ¹èœ¡çƒ›ï¼Œæˆ‘å°±é€ä½ ä¸€æŠŠç¥å™¨"},
+                new (){Name=GameManager.NpcNames.Luna,Content="ç¥å™¨ï¼Ÿ"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æ˜¯çš„ï¼Œæˆ‘æ„Ÿè§‰å¾ˆé€‚åˆä½ ï¼ŒåŠ æ²¹å‘~"},
+            },new DialogInfo(){Name = GameManager.NpcNames.Nala,Content = "ä½ è¿˜æ²¡å¸®æˆ‘æ”¶é›†åˆ°æ‰€æœ‰çš„èœ¡çƒ›ï¼Œå®~"}),
 
-            },new DialogInfo(){Name = UiManager.NpcNames.Nala,Content = "Äã»¹Ã»°ïÎÒÊÕ¼¯µ½ËùÓĞµÄÀ¯Öò£¬±¦~"}),
-
-            // ÈÎÎñ4 »ñµÃÎäÆ÷,¿ÉÒÔ´¥·¢ÏÔÊ¾¹ÖÎï,È»ºóÇåÀí¹ÖÎï
-            new Mission("KillMonsters",new DialogInfo[]
+            // ä»»åŠ¡4 è·å¾—æ­¦å™¨,å¯ä»¥è§¦å‘æ˜¾ç¤ºæ€ªç‰©,ç„¶åæ¸…ç†æ€ªç‰©
+            new Mission(MissionsName.KillMonsters,new DialogInfo[]
             {
-                new (){Name=UiManager.NpcNames.Nala,Content="¿É¿¿°¡£¡¾¹È»Ò»¸ö²»²îµÄÈ«ÊÕ¼¯»ØÀ´"},
-                new (){Name=UiManager.NpcNames.Luna,Content="ÄãÖªµÀ¶àÀÛÂğ£¿"},
-                new (){Name=UiManager.NpcNames.Luna,Content="Äãµ½´¦ÅÜ£¬ÕæµÄºÜÄÑÊÕ¼¯"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ĞÁ¿àÀ²ĞÁ¿àÀ²"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÕâÊÇ¸øÄãµÄ½±Àø"},
-                new (){Name=UiManager.NpcNames.Nala,Content= WeaponName + "£¬´«ËµÖĞµÄÉñÆ÷"},
-                new (){Name=UiManager.NpcNames.Nala,Content="Ó¦¸ÃÍ¦ÊÊºÏÄãµÄ"},
-                new (){Name=UiManager.NpcNames.Luna,Content="~~»ñµÃ"+WeaponName+"~~(Óöµ½¹ÖÎï¿É´¥·¢Õ½¶·)"},
-                new (){Name=UiManager.NpcNames.Luna,Content="ÍÛ£¬Ğ»Ğ»Äã£¡Thanks£¨¡¤¦Ø¡¤)"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ºÙºÙ£¨*^v^*£©£¬ÔÛÃÇµÄ¹ØÏµ²»ÓÃ¿ÍÆø"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÕıºÃ£¬×î½üÉ½Àï³öÏÖÁËÒ»¶Ñ¹ÖÎï£¬ÄãÒ²ËãÎªÃñ³ıº¦£¬°ïÃ¦ÇåÀíÁË"+ Monsters +"Ö»¹ÖÎï"},
-                new (){Name=UiManager.NpcNames.Luna,Content="°¡£¿"},
-                new (){Name=UiManager.NpcNames.Luna,Content="Õâ²ÅÊÇÄãµÄÕæÊµÄ¿µÄ°É£¿£¡"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÍĞ°İÍĞÀ²£¬·ñÔòÕæµÄºÜ²»·½±ãÎÒÂô¶«Î÷"},
-                new (){Name=UiManager.NpcNames.Luna,Content="ÎŞÓïÖĞ¡£¡£¡£"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÇóÇóÄãÁË~"},
-                new (){Name=UiManager.NpcNames.Luna,Content="°¥£¬ĞĞ°É£¬Ë­ÈÃÄã´óÄØ~"},
-                new (){Name=UiManager.NpcNames.Nala,Content="ÎûÎû£¬ÄÇĞÁ¿àÄãÀ²"},
+                new (){Name=GameManager.NpcNames.Nala,Content="å¯é å•Šï¼ç«Ÿç„¶ä¸€ä¸ªä¸å·®çš„å…¨æ”¶é›†å›æ¥"},
+                new (){Name=GameManager.NpcNames.Luna,Content="ä½ çŸ¥é“å¤šç´¯å—ï¼Ÿ"},
+                new (){Name=GameManager.NpcNames.Luna,Content="ä½ åˆ°å¤„è·‘ï¼ŒçœŸçš„å¾ˆéš¾æ”¶é›†"},
+                new (){Name=GameManager.NpcNames.Nala,Content="è¾›è‹¦å•¦è¾›è‹¦å•¦"},
+                new (){Name=GameManager.NpcNames.Nala,Content="è¿™æ˜¯ç»™ä½ çš„å¥–åŠ±"},
+                new (){Name=GameManager.NpcNames.Nala,Content= WeaponName + "ï¼Œä¼ è¯´ä¸­çš„ç¥å™¨"},
+                new (){Name=GameManager.NpcNames.Nala,Content="åº”è¯¥æŒºé€‚åˆä½ çš„"},
+                new (){Name=GameManager.NpcNames.Luna,Content="~~è·å¾—"+WeaponName+"~~(é‡åˆ°æ€ªç‰©å¯è§¦å‘æˆ˜æ–—)"},
+                new (){Name=GameManager.NpcNames.Luna,Content="å“‡ï¼Œè°¢è°¢ä½ ï¼Thanksï¼ˆÂ·Ï‰Â·)"},
+                new (){Name=GameManager.NpcNames.Nala,Content="å˜¿å˜¿ï¼ˆ*^v^*ï¼‰ï¼Œå’±ä»¬çš„å…³ç³»ä¸ç”¨å®¢æ°”"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æ­£å¥½ï¼Œæœ€è¿‘å±±é‡Œå‡ºç°äº†ä¸€å †æ€ªç‰©ï¼Œä½ ä¹Ÿç®—ä¸ºæ°‘é™¤å®³ï¼Œå¸®å¿™æ¸…ç†äº†"+ Monsters +"åªæ€ªç‰©"},
+                new (){Name=GameManager.NpcNames.Luna,Content="å•Šï¼Ÿ"},
+                new (){Name=GameManager.NpcNames.Luna,Content="è¿™æ‰æ˜¯ä½ çš„çœŸå®ç›®çš„å§ï¼Ÿï¼"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æ‰˜æ‹œæ‰˜å•¦ï¼Œå¦åˆ™çœŸçš„å¾ˆä¸æ–¹ä¾¿æˆ‘å–ä¸œè¥¿"},
+                new (){Name=GameManager.NpcNames.Luna,Content="æ— è¯­ä¸­ã€‚ã€‚ã€‚"},
+                new (){Name=GameManager.NpcNames.Nala,Content="æ±‚æ±‚ä½ äº†~"},
+                new (){Name=GameManager.NpcNames.Luna,Content="å“ï¼Œè¡Œå§ï¼Œè°è®©ä½ å¤§å‘¢~"},
+                new (){Name=GameManager.NpcNames.Nala,Content="å˜»å˜»ï¼Œé‚£è¾›è‹¦ä½ å•¦"},
+            },new DialogInfo(){Name=GameManager.NpcNames.Nala,Content="å®ï¼Œä½ è¿˜æ²¡æ¸…ç†å¹²å‡€å‘¢ï¼Œè¿™æ ·æˆ‘ä¸æ–¹ä¾¿å˜›~"}),
 
-            },new DialogInfo(){Name=UiManager.NpcNames.Nala,Content="±¦£¬Äã»¹Ã»ÇåÀí¸É¾»ÄØ£¬ÕâÑùÎÒ²»·½±ãÂï~"}),
-
-            // ÈÎÎñ5 Íê³ÉËùÓĞÈÎÎñ
-            new Mission("FinishAll",new DialogInfo[]
+            // ä»»åŠ¡5 å®Œæˆæ‰€æœ‰ä»»åŠ¡
+            new Mission(MissionsName.FinishAll,new DialogInfo[]
             {
-                new DialogInfo(){Name = UiManager.NpcNames.Nala,Content = "Õæ°ô£¬"+UiManager.NpcNames.Luna+",ÖÜÎ§µÄ¾ÓÃñ¶¼»áÊ®·Ö¸ĞĞ»ÄãµÄ£¬ÓĞ»ú»áÀ´ÎÒ¼ÒºÈÒ»±­°É"},
-                new DialogInfo(){Name = UiManager.NpcNames.Luna,Content = "ÎÒ¾õµÃ¿ÉĞĞ£¬¹ş¹ş~"},
-            },new DialogInfo(){ Name = UiManager.NpcNames.Nala, Content = "¸ÄÌìÔÙ¼ûà¶~" }),
-             
-            // ÈÎÎñ6 ...
+                new DialogInfo(){Name = GameManager.NpcNames.Nala,Content = "çœŸæ£’ï¼Œ"+GameManager.NpcNames.Luna+",å‘¨å›´çš„å±…æ°‘éƒ½ä¼šååˆ†æ„Ÿè°¢ä½ çš„ï¼Œæœ‰æœºä¼šæ¥æˆ‘å®¶å–ä¸€æ¯å§"},
+                new DialogInfo(){Name = GameManager.NpcNames.Luna,Content = "æˆ‘è§‰å¾—å¯è¡Œï¼Œå“ˆå“ˆ~"},
+            },new DialogInfo(){ Name = GameManager.NpcNames.Nala, Content = "æ”¹å¤©å†è§å–½~" }),
+
+            // ä»»åŠ¡6 ...
             //new Mission("E",new DialogInfo[]
             //{
-
             //},new DialogInfo(){}),
         };
     }
-
 }

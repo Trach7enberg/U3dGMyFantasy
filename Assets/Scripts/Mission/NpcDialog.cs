@@ -4,23 +4,20 @@ using UnityEngine;
 /// <summary>
 /// 任务对话信息控制
 /// </summary>
-public class NpcDialog : MonoBehaviour
-{
-
+public class NpcDialog : MonoBehaviour {
     public Animator NalaAnimator;
+    public Animator DogAnimator;
 
- 
     /// <summary>
     /// 显示对话
     /// </summary>
     public void DisplayDialog() {
         if (GameManager.Instance.MissionsIndex < MissionsManager.Instance.Missions.Count) {
             Mission m = MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex];
-            DialogInfo info;
 
             if (!m.IsDone) {
-                if (m.IsEnd)
-                {
+                DialogInfo info;
+                if (m.IsEnd) {
                     info = null;
                     m.IsEnd = false;
                     GameManager.Instance.CanControlLuna = true;

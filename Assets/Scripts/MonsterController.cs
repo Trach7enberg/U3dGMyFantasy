@@ -23,8 +23,6 @@ public class MonsterController : MonoBehaviour {
 
     private Rigidbody2D rigidbody2d;
     private Animator animator;
-    private string[] AnimatorParameters = { "ToX", "ToY" };
-    private string tagLuna = "Luna";
 
     private Vector2 lastPosition;
     private Vector2 nowPosition;
@@ -78,12 +76,12 @@ public class MonsterController : MonoBehaviour {
         lastPosition.Normalize();
         nowPosition.Normalize();
 
-        animator.SetFloat(AnimatorParameters[0], (isVertical) ? 0 : direction);
-        animator.SetFloat(AnimatorParameters[1], (isVertical) ? direction : 0);
+        animator.SetFloat(GameManager.AnimatorParameters.MainMonsterToX.ToString(), (isVertical) ? 0 : direction);
+        animator.SetFloat(GameManager.AnimatorParameters.MainMonsterToY.ToString(), (isVertical) ? direction : 0);
     }
 
     private void OnCollisionEnter2D(Collision2D collision) {
-        if (collision.transform.tag == tagLuna) {
+        if (collision.transform.tag == GameManager.NpcNames.Luna.ToString()) {
             GameManager.Instance.ShowBattleGround();
             UiManager.Instance.ShowBattleUi();
         }
