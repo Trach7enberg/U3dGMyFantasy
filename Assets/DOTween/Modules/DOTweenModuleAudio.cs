@@ -17,8 +17,8 @@ namespace DG.Tweening
 
         #region Audio
 
-        /// <summary>Tweens an AudioSource's volume to the given value.
-        /// Also stores the AudioSource as the tween's target so it can be used for filtered operations</summary>
+        /// <summary>Tweens an MainAudioSource's volume to the given value.
+        /// Also stores the MainAudioSource as the tween's target so it can be used for filtered operations</summary>
         /// <param name="endValue">The end value to reach (0 to 1)</param><param name="duration">The duration of the tween</param>
         public static TweenerCore<float, float, FloatOptions> DOFade(this AudioSource target, float endValue, float duration)
         {
@@ -29,8 +29,8 @@ namespace DG.Tweening
             return t;
         }
 
-        /// <summary>Tweens an AudioSource's pitch to the given value.
-        /// Also stores the AudioSource as the tween's target so it can be used for filtered operations</summary>
+        /// <summary>Tweens an MainAudioSource's pitch to the given value.
+        /// Also stores the MainAudioSource as the tween's target so it can be used for filtered operations</summary>
         /// <param name="endValue">The end value to reach</param><param name="duration">The duration of the tween</param>
         public static TweenerCore<float, float, FloatOptions> DOPitch(this AudioSource target, float endValue, float duration)
         {

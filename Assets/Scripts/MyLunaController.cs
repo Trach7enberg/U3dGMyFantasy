@@ -173,9 +173,10 @@ public class MyLunaController : MonoBehaviour {
         // 以某个刚体为半径的自交球,有东西在这个半径内 就代表检测成功,第一个参数是以谁为中心点,第二个参数是检测半径,第三参数是检测的是哪个层级的游戏物体
         Collider2D c = (cder != null) ? cder : Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UiManager.GameLayerMask.Npc.ToString()));
         GameObject starEffect = GameManager.Instance.UniversalStarEffect;
-        if (c != null && Enum.IsDefined(typeof(GameManager.NpcNames), c.name)) {
+        if (c != null && Enum.IsDefined(typeof(GameManager.NpcNames), c.tag)) {
             GameObject starEffectCopy = null;
-            switch ((GameManager.NpcNames)Enum.Parse(typeof(GameManager.NpcNames), c.name)) {
+
+            switch ((GameManager.NpcNames)Enum.Parse(typeof(GameManager.NpcNames), c.tag)) {
                 // 与Nala互动
                 case GameManager.NpcNames.Nala:
                     Animator nalaAnimator = c.GetComponentInParent<NpcDialog>().NalaAnimator;
@@ -190,11 +191,13 @@ public class MyLunaController : MonoBehaviour {
 
                     // 检测是否完成击杀任务
                     if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
-                        == MissionsManager.MissionsName.KillMonsters
-                        && GameManager.Instance.KilledNum == GameManager.Instance.TargetKilledNum) {
+                              == MissionsManager.MissionsName.KillMonsters
+                              && GameManager.Instance.KilledNum == GameManager.Instance.TargetKilledNum) {
                         MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
                         GameManager.Instance.MissionsIndex++;
                         MissionsManager.Instance.DialogIndex = 0;
+                        // 播放互动完成任务音效
+                        AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
                     }
 
                     // 拿到碰撞对象NPC下的父类然后播放对话
@@ -209,6 +212,8 @@ public class MyLunaController : MonoBehaviour {
                     if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed
                         && MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
                         == MissionsManager.MissionsName.PetTheDog) {
+                        // TODO 播放任务完成音效
+                        AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
                         // 摸狗动画
                         StartCoroutine(PetTheDogAnimation(dogAnimator, true));
                         // star效果
@@ -240,20 +245,22 @@ public class MyLunaController : MonoBehaviour {
                         Destroy(c.gameObject);
                         GameManager.Instance.CandleNum++;
 
-                        // 判断任务是否完成
+                        // 判断蜡烛任务是否完成
                         if (GameManager.Instance.CandleNum == GameManager.Instance.TargetCandleNum) {
                             MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
                             GameManager.Instance.MissionsIndex++;
                             MissionsManager.Instance.DialogIndex = 0;
+                            // TODO 播放蜡烛任务完成音效
+                            AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
                         }
                     }
 
                     starEffectCopy =
-                        Instantiate(starEffect, c.transform.position, Quaternion.identity) as GameObject;
+                        Instantiate(starEffect, c.transform.position, Quaternion.identity);
                     starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(GameManager.Instance.DestroyTime);
                     break;
 
-                // 谁碰到Luna
+                // Luna主动碰到一些东西时,例如 luna碰到药、蜡烛、时
                 case GameManager.NpcNames.Luna:
                     if (gObject != null) {
                         // 主场景怪物碰到Luna
@@ -261,6 +268,18 @@ public class MyLunaController : MonoBehaviour {
                             GameManager.Instance.SetCurrentMonster(gObject);
                             UiManager.Instance.ShowBattleGround(gObject);
                             UiManager.Instance.ShowBattleUi(true);
+
+                            // luna碰到药瓶
+                        } else if (Enum.Parse<GameManager.NpcNames>(gObject.tag) == GameManager.NpcNames.HpPotion) {
+                            // luna可以回血的时候
+                            if (GameManager.Instance.CanIncreaseLunaHp()) {
+                                GameManager.Instance.InOrDecreaseLunaHp();
+                                starEffectCopy = Instantiate(starEffect, gObject.transform.position, Quaternion.identity);
+                                starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(1f);
+                                // 播放互动音效
+                                AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
+                                Destroy(gObject);
+                            }
                         }
                     }
                     break;
@@ -282,6 +301,8 @@ public class MyLunaController : MonoBehaviour {
         } else {
             animator.CrossFade(GameManager.AnimatorMotionName.LookTheDog.ToString(), 0);
             dogAnimator.CrossFade(GameManager.AnimatorMotionName.DogBark.ToString(), 0);
+            // TODO 什么时候播放狗叫声待优化,因为狗子默认的动画是有狗叫动作的
+            AudioManager.Instance.PlaySound(AudioManager.Instance.DogBarkClip, 2f);
         }
         yield return 0;
     }

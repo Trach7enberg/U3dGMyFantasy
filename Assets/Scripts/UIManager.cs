@@ -65,11 +65,14 @@ public partial class UiManager : MonoBehaviour {
         // 关闭战斗场景时
         if (!enter) {
             GameManager.Instance.CanControlLuna = true;
-
             StartCoroutine(PerformMonsterLogic());
+            // 播放正常音乐
+            AudioManager.Instance.PlayMusic(AudioManager.Instance.NormalClip);
         } else {
             GameManager.Instance.MonsterCurrentHp = GameManager.Instance.MonsterMaxHp;
             GameManager.Instance.CanControlLuna = false;
+            // 播放战斗音乐
+            AudioManager.Instance.PlayMusic(AudioManager.Instance.BattleClip);
         }
         BattleBackGroundPanel.SetActive(enter);
     }
@@ -96,24 +99,11 @@ public partial class UiManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 显示对话内容(包含人物切换、文本内容修改),content为null则关闭对话框
+    /// 显示对话内容(包含人物切换、文本内容修改),dialogInfo.content为null则关闭对话框
     /// </summary>
-    /// <param name="eName">枚举类型的npc名字</param>
-    /// <param name="content">对话的信息</param>
-    public void ShowNpcDialog(GameManager.NpcNames eName = GameManager.NpcNames.Luna, string content = null) {
-        if (content == null) {
-            ShowTalkPanel(false);
-        } else {
-            ShowTalkPanel(true);
-            CurrentCharacterImage.sprite = characterSprites[(int)eName];
-            CurrentCharacterImage.SetNativeSize();// 即图片组件里的Set Native Size
-            NameText.text = eName.ToString();
-            ContentText.text = content;
-        }
-    }
-
+    /// <param name="dialogInfo">对话信息</param>
     public void ShowNpcDialog(DialogInfo dialogInfo) {
-        if (dialogInfo == null || dialogInfo.Content == null) {
+        if (dialogInfo is not { Content: not null }) {
             ShowTalkPanel(false);
         } else {
             ShowTalkPanel(true);

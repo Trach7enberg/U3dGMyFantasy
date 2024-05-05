@@ -25,14 +25,9 @@ public class Potion : MonoBehaviour {
     //    }
     //}
 
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.tag == tagName) {
-            if (GameManager.Instance.CanIncreaseLunaHp()) {
-                GameManager.Instance.InOrDecreaseLunaHp();
-                GameObject ins = Instantiate(startEffect, this.transform.position, Quaternion.identity) as GameObject;
-                ins.GetComponent<EffectControl>().SetDestroyTime(1f);
-                Destroy(this.gameObject);
-            }
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (collision != null && collision.gameObject.tag == GameManager.NpcNames.Luna.ToString()) {
+            collision.gameObject.GetComponent<MyLunaController>().DoSomething(collision.collider, this.gameObject);
         }
     }
 }

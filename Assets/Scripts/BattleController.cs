@@ -37,6 +37,8 @@ public class BattleController : MonoBehaviour {
     //private float lunaRecoverHpDuration = 1f;
     private float lunaDieDuration = 1f;
 
+    private float lunaHurtDuration = 0.417f;
+
     //private float lunaSkillDuration = 0.5f;
     private float lunaSkillEffectDuration = 1.18f; //放在怪物身上的技能伤害动画持续时间
 
@@ -169,6 +171,9 @@ public class BattleController : MonoBehaviour {
 
                 // 直接播放attack动画,结束之后自动游回箭头所指的动作,0代表状态机的层级
                 lunaAnimator.CrossFade(clipNameAtk, 0);
+                // 播放luna攻击音效
+                AudioManager.Instance.PlaySound(AudioManager.Instance.AttackClip);
+                AudioManager.Instance.PlaySound(AudioManager.Instance.LunaActionClip);
 
                 //怪物受击渐变动画
                 monsterRenderer.color = Color.red;
@@ -200,14 +205,17 @@ public class BattleController : MonoBehaviour {
     /// <summary>
     /// 协程,怪物冲刺攻击
     /// </summary>
-    /// <param name="isDefend">luna是否在防御状态</param>
     /// <returns></returns>
     private IEnumerator PerformMonsterAttackLogic() {
+        // 预先播放怪兽攻击音效
+        AudioManager.Instance.PlaySound(AudioManager.Instance.MonsterAttackClip);
         // 怪物先移动到luna旁边然后等待时间再进行冲刺
         monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 1.5f, monsterMoveDuration);
         yield return new WaitForSeconds(0.5f);
         // 怪物冲剂
         monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 0.5f, monsterMoveDuration / 2f).OnComplete(() => {
+            // 播放luna受击音效
+            AudioManager.Instance.PlaySound(AudioManager.Instance.LunaHurtClip, 4f);
             lunaAnimator.CrossFade(clipNameHurt, 0);
             lunaRenderer.color = Color.red;
             lunaRenderer.DOFade(lunaFadeSize, lunaFadeDuration);
@@ -228,9 +236,13 @@ public class BattleController : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator PerformDefenseLogic() {
         UiManager.Instance.ShowBattleUi(false);
+        AudioManager.Instance.PlaySound(AudioManager.Instance.LunaActionClip);
         lunaAnimator.SetBool(clipNameDefense, true);
 
+        // 预先播放怪兽攻击音效
+        AudioManager.Instance.PlaySound(AudioManager.Instance.MonsterAttackClip);
         monsterTransform.DOLocalMoveX(lunaTransform.localPosition.x - 1.5f, monsterMoveDuration / 2f);
+
         yield return new WaitForSeconds(0.5f);
 
         // 怪物冲刺
@@ -256,9 +268,12 @@ public class BattleController : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator PerformSkillLogic() {
         UiManager.Instance.ShowBattleUi(false);
+
         lunaAnimator.CrossFade(clipNameSkill, 0);
         JudgeLunaMp(GameManager.Instance.LunaSkillMpCost);
 
+        AudioManager.Instance.PlaySound(AudioManager.Instance.LunaActionClip);
+        AudioManager.Instance.PlaySound(AudioManager.Instance.LunaSkillClip, 2f);
         // 以monster为父类生成在monster脚下的动画
         skillEffectCopy = Instantiate(SkillEffect, monsterTransform) as GameObject;
         skillEffectCopy.GetComponent<EffectControl>().SetDestroyTime(1f);
@@ -274,7 +289,7 @@ public class BattleController : MonoBehaviour {
         SpriteRendererReset(monsterRenderer);
         JudgeMonsterHp(lunaSkillDamage);
 
-        //TODO  因为开启协程 会导致怪物死亡用技能时再次战斗会有bug
+        //注意:开启协程 会导致怪物死亡用技能时再次战斗会有bug,所以需要判断是否退出战场
         if (UiManager.Instance.BattleBackGroundPanel.activeSelf != false) {
             StartCoroutine(PerformMonsterAttackLogic());
         }
@@ -286,6 +301,8 @@ public class BattleController : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator PerformRecoverHpLogic() {
         UiManager.Instance.ShowBattleUi(false);
+        AudioManager.Instance.PlaySound(AudioManager.Instance.LunaActionClip);
+        AudioManager.Instance.PlaySound(AudioManager.Instance.RecoverHpClip, 4f);
         lunaAnimator.CrossFade(clipNameRecoverHp, 0);
         JudgeLunaMp(GameManager.Instance.LunaHealMpCost);
 
@@ -303,6 +320,8 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformLunaDieLogic() {
+        // 播放luna死亡音效
+        AudioManager.Instance.PlaySound(AudioManager.Instance.LunaDieClip, 4f);
         lunaAnimator.CrossFade(clipNameDie, 0);
         lunaRenderer.color = Color.red;
         lunaRenderer.DOFade(lunaFadeDuration, lunaDieDuration);
@@ -316,6 +335,8 @@ public class BattleController : MonoBehaviour {
     /// 执行怪物死亡
     /// </summary>
     public void PerformMonsterDieLogic() {
+        // 播放怪物死亡音效
+        AudioManager.Instance.PlaySound(AudioManager.Instance.MonsterDieClip, 4f);
         // 怪物击杀加一
         GameManager.Instance.KilledNum++;
         UiManager.Instance.ShowBattleUi(false);

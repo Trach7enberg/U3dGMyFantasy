@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour {
     /// 游戏里的Npc的标签名字
     /// </summary>
     public enum NpcNames {
-        Luna, Nala, Dog, Candle, MainMapMonster
+        Luna, Nala, Dog, Candle, HpPotion, MainMapMonster
     }
 
     /// <summary>
@@ -159,11 +159,10 @@ public class GameManager : MonoBehaviour {
     }
 
     public void SetCurrentMonster(GameObject monster) {
-        CurrentMonster =monster;
+        CurrentMonster = monster;
     }
 
     public GameObject GetCurrentMonster() {
         return CurrentMonster;
     }
-
 }
