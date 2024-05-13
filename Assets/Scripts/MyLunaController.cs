@@ -184,6 +184,12 @@ public class MyLunaController : MonoBehaviour {
                 animator.SetBool(GameManager.AnimatorParameters.Run.ToString(), false);
                 currentSpeed = speedFactor;
             }
+        } else {
+            // 奔跑状态下原地不动时或者停下的时候,跑步状态会取消
+            if (isRun) {
+                animator.SetBool(GameManager.AnimatorParameters.Run.ToString(), false);
+                isRun = false;
+            }
         }
         animator.SetFloat(GameManager.AnimatorParameters.MoveValue.ToString(), originalInput.magnitude);
 
