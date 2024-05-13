@@ -44,8 +44,11 @@ public class MyLunaController : MonoBehaviour {
     // 人物攀爬
     public bool isClimb;
 
+    // 人物进入攀爬区域才能爬
     public bool inClimbArea;
-    public bool inJumpArea;
+
+    // 人物进入跳跃区域才能跳
+    private bool inJumpArea;
 
     //private float TouchTheDogDuration = 0.5f; // 摸狗子的动画时间
     //private float LookAtTheDogDuration = 1f; // 看狗子思考的动画时间
@@ -87,7 +90,7 @@ public class MyLunaController : MonoBehaviour {
 
         // 跳跑爬状态默认是按下切换,而不是持续按下
         // 与运算的作用是 跳跑爬动作同时只能存在一个
-        isJump = (isJump) ? !Input.GetKeyDown(KeyCode.Space) : !isRun & !isClimb & Input.GetKeyDown(KeyCode.Space);
+        isJump = (isJump) ? !Input.GetKeyDown(KeyCode.Space) : !isRun & !isClimb & inJumpArea & Input.GetKeyDown(KeyCode.Space);
         isRun = (isRun) ? !Input.GetKeyDown(KeyCode.LeftShift) : !isJump & !isClimb & Input.GetKeyDown(KeyCode.LeftShift);
         isClimb = (isClimb) ? !Input.GetKeyDown(KeyCode.LeftControl) : !isJump & !isRun & inClimbArea & Input.GetKeyDown(KeyCode.LeftControl);
         if (Input.GetKeyDown(KeyCode.F)) {
@@ -100,8 +103,26 @@ public class MyLunaController : MonoBehaviour {
     /// 设置当前luna的刚体组件的simulated属性,可以使luna穿透碰撞体
     /// </summary>
     /// <param name="b"></param>
-    public void SetSimulated(bool b) {
+    private void SetSimulated(bool b) {
         rigibody.simulated = b;
+    }
+
+    /// <summary>
+    /// 关闭Luna进入跳跃区域的标志
+    /// </summary>
+    public void CloseJumpArea() {
+        // simulated为false,说明luna正在跳跃,跳跃结束我们才能设置是否离开区域
+        // 为true说明跳跃结束或者不在跳跃
+        if (rigibody.simulated) {
+            inJumpArea = false;
+        }
+    }
+
+    /// <summary>
+    /// 开启Luna进入跳跃区域的标志
+    /// </summary>
+    public void SetJumpArea() {
+        inJumpArea = true;
     }
 
     /// <summary>
@@ -122,6 +143,7 @@ public class MyLunaController : MonoBehaviour {
                 //跳跃结束时luna的刚体模拟要恢复否则会卡住不动
                 SetSimulated(true);
                 isJump = false;
+                CloseJumpArea();
             });
 
         // 移动luna下的lunaSprite,让跳跃更加真实,动作分成两段,第一段是增加Y距离,第二段是恢复默认Y值
@@ -131,7 +153,8 @@ public class MyLunaController : MonoBehaviour {
                 lunaLocalPositionYOriginal + jumpRealitySize, jumpRealityDuration).SetEase(Ease.InOutSine)
             .OnComplete(
                 () => {
-                    lunaLocalTransform.DOLocalMoveY(lunaLocalPositionYOriginal, jumpRealityDuration).SetEase(Ease.InOutSine);
+                    lunaLocalTransform.DOLocalMoveY(lunaLocalPositionYOriginal, jumpRealityDuration)
+                        .SetEase(Ease.InOutSine).OnComplete(() => { });
                 }
             );
     }
