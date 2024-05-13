@@ -2635,7 +2635,6 @@ MonoBehaviour:
   LunaCurrentHp: 0
   LunaCurrentMp: 0
   MonsterCurrentHp: 0
-  MissionsIndex: 0
   HasPetTheDog: 0
   CandleNum: 0
   KilledNum: 0
@@ -3254,6 +3253,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DialogIndex: 0
+  MissionsIndex: 0
 --- !u!4 &579572055
 Transform:
   m_ObjectHideFlags: 0
@@ -5232,7 +5232,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.83, y: 1.39, z: -10}
+  m_LocalPosition: {x: -3.04, y: -7.52, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6339,6 +6339,7 @@ MonoBehaviour:
   MonsterDieClip: {fileID: 8300000, guid: a04a79783c4c5514786d088e302837c4, type: 3}
   RecoverHpClip: {fileID: 8300000, guid: bd9019a7346031d45868d71d90dec068, type: 3}
   LunaSkillClip: {fileID: 8300000, guid: af30794d915956042a681c0f6f65cc91, type: 3}
+  VolumeScale: 2
 --- !u!4 &1091044708
 Transform:
   m_ObjectHideFlags: 0
@@ -11417,11 +11418,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5318372905259463049, guid: c5c0978ba8575e64e8e4c80e62cdf810, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -6.83
+      value: -3.04
       objectReference: {fileID: 0}
     - target: {fileID: 5318372905259463049, guid: c5c0978ba8575e64e8e4c80e62cdf810, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.39
+      value: -7.52
       objectReference: {fileID: 0}
     - target: {fileID: 5318372905259463049, guid: c5c0978ba8575e64e8e4c80e62cdf810, type: 3}
       propertyPath: m_LocalPosition.z
