@@ -212,7 +212,7 @@ public class MyLunaController : MonoBehaviour {
                     if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed
                         && MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
                         == MissionsManager.MissionsName.PetTheDog) {
-                        // TODO 播放任务完成音效
+                        // 播放任务完成音效
                         AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
                         // 摸狗动画
                         StartCoroutine(PetTheDogAnimation(dogAnimator, true));
@@ -221,12 +221,22 @@ public class MyLunaController : MonoBehaviour {
                             Instantiate(starEffect, dogAnimator.transform) as GameObject;
                         starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(GameManager.Instance.DestroyTime);
 
-                        StartCoroutine(PetTheDogAnimation(dogAnimator, false));
-
                         MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
                         GameManager.Instance.MissionsIndex++;
                         MissionsManager.Instance.DialogIndex = 0;
+
+                        // 完成任务后狗子可以随便摸,不会狗吠
+                    } else if (MissionsManager.Instance.FindMission(MissionsManager.MissionsName.PetTheDog).IsDone) {
+                        // 摸狗动画
+                        StartCoroutine(PetTheDogAnimation(dogAnimator, true));
+                        // star效果
+                        starEffectCopy =
+                            Instantiate(starEffect, dogAnimator.transform) as GameObject;
+                        starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(GameManager.Instance.DestroyTime);
+                        // 播放任务完成音效
+                        AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
                     } else {
+                        // 否则摸狗,狗吠
                         // star效果
                         starEffectCopy =
                             Instantiate(starEffect, dogAnimator.transform) as GameObject;
@@ -234,7 +244,6 @@ public class MyLunaController : MonoBehaviour {
 
                         StartCoroutine(PetTheDogAnimation(dogAnimator, false));
                     }
-                    // 完成任务后狗子可以随便摸,,TODO
                     break;
 
                 // 与蜡烛互动,相关任务

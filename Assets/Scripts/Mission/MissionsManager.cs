@@ -94,4 +94,11 @@ public class MissionsManager : MonoBehaviour {
             //},new DialogInfo(){}),
         };
     }
+
+    public Mission FindMission(MissionsManager.MissionsName mName) {
+        foreach (Mission mission in Missions) {
+            if (mission.Name == mName) return mission;
+        }
+        return null;
+    }
 }
