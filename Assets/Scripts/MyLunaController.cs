@@ -197,7 +197,7 @@ public class MyLunaController : MonoBehaviour {
                         MissionsManager.Instance.MissionsIndex++;
                         MissionsManager.Instance.DialogIndex = 0;
                         // 播放互动完成任务音效
-                        AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
+                        AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, AudioManager.Instance.VolumeScale);
                     }
 
                     // 拿到碰撞对象NPC下的父类然后播放对话
@@ -213,7 +213,7 @@ public class MyLunaController : MonoBehaviour {
                         && MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].Name
                         == MissionsManager.MissionsName.PetTheDog) {
                         // 播放任务完成音效
-                        AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
+                        AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, AudioManager.Instance.VolumeScale);
                         // 摸狗动画
                         StartCoroutine(PetTheDogAnimation(dogAnimator, true));
                         // star效果
@@ -258,7 +258,7 @@ public class MyLunaController : MonoBehaviour {
                             MissionsManager.Instance.MissionsIndex++;
                             MissionsManager.Instance.DialogIndex = 0;
                             // TODO 播放蜡烛任务完成音效
-                            AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
+                            AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, AudioManager.Instance.VolumeScale);
                         }
                     }
 
@@ -284,7 +284,7 @@ public class MyLunaController : MonoBehaviour {
                                 starEffectCopy = Instantiate(starEffect, gObject.transform.position, Quaternion.identity);
                                 starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(1f);
                                 // 播放互动音效
-                                AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
+                                AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, AudioManager.Instance.VolumeScale);
                                 Destroy(gObject);
                             }
                         }

@@ -49,6 +49,8 @@ public class AudioManager : MonoBehaviour {
     // luna用技能攻击音效,Cut版本为缩短版本的音效
     public AudioClip LunaSkillClip;
 
+    public float VolumeScale = 2f;
+
     public void Awake() {
         Instance = this;
         // 游戏打开就播放音乐

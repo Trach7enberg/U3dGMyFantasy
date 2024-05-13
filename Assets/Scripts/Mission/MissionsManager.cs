@@ -14,7 +14,7 @@ public class MissionsManager : MonoBehaviour {
     public static MissionsManager Instance;
     public List<Mission> Missions;
     public int DialogIndex; // 当前List中的相应任务的普通对话数组的索引
-    public int MissionsIndex; // 任务对话数组的一维索引下标控制
+    public int MissionsIndex; // 任务对话数组的一维索引下标控制,也就是当前正在进行的任务索引
 
     private void Start() {
         MissionsIndex = 1;
