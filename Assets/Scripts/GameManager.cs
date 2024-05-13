@@ -53,9 +53,6 @@ public class GameManager : MonoBehaviour {
 
     [Range(0, 5)] public float MonsterCurrentHp;
 
-    // 对话数组的一维索引下标控制
-    public int MissionsIndex;
-
     // 是否抚摸狗子了
     public bool HasPetTheDog;
 
@@ -92,8 +89,6 @@ public class GameManager : MonoBehaviour {
         Test = false;
         DestroyTime = 1f;
         ShowMonsterTime = 1f;
-
-        MissionsIndex = 1;
 
         LunaMaxHp = 5;
         LunaMaxMp = 5;

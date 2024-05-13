@@ -184,17 +184,17 @@ public class MyLunaController : MonoBehaviour {
                     nalaAnimator.CrossFade(GameManager.AnimatorMotionName.TalkLaugh.ToString(), 0);
 
                     // 轮到杀怪任务时,显示怪物
-                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name ==
+                    if (MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].Name ==
                         MissionsManager.MissionsName.KillMonsters) {
                         UiManager.Instance.ShowMonsters(true);
                     }
 
                     // 检测是否完成击杀任务
-                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
+                    if (MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].Name
                               == MissionsManager.MissionsName.KillMonsters
                               && GameManager.Instance.KilledNum == GameManager.Instance.TargetKilledNum) {
-                        MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
-                        GameManager.Instance.MissionsIndex++;
+                        MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].IsDone = true;
+                        MissionsManager.Instance.MissionsIndex++;
                         MissionsManager.Instance.DialogIndex = 0;
                         // 播放互动完成任务音效
                         AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
@@ -209,8 +209,8 @@ public class MyLunaController : MonoBehaviour {
                     Animator dogAnimator = c.GetComponentInParent<NpcDialog>().DogAnimator;
 
                     // 已领取任务并且当前任务的名字是摸狗子时
-                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed
-                        && MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
+                    if (MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].IsClaimed
+                        && MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].Name
                         == MissionsManager.MissionsName.PetTheDog) {
                         // 播放任务完成音效
                         AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
@@ -221,8 +221,8 @@ public class MyLunaController : MonoBehaviour {
                             Instantiate(starEffect, dogAnimator.transform) as GameObject;
                         starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(GameManager.Instance.DestroyTime);
 
-                        MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
-                        GameManager.Instance.MissionsIndex++;
+                        MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].IsDone = true;
+                        MissionsManager.Instance.MissionsIndex++;
                         MissionsManager.Instance.DialogIndex = 0;
 
                         // 完成任务后狗子可以随便摸,不会狗吠
@@ -233,8 +233,6 @@ public class MyLunaController : MonoBehaviour {
                         starEffectCopy =
                             Instantiate(starEffect, dogAnimator.transform) as GameObject;
                         starEffectCopy.GetComponent<EffectControl>().SetDestroyTime(GameManager.Instance.DestroyTime);
-                        // 播放任务完成音效
-                        AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);
                     } else {
                         // 否则摸狗,狗吠
                         // star效果
@@ -248,16 +246,16 @@ public class MyLunaController : MonoBehaviour {
 
                 // 与蜡烛互动,相关任务
                 case GameManager.NpcNames.Candle:
-                    if (MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsClaimed
-                        && MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].Name
+                    if (MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].IsClaimed
+                        && MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].Name
                         == MissionsManager.MissionsName.FindCandles) {
                         Destroy(c.gameObject);
                         GameManager.Instance.CandleNum++;
 
                         // 判断蜡烛任务是否完成
                         if (GameManager.Instance.CandleNum == GameManager.Instance.TargetCandleNum) {
-                            MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex].IsDone = true;
-                            GameManager.Instance.MissionsIndex++;
+                            MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].IsDone = true;
+                            MissionsManager.Instance.MissionsIndex++;
                             MissionsManager.Instance.DialogIndex = 0;
                             // TODO 播放蜡烛任务完成音效
                             AudioManager.Instance.PlaySound(AudioManager.Instance.FinishActionClip, 2f);

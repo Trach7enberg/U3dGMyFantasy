@@ -14,8 +14,10 @@ public class MissionsManager : MonoBehaviour {
     public static MissionsManager Instance;
     public List<Mission> Missions;
     public int DialogIndex; // 当前List中的相应任务的普通对话数组的索引
+    public int MissionsIndex; // 任务对话数组的一维索引下标控制
 
     private void Start() {
+        MissionsIndex = 1;
         DialogIndex = 0;
         Instance = this;
         this.Candle = GameManager.Instance.TargetCandleNum;
@@ -95,6 +97,11 @@ public class MissionsManager : MonoBehaviour {
         };
     }
 
+    /// <summary>
+    /// 根据任务名字查找任务
+    /// </summary>
+    /// <param name="mName">任务名</param>
+    /// <returns>任务</returns>
     public Mission FindMission(MissionsManager.MissionsName mName) {
         foreach (Mission mission in Missions) {
             if (mission.Name == mName) return mission;

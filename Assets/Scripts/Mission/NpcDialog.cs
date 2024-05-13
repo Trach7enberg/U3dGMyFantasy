@@ -13,8 +13,8 @@ public class NpcDialog : MonoBehaviour {
     /// 显示对话
     /// </summary>
     public void DisplayDialog() {
-        if (GameManager.Instance.MissionsIndex < MissionsManager.Instance.Missions.Count) {
-            Mission m = MissionsManager.Instance.Missions[GameManager.Instance.MissionsIndex];
+        if (MissionsManager.Instance.MissionsIndex < MissionsManager.Instance.Missions.Count) {
+            Mission m = MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex];
 
             if (!m.IsDone) {
                 DialogInfo info;
