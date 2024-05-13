@@ -37,7 +37,7 @@ public class BattleController : MonoBehaviour {
     //private float lunaRecoverHpDuration = 1f;
     private float lunaDieDuration = 1f;
 
-    private float lunaHurtDuration = 0.417f;
+    //private float lunaHurtDuration = 0.417f; // luna受击动画时间
 
     //private float lunaSkillDuration = 0.5f;
     private float lunaSkillEffectDuration = 1.18f; //放在怪物身上的技能伤害动画持续时间
@@ -329,6 +329,8 @@ public class BattleController : MonoBehaviour {
         UiManager.Instance.ShowBattleUi(false);
         UiManager.Instance.ShowBattleGround(false);
         SpriteRendererReset(lunaRenderer);
+
+        // TODO luna死后应该返回上个存档点
     }
 
     /// <summary>

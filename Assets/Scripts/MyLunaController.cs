@@ -35,6 +35,7 @@ public class MyLunaController : MonoBehaviour {
     // 跳跃逼真效果的幅度
     private float jumpRealitySize = 1f;
 
+    // luna下的lunaSprite的y轴,在跳跃时进行抖动,使效果更加真实
     private float lunaLocalPositionYOriginal;
 
     // 人物加速奔跑
@@ -44,9 +45,10 @@ public class MyLunaController : MonoBehaviour {
     public bool isClimb;
 
     public bool inClimbArea;
+    public bool inJumpArea;
 
-    private float TouchTheDogDuration = 0.5f;
-    private float LookAtTheDogDuration = 1f;
+    //private float TouchTheDogDuration = 0.5f; // 摸狗子的动画时间
+    //private float LookAtTheDogDuration = 1f; // 看狗子思考的动画时间
 
     private void Start() {
         //设置帧率
@@ -56,6 +58,9 @@ public class MyLunaController : MonoBehaviour {
         lunaLocalTransform = transform.GetChild(0);
         lunaLocalPositionYOriginal = lunaLocalTransform.localPosition.y;
         currentSpeed = speedFactor;
+
+        inJumpArea = false;
+        inClimbArea = false;
     }
 
     private void Update() {

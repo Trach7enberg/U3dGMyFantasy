@@ -7,7 +7,6 @@
 public class Potion : MonoBehaviour {
     public GameObject startEffect;
 
-    private string tagName = "Luna";
     //private void OnTriggerEnter2D(Collider2D collision) {
     //    MyLunaController Luna = collision.GetComponent<MyLunaController>();
     //    if (Luna != null) {
