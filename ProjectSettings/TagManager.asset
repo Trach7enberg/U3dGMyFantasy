@@ -11,6 +11,9 @@ TagManager:
   - Nala
   - Horse
   - Candle
+  - Npcs
+  - Map
+  - GameUi
   layers:
   - Default
   - TransparentFX

@@ -23,6 +23,7 @@ public partial class UiManager : MonoBehaviour {
     public GameObject TalkPanel;
 
     public GameObject MainSceneMonsters;
+    public GameObject MainGameObject;
 
     /// <summary>
     /// 游戏层级mask
@@ -133,5 +134,9 @@ public partial class UiManager : MonoBehaviour {
             GameManager.Instance.GetCurrentMonster().SetActive(true);
         }
         yield return 0;
+    }
+
+    public void ShowMainGameObject(bool isShow = true) {
+
     }
 }
