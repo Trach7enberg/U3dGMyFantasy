@@ -8,7 +8,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour {
     public static AudioManager Instance;
 
-    public AudioSource MainAudioSource;
+    [SerializeField] private AudioSource MainAudioSource;
 
     // 正常场景音频
     public AudioClip NormalClip;
@@ -51,10 +51,17 @@ public class AudioManager : MonoBehaviour {
 
     public float VolumeScale = 2f;
 
+    // 主场景音量
+    [SerializeField] private float MainVolume;
+
+    // 战斗场景音量
+    [SerializeField] private float BattleVolume;
+
     public void Awake() {
         Instance = this;
         // 游戏打开就播放音乐
         MainAudioSource.volume = 0.10f;
+        MainVolume = BattleVolume = MainAudioSource.volume;
         MainAudioSource.Play();
     }
 
@@ -78,5 +85,42 @@ public class AudioManager : MonoBehaviour {
         if (audioClip) {
             MainAudioSource.PlayOneShot(audioClip, volumeScale);
         }
+    }
+
+    /// <summary>
+    /// 设置主场景音量
+    /// </summary>
+    /// <param name="volume"></param>
+    public void SetMainVolume(float volume) {
+        MainVolume = volume;
+        MainAudioSource.volume = MainVolume;
+    }
+
+    /// <summary>
+    /// 设置战斗场景音量
+    /// </summary>
+    /// <param name="volume"></param>
+    public void SetBattleVolume(float volume) {
+        BattleVolume = volume;
+        if (GameUiManager.Instance.InBattleGround()) {
+            MainAudioSource.volume = BattleVolume;
+        }
+    }
+
+    /// <summary>
+    /// 通过名字获取对应场景的音量
+    /// </summary>
+    /// <param name="sliderName">滑动条的名字</param>
+    /// <returns>音量值</returns>
+    public float GetVolume(string sliderName = null) {
+        float res = MainAudioSource.volume;
+        if (sliderName != null) {
+            if (sliderName.Contains("Main")) {
+                res = MainVolume;
+            } else {
+                res = BattleVolume;
+            }
+        }
+        return res;
     }
 }

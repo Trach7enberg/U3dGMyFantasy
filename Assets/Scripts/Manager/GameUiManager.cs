@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Threading;
@@ -23,6 +24,7 @@ public partial class GameUiManager : MonoBehaviour {
     public GameObject BattleChoicePanel;
     public GameObject BattleBackGroundPanel;
     public GameObject TalkPanel;
+    [SerializeField] private GameObject LunaPanel;
 
     public GameObject MainSceneMonsters;
 
@@ -88,6 +90,14 @@ public partial class GameUiManager : MonoBehaviour {
         // 通过RectTransform的锚点来设置图片的宽度,第一个参数我们用锚点的水平轴向,第二个size是填充的百分比
         hpMaskImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, hpFillPercent * originalSize);
         mpMaskImage.rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, MpFillPercent * originalSize);
+    }
+
+    /// <summary>
+    /// 是否显示luna的头像和蓝血条
+    /// </summary>
+    /// <param name="isShow"></param>
+    public void ShowLunaPanel(bool isShow = true) {
+        LunaPanel.gameObject.SetActive(isShow);
     }
 
     private void ShowMonsterHpSlider(bool isShow = true) {
@@ -175,5 +185,13 @@ public partial class GameUiManager : MonoBehaviour {
             GameManager.Instance.GetCurrentMonster().SetActive(true);
         }
         yield return 0;
+    }
+
+    /// <summary>
+    /// 战斗场景是否打开
+    /// </summary>
+    /// <returns>t为是,f为否</returns>
+    public Boolean InBattleGround() {
+        return BattleBackGroundPanel.activeSelf;
     }
 }
