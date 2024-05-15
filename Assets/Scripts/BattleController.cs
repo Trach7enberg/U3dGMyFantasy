@@ -103,13 +103,13 @@ public class BattleController : MonoBehaviour {
     }
 
     public void Escape() {
-        UiManager.Instance.ShowBattleUi(false);
+        GameUiManager.Instance.ShowBattleUi(false);
         lunaAnimator.SetBool(animatorParameters[2], true);
         lunaAnimator.SetFloat(animatorParameters[1], 1f);
         lunaTransform.DOLocalMoveX(lunaTransform.localPosition.x + 2.5f, lunaMoveDuration).OnComplete((() => {
             lunaAnimator.SetBool(animatorParameters[2], false);
             lunaAnimator.SetFloat(animatorParameters[1], 0f);
-            UiManager.Instance.ShowBattleGround(false);
+            GameUiManager.Instance.ShowBattleGround(false);
             lunaTransform.localPosition = lunaInitPos;
         }));
     }
@@ -159,7 +159,7 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformAttackLogic() {
-        UiManager.Instance.ShowBattleUi(false);
+        GameUiManager.Instance.ShowBattleUi(false);
         lunaAnimator.SetBool(animatorParameters[2], true);
         lunaAnimator.SetFloat(animatorParameters[1], -1f);
 
@@ -226,7 +226,7 @@ public class BattleController : MonoBehaviour {
         JudgeLunaHp(MonsterDamage);
 
         monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
-            UiManager.Instance.ShowBattleUi(true);
+            GameUiManager.Instance.ShowBattleUi(true);
         });
     }
 
@@ -235,7 +235,7 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformDefenseLogic() {
-        UiManager.Instance.ShowBattleUi(false);
+        GameUiManager.Instance.ShowBattleUi(false);
         AudioManager.Instance.PlaySound(AudioManager.Instance.LunaActionClip);
         lunaAnimator.SetBool(clipNameDefense, true);
 
@@ -257,7 +257,7 @@ public class BattleController : MonoBehaviour {
         yield return new WaitForSeconds(lunaMoveDuration);
         //怪物归位
         monsterTransform.DOLocalMove(monsterInitPos, monsterMoveDuration).OnComplete(() => {
-            UiManager.Instance.ShowBattleUi(true);
+            GameUiManager.Instance.ShowBattleUi(true);
             lunaAnimator.SetBool(clipNameDefense, false);
         });
     }
@@ -267,7 +267,7 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformSkillLogic() {
-        UiManager.Instance.ShowBattleUi(false);
+        GameUiManager.Instance.ShowBattleUi(false);
 
         lunaAnimator.CrossFade(clipNameSkill, 0);
         JudgeLunaMp(GameManager.Instance.LunaSkillMpCost);
@@ -290,7 +290,7 @@ public class BattleController : MonoBehaviour {
         JudgeMonsterHp(lunaSkillDamage);
 
         //注意:开启协程 会导致怪物死亡用技能时再次战斗会有bug,所以需要判断是否退出战场
-        if (UiManager.Instance.BattleBackGroundPanel.activeSelf != false) {
+        if (GameUiManager.Instance.BattleBackGroundPanel.activeSelf != false) {
             StartCoroutine(PerformMonsterAttackLogic());
         }
     }
@@ -300,7 +300,7 @@ public class BattleController : MonoBehaviour {
     /// </summary>
     /// <returns></returns>
     private IEnumerator PerformRecoverHpLogic() {
-        UiManager.Instance.ShowBattleUi(false);
+        GameUiManager.Instance.ShowBattleUi(false);
         AudioManager.Instance.PlaySound(AudioManager.Instance.LunaActionClip);
         AudioManager.Instance.PlaySound(AudioManager.Instance.RecoverHpClip, AudioManager.Instance.VolumeScale * 2f);
         lunaAnimator.CrossFade(clipNameRecoverHp, 0);
@@ -311,7 +311,7 @@ public class BattleController : MonoBehaviour {
 
         yield return new WaitForSeconds(lunaHealEffectDuration);
         JudgeLunaHp();
-        UiManager.Instance.ShowBattleUi(true);
+        GameUiManager.Instance.ShowBattleUi(true);
         yield return null;
     }
 
@@ -326,8 +326,8 @@ public class BattleController : MonoBehaviour {
         lunaRenderer.color = Color.red;
         lunaRenderer.DOFade(lunaFadeDuration, lunaDieDuration);
         yield return new WaitForSeconds(lunaDieDuration);
-        UiManager.Instance.ShowBattleUi(false);
-        UiManager.Instance.ShowBattleGround(false);
+        GameUiManager.Instance.ShowBattleUi(false);
+        GameUiManager.Instance.ShowBattleGround(false);
         SpriteRendererReset(lunaRenderer);
 
         // TODO luna死后应该返回上个存档点
@@ -341,8 +341,8 @@ public class BattleController : MonoBehaviour {
         AudioManager.Instance.PlaySound(AudioManager.Instance.MonsterDieClip, AudioManager.Instance.VolumeScale * 2f);
         // 怪物击杀加一
         GameManager.Instance.KilledNum++;
-        UiManager.Instance.ShowBattleUi(false);
-        UiManager.Instance.ShowBattleGround(false);
+        GameUiManager.Instance.ShowBattleUi(false);
+        GameUiManager.Instance.ShowBattleGround(false);
         SpriteRendererReset(monsterRenderer);
     }
 }

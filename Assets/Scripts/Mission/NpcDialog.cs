@@ -38,7 +38,7 @@ public class NpcDialog : MonoBehaviour {
                         m.IsEnd = true;
                     }
                 }
-                UiManager.Instance.ShowNpcDialog(info);
+                GameUiManager.Instance.ShowNpcDialog(info);
             }
         }
     }

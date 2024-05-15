@@ -2,6 +2,7 @@
 using System.Security.Cryptography;
 using System.Threading;
 using DG.Tweening;
+using Michsky.MUIP;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
@@ -9,8 +10,8 @@ using UnityEngine.UI;
 /// <summary>
 /// UI管理
 /// </summary>
-public partial class UiManager : MonoBehaviour {
-    public static UiManager Instance;
+public partial class GameUiManager : MonoBehaviour {
+    public static GameUiManager Instance;
     public Image hpMaskImage;
     public Image mpMaskImage;
     public Image CurrentCharacterImage;
@@ -23,7 +24,11 @@ public partial class UiManager : MonoBehaviour {
     public GameObject TalkPanel;
 
     public GameObject MainSceneMonsters;
-    public GameObject MainGameObject;
+
+    [SerializeField] private GameObject BattleSceneMonster; // 战斗场景中的怪兽
+    [SerializeField] private SliderManager MonsterSlider;   // 怪兽血条
+    public Vector3 InitBattleMonsterGlobPos;  // 战斗场景中的怪兽初始位置
+    public Vector3 InitMonsterSliderGlobPos;  // 怪兽血条的初始位置
 
     /// <summary>
     /// 游戏层级mask
@@ -41,6 +46,16 @@ public partial class UiManager : MonoBehaviour {
     private void Awake() {
         Instance = this;
         originalSize = hpMaskImage.rectTransform.rect.width;
+
+        InitBattleMonsterGlobPos = Camera.main.WorldToScreenPoint(BattleSceneMonster.transform.position);
+        InitMonsterSliderGlobPos = MonsterSlider.transform.position;
+        MonsterSlider.mainSlider.minValue = GameManager.Instance.MonsterMinHp;
+        MonsterSlider.mainSlider.maxValue = GameManager.Instance.MonsterMaxHp;
+        MonsterSlider.mainSlider.value = GameManager.Instance.MonsterCurrentHp;
+    }
+
+    private void Update() {
+        SetBar(GameManager.Instance.LunaCurrentHp / GameManager.Instance.LunaMaxHp, GameManager.Instance.LunaCurrentMp / GameManager.Instance.LunaMaxMp);
     }
 
     /// <summary>
@@ -82,10 +97,6 @@ public partial class UiManager : MonoBehaviour {
     /// 进入游戏战斗场景,并且隐藏与Luna发生战斗的怪物
     /// </summary>
     /// <param name="monster">与Luna发生战斗的怪物</param>
-    /// <param name="battleLuna">战斗场景中的luna</param>
-    /// <param name="m">monster的初始位置</param>
-    /// <param name="bL">battleLuna的初始位置</param>
-    /// <param name="enter">true为开启</param>
     public void ShowBattleGround(GameObject monster) {
         monster.SetActive(false);
         ShowBattleGround(true);
@@ -134,9 +145,5 @@ public partial class UiManager : MonoBehaviour {
             GameManager.Instance.GetCurrentMonster().SetActive(true);
         }
         yield return 0;
-    }
-
-    public void ShowMainGameObject(bool isShow = true) {
-
     }
 }

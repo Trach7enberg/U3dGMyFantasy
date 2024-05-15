@@ -205,7 +205,7 @@ public class MyLunaController : MonoBehaviour {
     /// <param name="gObject">发起主动碰撞的那个游戏物体</param>
     public void DoSomething(Collider2D cder = null, GameObject gObject = null) {
         // 以某个刚体为半径的自交球,有东西在这个半径内 就代表检测成功,第一个参数是以谁为中心点,第二个参数是检测半径,第三参数是检测的是哪个层级的游戏物体
-        Collider2D c = (cder != null) ? cder : Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(UiManager.GameLayerMask.Npc.ToString()));
+        Collider2D c = (cder != null) ? cder : Physics2D.OverlapCircle(rigibody.position, 0.5f, LayerMask.GetMask(GameUiManager.GameLayerMask.Npc.ToString()));
         GameObject starEffect = GameManager.Instance.UniversalStarEffect;
         if (c != null && Enum.IsDefined(typeof(GameManager.NpcNames), c.tag)) {
             GameObject starEffectCopy = null;
@@ -220,7 +220,7 @@ public class MyLunaController : MonoBehaviour {
                     // 轮到杀怪任务时,显示怪物
                     if (MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].Name ==
                         MissionsManager.MissionsName.KillMonsters) {
-                        UiManager.Instance.ShowMonsters(true);
+                        GameUiManager.Instance.ShowMonsters(true);
                     }
 
                     // 检测是否完成击杀任务
@@ -307,8 +307,8 @@ public class MyLunaController : MonoBehaviour {
                         // 主场景怪物碰到Luna
                         if (Enum.Parse<GameManager.NpcNames>(gObject.tag) == GameManager.NpcNames.MainMapMonster) {
                             GameManager.Instance.SetCurrentMonster(gObject);
-                            UiManager.Instance.ShowBattleGround(gObject);
-                            UiManager.Instance.ShowBattleUi(true);
+                            GameUiManager.Instance.ShowBattleGround(gObject);
+                            GameUiManager.Instance.ShowBattleUi(true);
 
                             // luna碰到药瓶
                         } else if (Enum.Parse<GameManager.NpcNames>(gObject.tag) == GameManager.NpcNames.HpPotion) {

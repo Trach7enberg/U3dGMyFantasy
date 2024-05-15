@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour {
     public float LunaMaxHp { get; private set; }
     public float LunaMaxMp { get; private set; }
     public float MonsterMaxHp { get; private set; }
+    public float MonsterMinHp { get; private set; }
 
     // luna使用Mp技能消耗的蓝数
     public float LunaSkillMpCost;
@@ -91,6 +92,7 @@ public class GameManager : MonoBehaviour {
         LunaMaxHp = 5;
         LunaMaxMp = 5;
         MonsterMaxHp = 5;
+        MonsterMinHp = 0;
         LunaSkillMpCost = -3f;
         LunaHealMpCost = -1f;
 
@@ -100,7 +102,12 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Update() {
-        UpdateBar();
+        // 测试
+        if (Test) {
+            LunaCurrentMp = LunaMaxMp;
+            LunaCurrentHp = LunaMaxMp;
+            MonsterCurrentHp = MonsterMaxHp;
+        }
     }
 
     /// <summary>
@@ -117,20 +124,6 @@ public class GameManager : MonoBehaviour {
 
     public void InOrDecreaseMonsterHp(float hp = 1) {
         MonsterCurrentHp = Mathf.Clamp(MonsterCurrentHp + hp, 0, MonsterMaxHp);
-    }
-
-    /// <summary>
-    /// 血条和蓝条UI更新
-    /// </summary>
-    private void UpdateBar() {
-        UiManager.Instance.SetBar(LunaCurrentHp / LunaMaxHp, LunaCurrentMp / LunaMaxMp);
-
-        // 测试
-        if (Test) {
-            LunaCurrentMp = LunaMaxMp;
-            LunaCurrentHp = LunaMaxMp;
-            MonsterCurrentHp = MonsterMaxHp;
-        }
     }
 
     /// <summary>
