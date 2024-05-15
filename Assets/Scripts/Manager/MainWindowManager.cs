@@ -4,20 +4,28 @@ using UnityEngine;
 public class MainWindowManager : MonoBehaviour {
     public static MainWindowManager Instance;
 
-    [SerializeField] private WindowManager myWindowManager;
+    [SerializeField] private WindowManager MainPanel;
+    [SerializeField] private GameObject GameMain;
 
     private void Awake() {
         Instance = this;
     }
 
     private void YourFunction() {
-        myWindowManager.OpenWindow("Your Window Name"); // open a specific window
-        myWindowManager.OpenWindowByIndex(1); // open a specific window by index
-        myWindowManager.NextWindow(); // open next page
-        myWindowManager.PrevWindow(); // open previous page
-        myWindowManager.ShowCurrentWindow(); // show current window
-        myWindowManager.HideCurrentWindow(); // hide current window
-        myWindowManager.ShowCurrentButton(); // show current window button
-        myWindowManager.HideCurrentButton(); // hide current window button
+        MainPanel.OpenWindow("Your Window Name"); // open a specific window
+        MainPanel.OpenWindowByIndex(1); // open a specific window by index
+        MainPanel.NextWindow(); // open next page
+        MainPanel.PrevWindow(); // open previous page
+        MainPanel.ShowCurrentWindow(); // show current window
+        MainPanel.HideCurrentWindow(); // hide current window
+        MainPanel.ShowCurrentButton(); // show current window button
+        MainPanel.HideCurrentButton(); // hide current window button
+    }
+
+    public void Login() {
+        GameMain.transform.GetChild(1).GetChild(5).gameObject.SetActive(true);
+        GameMain.transform.GetChild(1).GetChild(6).gameObject.SetActive(true);
+        GameMain.transform.GetChild(2).gameObject.SetActive(true);
+        this.gameObject.SetActive(false);
     }
 }
