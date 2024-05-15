@@ -41,12 +41,12 @@ namespace TMPro.Examples
 
         void OnCharacterSelection(char c, int index)
         {
-            Debug.Log("Character [" + c + "] at CurrentIndex: " + index + " has been selected.");
+            Debug.Log("Character [" + c + "] at Index: " + index + " has been selected.");
         }
 
         void OnSpriteSelection(char c, int index)
         {
-            Debug.Log("Sprite [" + c + "] at CurrentIndex: " + index + " has been selected.");
+            Debug.Log("Sprite [" + c + "] at Index: " + index + " has been selected.");
         }
 
         void OnWordSelection(string word, int firstCharacterIndex, int length)
@@ -66,7 +66,7 @@ namespace TMPro.Examples
                 TMP_LinkInfo linkInfo = m_TextComponent.textInfo.linkInfo[linkIndex];
             }
             
-            Debug.Log("Link CurrentIndex: " + linkIndex + " with ID [" + linkID + "] and Text \"" + linkText + "\" has been selected.");
+            Debug.Log("Link Index: " + linkIndex + " with ID [" + linkID + "] and Text \"" + linkText + "\" has been selected.");
         }
 
     }
