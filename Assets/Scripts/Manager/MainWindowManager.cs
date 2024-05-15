@@ -1,23 +1,16 @@
-using Michsky.MUIP;
+﻿using Michsky.MUIP;
 using UnityEngine;
 
-public class MainUiManager : MonoBehaviour
-{
-    public static MainUiManager Instance;
-    
+public class MainWindowManager : MonoBehaviour {
+    public static MainWindowManager Instance;
+
     [SerializeField] private WindowManager myWindowManager;
 
-   
-
-
-    void Awake()
-    {
-       Instance = this;
-        
+    private void Awake() {
+        Instance = this;
     }
 
-  
-    void YourFunction() {
+    private void YourFunction() {
         myWindowManager.OpenWindow("Your Window Name"); // open a specific window
         myWindowManager.OpenWindowByIndex(1); // open a specific window by index
         myWindowManager.NextWindow(); // open next page
@@ -27,5 +20,4 @@ public class MainUiManager : MonoBehaviour
         myWindowManager.ShowCurrentButton(); // show current window button
         myWindowManager.HideCurrentButton(); // hide current window button
     }
-
 }

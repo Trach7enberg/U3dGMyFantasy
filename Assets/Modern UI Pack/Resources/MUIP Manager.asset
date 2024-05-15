@@ -17,7 +17,7 @@ MonoBehaviour:
   editorHints: 0
   animatedIconColor: {r: 1, g: 1, b: 1, a: 1}
   contextBackgroundColor: {r: 0.21568628, g: 0.29411766, b: 0.37254903, a: 1}
-  buttonFont: {fileID: 11400000, guid: 84dd14695854bbc43a5faa24fcf93d0d, type: 2}
+  buttonFont: {fileID: 11400000, guid: d7ca005ff2003df44a9dcb325d5ade02, type: 2}
   buttonNormalColor: {r: 0.21568628, g: 0.29411766, b: 0.37254903, a: 255}
   buttonAccentColor: {r: 1, g: 1, b: 1, a: 255}
   buttonDisabledAlpha: 0.4
@@ -31,7 +31,7 @@ MonoBehaviour:
   selectorFont: {fileID: 11400000, guid: 4bd810f1cbcb0f446a8f5a31453e243f, type: 2}
   selectorColor: {r: 1, g: 1, b: 1, a: 1}
   selectorHighlightedColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 1}
-  inputFieldFont: {fileID: 11400000, guid: 4bd810f1cbcb0f446a8f5a31453e243f, type: 2}
+  inputFieldFont: {fileID: 11400000, guid: d7ca005ff2003df44a9dcb325d5ade02, type: 2}
   inputFieldColor: {r: 1, g: 1, b: 1, a: 1}
   modalWindowTitleFont: {fileID: 11400000, guid: fa328c1ae3ffb6b4583cf371153b0be6, type: 2}
   modalWindowContentFont: {fileID: 11400000, guid: 4bd810f1cbcb0f446a8f5a31453e243f, type: 2}
@@ -74,7 +74,7 @@ MonoBehaviour:
   toggleBorderColor: {r: 1, g: 1, b: 1, a: 1}
   toggleBackgroundColor: {r: 1, g: 1, b: 1, a: 0.29411766}
   toggleCheckColor: {r: 1, g: 1, b: 1, a: 1}
-  tooltipFont: {fileID: 11400000, guid: 4bd810f1cbcb0f446a8f5a31453e243f, type: 2}
+  tooltipFont: {fileID: 11400000, guid: d7ca005ff2003df44a9dcb325d5ade02, type: 2}
   tooltipFontSize: 22
   tooltipTextColor: {r: 1, g: 1, b: 1, a: 1}
   tooltipBackgroundColor: {r: 0.1764706, g: 0.25490198, b: 0.33333334, a: 1}
