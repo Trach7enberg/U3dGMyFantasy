@@ -32,11 +32,12 @@ public class MainWindowManager : MonoBehaviour {
         MainPanel.gameObject.SetActive(false);
         InMainGameOption.SetActive(true);
 
-        // 已经登录 就把登录面板的输入模块换成Tips,显示已登录
+        // 已经登录 就把登录面板的输入模块换成Tip和退出游戏按钮
         // 输入模块禁用
-        ContentWindows.transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(false);
-        // 显示tips
+        ContentWindows.transform.GetChild(0).GetChild(0).GetChild(2).gameObject.SetActive(false);
+        // 显示tip和退出游戏按钮 TODO 退出游戏待优化位置
         ContentWindows.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
+        ContentWindows.transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(true);
     }
 
     public void SetMainGameMusicVolume() {
@@ -51,6 +52,7 @@ public class MainWindowManager : MonoBehaviour {
     /// 点击取消按钮就退出游戏
     /// </summary>
     public void Cancel() {
+        //UnityEditor.EditorApplication.isPlaying = false;
         Application.Quit();
     }
 
