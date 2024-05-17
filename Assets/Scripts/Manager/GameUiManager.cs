@@ -28,6 +28,7 @@ public partial class GameUiManager : MonoBehaviour {
 
     public GameObject MainSceneMonsters;
 
+    [SerializeField] private float MonsterHpSliderSpeed = 0.2f; // 怪兽血条跟随移动的速度,值越大越慢,最好不要大于0.5
     [SerializeField] private float PosOffset = 50f;         // 血条位置的偏移值
     [SerializeField] private GameObject BattleSceneMonster; // 战斗场景中的怪兽
     [SerializeField] private SliderManager MonsterSlider;   // 怪兽血条,
@@ -49,6 +50,7 @@ public partial class GameUiManager : MonoBehaviour {
     // Awake先于 start()方法执行
     private void Awake() {
         Instance = this;
+        DOTween.SetTweensCapacity(500, 50); // 设置DOTween 可以同时存在多少动画队列
         originalSize = hpMaskImage.rectTransform.rect.width;
 
         InitMonsterBarPos(PosOffset);
@@ -73,12 +75,14 @@ public partial class GameUiManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 更新怪兽血条的位置,跟随怪兽移动
+    /// 更新战斗场景怪兽血条的位置,只有怪兽移动的时候才会移动
     /// </summary>
     private void UpdateMonsterBar() {
         MonsterSlider.mainSlider.value = GameManager.Instance.MonsterCurrentHp;
         float distance = Camera.main.WorldToScreenPoint(BattleSceneMonster.transform.position).x - InitBattleMonsterGlobPos.x;
-        MonsterSlider.transform.DOMoveX(InitMonsterSliderGlobPos.x + distance, 0);
+        if (distance != 0) {
+            MonsterSlider.transform.DOMoveX(InitMonsterSliderGlobPos.x + distance, MonsterHpSliderSpeed);
+        }
     }
 
     /// <summary>
@@ -109,7 +113,7 @@ public partial class GameUiManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 进入或者退出游戏战斗场景
+    /// 进入或者退出游戏战斗场景时
     /// </summary>
     /// <param name="enter">true为开启</param>
     public void ShowBattleGround(bool enter = true) {

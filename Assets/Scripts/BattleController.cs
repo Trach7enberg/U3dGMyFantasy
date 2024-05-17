@@ -174,7 +174,7 @@ public class BattleController : MonoBehaviour {
                 // 播放luna攻击音效
                 AudioManager.Instance.PlaySound(AudioManager.Instance.AttackClip);
                 AudioManager.Instance.PlaySound(AudioManager.Instance.LunaActionClip);
-
+                JudgeMonsterHp(lunaDamage); // 扣怪物血
                 //怪物受击渐变动画
                 monsterRenderer.color = Color.red;
                 monsterRenderer.DOFade(monsterFade, monsterFadeDuration)
@@ -196,7 +196,6 @@ public class BattleController : MonoBehaviour {
             .OnComplete(() => {
                 lunaAnimator.SetBool(animatorParameters[2], false);
                 lunaAnimator.SetFloat(animatorParameters[1], 0f);
-                JudgeMonsterHp(lunaDamage);
             });
         yield return new WaitForSeconds(0.5f);
         StartCoroutine(PerformMonsterAttackLogic());
