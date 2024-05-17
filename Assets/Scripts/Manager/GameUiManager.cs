@@ -104,6 +104,10 @@ public partial class GameUiManager : MonoBehaviour {
         LunaPanel.gameObject.SetActive(isShow);
     }
 
+    /// <summary>
+    /// 是否显示战斗场景中怪兽的血条
+    /// </summary>
+    /// <param name="isShow"></param>
     private void ShowMonsterHpSlider(bool isShow = true) {
         MonsterSlider.gameObject.SetActive(isShow);
     }
@@ -120,7 +124,13 @@ public partial class GameUiManager : MonoBehaviour {
         // 关闭战斗场景时
         if (!enter) {
             GameManager.Instance.CanControlLuna = true;
-            StartCoroutine(PerformMonsterLogic());
+            StartCoroutine(PerformHideMonsterLogic());
+
+            // luna死亡时,回到主场景血量置为1 TODO 或者luna死后应该返回上个存档点
+            if (GameManager.Instance.LunaCurrentHp == 0) {
+                GameManager.Instance.LunaCurrentHp = 1;
+            }
+
             // 播放正常音乐
             AudioManager.Instance.PlayMusic(AudioManager.Instance.NormalClip);
 
@@ -128,6 +138,7 @@ public partial class GameUiManager : MonoBehaviour {
         } else {
             // TODO 怪物没有死的时候,重新进入战斗场景的血量应该保持
             GameManager.Instance.MonsterCurrentHp = GameManager.Instance.MonsterMaxHp;
+
             GameManager.Instance.CanControlLuna = false;
             // 播放战斗音乐
             AudioManager.Instance.PlayMusic(AudioManager.Instance.BattleClip);
@@ -173,8 +184,8 @@ public partial class GameUiManager : MonoBehaviour {
     /// <summary>
     /// 主场景中的N个怪物是否全部启用
     /// </summary>
-    /// <param name="isShow"></param>
-    public void ShowMonsters(bool isShow) {
+    /// <param name="isShow">t为显示,f为关闭</param>
+    public void ShowMainMonsters(bool isShow) {
         MainSceneMonsters.SetActive(isShow);
     }
 
@@ -183,7 +194,7 @@ public partial class GameUiManager : MonoBehaviour {
     /// 退出战斗场景时候怪物如果没有被杀死,则在主场景中现身,需要等待n秒后怪物才能恢复,不然会和Luna撞到一起
     /// </summary>
     /// <returns></returns>
-    private IEnumerator PerformMonsterLogic() {
+    private IEnumerator PerformHideMonsterLogic() {
         if (GameManager.Instance.MonsterCurrentHp != 0) {
             yield return new WaitForSeconds(GameManager.Instance.ShowMonsterTime);
             GameManager.Instance.GetCurrentMonster().SetActive(true);

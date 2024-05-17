@@ -180,11 +180,10 @@ public class BattleController : MonoBehaviour {
                 monsterRenderer.DOFade(monsterFade, monsterFadeDuration)
                     .OnComplete(() => {
                         SpriteRendererReset(monsterRenderer);
-                        //JudgeMonsterHp(lunaDamage);
                     });
             });
 
-        // 每次普通攻击,luna都会回蓝
+        // 每次普通攻击,luna都会回蓝 TODO 逻辑待更新,不应该普攻回蓝、暂时没想到好方法
         JudgeLunaMp();
 
         // 等待移动+攻击完成之后 将luna回移
@@ -328,8 +327,6 @@ public class BattleController : MonoBehaviour {
         GameUiManager.Instance.ShowBattleUi(false);
         GameUiManager.Instance.ShowBattleGround(false);
         SpriteRendererReset(lunaRenderer);
-
-        // TODO luna死后应该返回上个存档点
     }
 
     /// <summary>

@@ -32,11 +32,15 @@ public class MainWindowManager : MonoBehaviour {
         MainPanel.gameObject.SetActive(false);
         InMainGameOption.SetActive(true);
 
+        // 关闭显示主场景怪兽
+        GameUiManager.Instance.ShowMainMonsters(false);
+
         // 已经登录 就把登录面板的输入模块换成Tip和退出游戏按钮
-        // 输入模块禁用
+        // 主界面UI输入模块禁用
         ContentWindows.transform.GetChild(0).GetChild(0).GetChild(2).gameObject.SetActive(false);
-        // 显示tip和退出游戏按钮 TODO 退出游戏待优化位置
+        // 显示tip
         ContentWindows.transform.GetChild(0).GetChild(0).GetChild(0).gameObject.SetActive(true);
+        // 退出游戏按钮 TODO 退出游戏按钮待优化位置
         ContentWindows.transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SetActive(true);
     }
 

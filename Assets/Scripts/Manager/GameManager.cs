@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour {
         KilledNum = 0;
         Test = false;
         DestroyTime = 1f;
-        ShowMonsterTime = 1f;
+        ShowMonsterTime = 2f;
 
         LunaMaxHp = 5;
         LunaMaxMp = 5;

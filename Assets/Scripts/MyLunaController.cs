@@ -220,7 +220,7 @@ public class MyLunaController : MonoBehaviour {
                     // 轮到杀怪任务时,显示怪物
                     if (MissionsManager.Instance.Missions[MissionsManager.Instance.MissionsIndex].Name ==
                         MissionsManager.MissionsName.KillMonsters) {
-                        GameUiManager.Instance.ShowMonsters(true);
+                        GameUiManager.Instance.ShowMainMonsters(true);
                     }
 
                     // 检测是否完成击杀任务
